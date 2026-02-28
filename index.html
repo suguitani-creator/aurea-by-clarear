@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Áurea by Clarear</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Áurea</h1>
+    <p class="subtitle">by Clarear</p>
+
+    <!-- LOGIN -->
+   <div id="auth-container">
+
+        <h2>Acesse sua gestão patrimonial</h2>
+        <p class="login-subtitle">Clareza financeira começa com organização.</p>
+
+        <input type="email" id="email" placeholder="Seu email">
+        <input type="password" id="senha" placeholder="Sua senha">
+
+        <button id="btn-login">Entrar</button>
+        <button id="btn-cadastro" class="secondary-btn">Criar conta</button>
+
+    </div>
+
+    <!-- APP (escondido até login) -->
+    <div id="app-container" style="display:none;">
+
+        <div class="usuario-info">
+            <span id="usuario-email"></span>
+            <button id="btn-logout">Sair</button>
+        </div>
+
+        <div class="filtro-mes">
+            <input type="month" id="mes-filtro">
+        </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <h4>Receitas</h4>
+                <p id="total-receitas">R$ 0.00</p>
+            </div>
+
+            <div class="card">
+                <h4>Despesas</h4>
+                <p id="total-despesas">R$ 0.00</p>
+            </div>
+
+            <div class="card saldo-card">
+                <h4>Saldo</h4>
+                <p id="saldo">R$ 0.00</p>
+            </div>
+        </div>
+
+        <div class="form">
+            <select id="tipo">
+                <option value="receita">Receita</option>
+                <option value="despesa">Despesa</option>
+            </select>
+
+            <select id="categoria"></select>
+
+            <input type="text" id="descricao" placeholder="Descrição">
+            <input type="number" id="valor" placeholder="Valor">
+            <input type="date" id="data">
+
+            <button id="btn-adicionar">Adicionar</button>
+        </div>
+
+        <h2>Fluxo Financeiro</h2>
+        <ul id="lista-despesas"></ul>
+
+        <div class="grafico-container">
+            <canvas id="graficoCategorias"></canvas>
+        </div>
+
+    </div>
+
+</div>
+
+<script type="module" src="firebase.js"></script>
+<script type="module" src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>
