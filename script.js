@@ -22,8 +22,6 @@ const categorias = {
     despesa: ["Alimentação","Moradia","Transporte","Lazer","Saúde","Educação","Outros"]
 };
 
-
-
 let transacoes = [];
 let grafico;
 
