@@ -22,7 +22,7 @@ const categorias = {
     despesa: ["Alimentação","Moradia","Transporte","Lazer","Saúde","Educação","Outros"]
 };
 
-import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 
 let transacoes = [];
 let grafico;
