@@ -22,6 +22,8 @@ const categorias = {
     despesa: ["Alimentação","Moradia","Transporte","Lazer","Saúde","Educação","Outros"]
 };
 
+import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 let transacoes = [];
 let grafico;
 
@@ -197,11 +199,10 @@ function calcularSaldo(listaTransacoes) {
 
 async function removerTransacao(id) {
     const user = auth.currentUser;
+
     if (!user) return;
 
-    await deleteDoc(
-        doc(db, "users", user.uid, "transacoes", id)
-    );
+    await deleteDoc(doc(db, "users", user.uid, "transacoes", id));
 
     carregarTransacoes();
 }
@@ -254,12 +255,12 @@ async function carregarTransacoes() {
 
     transacoes = [];
 
-    querySnapshot.forEach((doc) => {
-        transacoes.push({
-            id: doc.id,
-            ...doc.data()
-        });
+    querySnapshot.forEach(documento => {
+    transacoes.push({
+        id: documento.id,
+        ...documento.data()
     });
+});
 
     aplicarFiltro();
 }
