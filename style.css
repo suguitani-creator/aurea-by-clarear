@@ -282,3 +282,39 @@ li.despesa {
 .usuario-info button:hover {
     background: #F0E7DA;
 }
+
+/* ================= RESPONSIVO ================= */
+
+@media (max-width: 480px) {
+
+    body {
+        align-items: flex-start;
+        padding: 20px 0;
+    }
+
+    .container {
+        width: 92%;
+        padding: 25px 20px;
+        border-radius: 16px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    #auth-container input,
+    .form input,
+    .form select {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .dashboard {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .card {
+        width: 100%;
+    }
+}
