@@ -205,6 +205,8 @@ async function removerTransacao(id) {
     carregarTransacoes();
 }
 
+window.removerTransacao = removerTransacao;
+
 function atualizarGrafico(listaTransacoes) {
     const despesas = listaTransacoes.filter(t => t.tipo === "despesa");
     const categoriasAgrupadas = {};
