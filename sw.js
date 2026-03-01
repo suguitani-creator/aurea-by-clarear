@@ -1,4 +1,4 @@
-const CACHE_NAME = "aurea-v4";
+const CACHE_NAME = "aurea-v5";
 
 const urlsToCache = [
   "/",
@@ -20,7 +20,15 @@ self.addEventListener("install", event => {
 });
 
 self.addEventListener("activate", event => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.filter(key => key !== CACHE_NAME)
+            .map(key => caches.delete(key))
+      );
+    })
+  );
+  return self.clients.claim();
 });
 
 self.addEventListener("fetch", event => {
