@@ -51,7 +51,7 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btn-cadastro").addEventListener("click", async () => {
         try {
             await createUserWithEmailAndPassword(auth, emailInput.value, senhaInput.value);
-            alert("Conta criada com sucesso!");
+            showToast("Conta criada com sucesso!");
         } catch (error) {
             alert(error.message);
         }
@@ -61,7 +61,7 @@ window.addEventListener("DOMContentLoaded", () => {
         try {
             await signInWithEmailAndPassword(auth, emailInput.value, senhaInput.value);
         } catch (error) {
-            alert("Erro ao entrar: " + error.message);
+            showToast("Erro ao entrar", "error");
         }
     });
 
@@ -114,6 +114,7 @@ async function adicionarTransacao() {
         collection(db, "users", user.uid, "transacoes"),
         { tipo, categoria, descricao, valor, data }
     );
+    showToast("Transação adicionada com sucesso!");
     limparFormulario();
     carregarTransacoes();
 }
@@ -201,7 +202,7 @@ async function removerTransacao(id) {
     if (!user) return;
 
     await deleteDoc(doc(db, "users", user.uid, "transacoes", id));
-
+    showToast("Transação excluída!");
     carregarTransacoes();
 }
 
@@ -269,4 +270,15 @@ function limparFormulario() {
     document.getElementById("descricao").value = "";
     document.getElementById("valor").value = "";
     document.getElementById("data").value = "";
+}
+
+function showToast(message, type = "success") {
+    const toast = document.getElementById("toast");
+
+    toast.textContent = message;
+    toast.className = "toast show " + type;
+
+    setTimeout(() => {
+        toast.className = "toast";
+    }, 3000);
 }
