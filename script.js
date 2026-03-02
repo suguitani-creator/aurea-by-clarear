@@ -154,6 +154,8 @@ function atualizarTela(listaTransacoes) {
     listaTransacoes.forEach((transacao, index) => {
         const item = document.createElement("li");
         item.classList.add(transacao.tipo);
+        item.classList.add("item-novo");
+        
 
         item.innerHTML = `
             <div>
@@ -162,9 +164,9 @@ function atualizarTela(listaTransacoes) {
             </div>
             <div>
                 R$ ${transacao.valor.toFixed(2)}
-            <button class="btn-delete" onclick="removerTransacao('${transacao.id}')">
+            <button class="btn-delete" onclick="confirmarExclusao('${transacao.id}')">
                 <svg viewBox="0 0 24 24" width="16" height="16">
-                <path fill="currentColor" d="M9 3h6l1 2h4v2H4V5h4l1-2zm1 6h2v8h-2V9zm4 0h2v8h-2V9z"/>
+                <path fill="currentColor" d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
                 </svg>
             </button>
             </div>
@@ -293,3 +295,28 @@ function showToast(message, type = "success") {
         toast.className = "toast";
     }, 3000);
 }
+
+let idParaExcluir = null;
+
+function confirmarExclusao(id) {
+    idParaExcluir = id;
+    document.getElementById("modal-confirmacao").classList.add("show");
+}
+
+document.getElementById("cancelar-exclusao").addEventListener("click", () => {
+    document.getElementById("modal-confirmacao").classList.remove("show");
+    idParaExcluir = null;
+});
+
+document.getElementById("confirmar-exclusao").addEventListener("click", async () => {
+    if (!idParaExcluir) return;
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    await deleteDoc(doc(db, "users", user.uid, "transacoes", idParaExcluir));
+
+    document.getElementById("modal-confirmacao").classList.remove("show");
+    showToast("Transação removida", "delete");
+    carregarTransacoes();
+});
