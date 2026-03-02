@@ -328,14 +328,15 @@ li.despesa {
     transform: translateX(-50%) translateY(20px);
     background: #3E2F23;
     color: white;
-    padding: 12px 20px;
-    border-radius: 12px;
+    padding: 14px 22px;
+    border-radius: 14px;
     font-size: 14px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
     opacity: 0;
     pointer-events: none;
-    transition: all 0.3s ease;
+    transition: all 0.35s ease;
     z-index: 9999;
+    letter-spacing: 0.3px;
 }
 
 .toast.show {
@@ -344,9 +345,27 @@ li.despesa {
 }
 
 .toast.success {
-    background: #4A7C59;
+    background: #4E3B2A; /* marrom elegante */
+}
+
+.toast.delete {
+    background: #8B6F4E; /* bege escuro sofisticado */
 }
 
 .toast.error {
-    background: #A94442;
+    background: #7A2F2E; /* vinho discreto */
+}
+
+.btn-delete {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #7A5C42;
+    transition: all 0.2s ease;
+}
+
+.btn-delete:hover {
+    color: #3E2F23;
+    transform: scale(1.1);
 }

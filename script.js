@@ -114,7 +114,7 @@ async function adicionarTransacao() {
         collection(db, "users", user.uid, "transacoes"),
         { tipo, categoria, descricao, valor, data }
     );
-    showToast("Transação adicionada com sucesso!");
+    showToast("Transação adicionada!", "success");
     limparFormulario();
     carregarTransacoes();
 }
@@ -162,7 +162,9 @@ function atualizarTela(listaTransacoes) {
             </div>
             <div>
                 R$ ${transacao.valor.toFixed(2)}
-                <button onclick="removerTransacao('${transacao.id}')">❌</button>
+                <button class="btn-delete" onclick="removerTransacao('${transacao.id}')">
+    🗑
+</button>
             </div>
         `;
 
@@ -202,7 +204,7 @@ async function removerTransacao(id) {
     if (!user) return;
 
     await deleteDoc(doc(db, "users", user.uid, "transacoes", id));
-    showToast("Transação excluída!");
+    showToast("Transação removida!", "delete");
     carregarTransacoes();
 }
 
