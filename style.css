@@ -319,24 +319,30 @@ li.despesa {
     }
 }
 
-/* ================= TOAST PREMIUM ================= */
+/* ================= TOAST ULTRA PREMIUM ================= */
 
 .toast {
     position: fixed;
-    bottom: 25px;
+    bottom: 30px;
     left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: #3E2F23;
-    color: white;
+    transform: translateX(-50%) translateY(15px);
+    min-width: 220px;
+    max-width: 85%;
     padding: 14px 22px;
-    border-radius: 14px;
+    border-radius: 18px;
     font-size: 14px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0.3px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(62, 47, 35, 0.85);
+    color: #F5F1EB;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     opacity: 0;
     pointer-events: none;
     transition: all 0.35s ease;
     z-index: 9999;
-    letter-spacing: 0.3px;
 }
 
 .toast.show {
@@ -344,28 +350,37 @@ li.despesa {
     transform: translateX(-50%) translateY(0);
 }
 
+/* Sucesso elegante */
 .toast.success {
-    background: #4E3B2A; /* marrom elegante */
+    background: rgba(78, 59, 42, 0.92);
 }
 
+/* Exclusão discreta */
 .toast.delete {
-    background: #8B6F4E; /* bege escuro sofisticado */
+    background: rgba(139, 111, 78, 0.92);
 }
 
+/* Erro vinho sofisticado */
 .toast.error {
-    background: #7A2F2E; /* vinho discreto */
+    background: rgba(122, 47, 46, 0.92);
 }
+
+/* ================= BOTÃO EXCLUSÃO PREMIUM ================= */
 
 .btn-delete {
     background: transparent;
     border: none;
-    font-size: 16px;
     cursor: pointer;
-    color: #7A5C42;
+    color: #8B6F4E;
+    padding: 6px;
+    border-radius: 10px;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-delete:hover {
+    background: rgba(62, 47, 35, 0.08);
     color: #3E2F23;
-    transform: scale(1.1);
 }

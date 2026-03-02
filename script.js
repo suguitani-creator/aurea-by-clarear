@@ -162,9 +162,11 @@ function atualizarTela(listaTransacoes) {
             </div>
             <div>
                 R$ ${transacao.valor.toFixed(2)}
-                <button class="btn-delete" onclick="removerTransacao('${transacao.id}')">
-    🗑
-</button>
+            <button class="btn-delete" onclick="removerTransacao('${transacao.id}')">
+                <svg viewBox="0 0 24 24" width="16" height="16">
+                <path fill="currentColor" d="M9 3h6l1 2h4v2H4V5h4l1-2zm1 6h2v8h-2V9zm4 0h2v8h-2V9z"/>
+                </svg>
+            </button>
             </div>
         `;
 
@@ -200,12 +202,19 @@ function calcularSaldo(listaTransacoes) {
 
 async function removerTransacao(id) {
     const user = auth.currentUser;
-
     if (!user) return;
 
-    await deleteDoc(doc(db, "users", user.uid, "transacoes", id));
-    showToast("Transação removida!", "delete");
-    carregarTransacoes();
+    const elemento = document.querySelector(`button[onclick*="${id}"]`).closest("li");
+
+    elemento.style.transition = "all 0.3s ease";
+    elemento.style.opacity = "0";
+    elemento.style.transform = "translateX(10px)";
+
+    setTimeout(async () => {
+        await deleteDoc(doc(db, "users", user.uid, "transacoes", id));
+        carregarTransacoes();
+        showToast("Transação removida", "delete");
+    }, 300);
 }
 
 window.removerTransacao = removerTransacao;
