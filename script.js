@@ -149,42 +149,30 @@ function aplicarFiltro() {
 
 function atualizarTela(listaTransacoes) {
     const lista = document.getElementById("lista-despesas");
-    item.innerHTML = `
-    <div class="item-info">
-        <strong>${transacao.descricao}</strong>
-        <small>${transacao.categoria}</small>
-    </div>
+    lista.innerHTML = "";
 
-    <div class="item-actions">
-        <span class="valor">R$ ${transacao.valor.toFixed(2)}</span>
+    listaTransacoes.forEach((transacao) => {
 
-        <button class="btn-delete" onclick="confirmarExclusao('${transacao.id}')">
-            <svg viewBox="0 0 24 24" width="16" height="16">
-                <path fill="currentColor"
-                d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
-            </svg>
-        </button>
-    </div>
-`;
-
-    listaTransacoes.forEach((transacao, index) => {
         const item = document.createElement("li");
+
         item.classList.add(transacao.tipo);
         item.classList.add("item-novo");
-        
 
         item.innerHTML = `
-            <div>
-                <strong>${transacao.descricao}</strong><br>
+            <div class="item-info">
+                <strong>${transacao.descricao}</strong>
                 <small>${transacao.categoria}</small>
             </div>
-            <div>
-                R$ ${transacao.valor.toFixed(2)}
-            <button class="btn-delete" onclick="confirmarExclusao('${transacao.id}')">
-                <svg viewBox="0 0 24 24" width="16" height="16">
-                <path fill="currentColor" d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
-                </svg>
-            </button>
+
+            <div class="item-actions">
+                <span class="valor">R$ ${transacao.valor.toFixed(2)}</span>
+
+                <button class="btn-delete" onclick="confirmarExclusao('${transacao.id}')">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="currentColor"
+                        d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
+                    </svg>
+                </button>
             </div>
         `;
 
