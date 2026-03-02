@@ -469,3 +469,18 @@ li.despesa {
 .valor {
     font-weight: 500;
 }
+
+.btn-edit {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #A68A64;
+    padding: 6px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.btn-edit:hover {
+    background: rgba(62, 47, 35, 0.08);
+    color: #3E2F23;
+}

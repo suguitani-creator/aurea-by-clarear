@@ -7,7 +7,8 @@ import {
   deleteDoc,
   doc,
   query,
-  orderBy
+  orderBy,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -22,6 +23,7 @@ const categorias = {
     despesa: ["Alimentação","Moradia","Transporte","Lazer","Saúde","Educação","Outros"]
 };
 
+let idEmEdicao = null;
 let transacoes = [];
 let grafico;
 
@@ -96,6 +98,7 @@ window.addEventListener("DOMContentLoaded", () => {
 // ================= FINANÇAS =================
 
 async function adicionarTransacao() {
+
     const user = auth.currentUser;
     if (!user) return;
 
@@ -106,15 +109,32 @@ async function adicionarTransacao() {
     const data = document.getElementById("data").value;
 
     if (!descricao || isNaN(valor) || !data) {
-        alert("Preencha todos os campos corretamente.");
+        showToast("Preencha todos os campos", "error");
         return;
     }
 
-    await addDoc(
-        collection(db, "users", user.uid, "transacoes"),
-        { tipo, categoria, descricao, valor, data }
-    );
-    showToast("Transação adicionada!", "success");
+    if (idEmEdicao) {
+        await updateDoc(
+            doc(db, "users", user.uid, "transacoes", idEmEdicao),
+            { tipo, categoria, descricao, valor, data }
+        );
+
+        showToast("Transação atualizada!");
+        idEmEdicao = null;
+
+        const btn = document.getElementById("btn-adicionar");
+        btn.textContent = "Adicionar";
+        btn.classList.remove("modo-edicao");
+
+    } else {
+        await addDoc(
+            collection(db, "users", user.uid, "transacoes"),
+            { tipo, categoria, descricao, valor, data }
+        );
+
+        showToast("Transação adicionada!");
+    }
+
     limparFormulario();
     carregarTransacoes();
 }
@@ -167,10 +187,20 @@ function atualizarTela(listaTransacoes) {
             <div class="item-actions">
                 <span class="valor">R$ ${transacao.valor.toFixed(2)}</span>
 
+                <button class="btn-edit" onclick="editarTransacao('${transacao.id}')">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                    <path fill="currentColor"
+                    d="M3 17.25V21h3.75L19.81 7.94l-3.75-3.75L3 17.25zM20.71 
+                    6.04c.39-.39.39-1.02 
+                    0-1.41l-1.34-1.34c-.39-.39-1.02-.39-1.41 
+                    0l-1.13 1.13 3.75 3.75 1.13-1.13z"/>
+                    </svg>
+                </button>
+
                 <button class="btn-delete" onclick="confirmarExclusao('${transacao.id}')">
                     <svg viewBox="0 0 24 24" width="16" height="16">
-                        <path fill="currentColor"
-                        d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
+                    <path fill="currentColor"
+                    d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
                     </svg>
                 </button>
             </div>
@@ -326,3 +356,28 @@ document.getElementById("confirmar-exclusao").addEventListener("click", async ()
 });
 
 window.confirmarExclusao = confirmarExclusao;
+
+window.editarTransacao = async function(id) {
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const transacao = transacoes.find(t => t.id === id);
+    if (!transacao) return;
+
+    document.getElementById("tipo").value = transacao.tipo;
+    atualizarCategorias();
+
+    document.getElementById("categoria").value = transacao.categoria;
+    document.getElementById("descricao").value = transacao.descricao;
+    document.getElementById("valor").value = transacao.valor;
+    document.getElementById("data").value = transacao.data;
+
+    idEmEdicao = id;
+
+    const btn = document.getElementById("btn-adicionar");
+    btn.textContent = "Salvar alteração";
+    btn.classList.add("modo-edicao");
+
+    showToast("Editando transação...");
+};
