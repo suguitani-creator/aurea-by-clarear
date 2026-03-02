@@ -223,11 +223,11 @@ li button:hover {
 }
 
 li.receita {
-    border-left: 4px solid #4A7C59;
+    border-left: 3px solid #4A7C59;
 }
 
 li.despesa {
-    border-left: 4px solid #A94442;
+    border-left: 3px solid #8B3E3E;
 }
 
 /* ================= SALDO ================= */
@@ -453,4 +453,19 @@ li.despesa {
     padding: 10px 16px;
     border-radius: 10px;
     cursor: pointer;
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.valor {
+    font-weight: 500;
 }
