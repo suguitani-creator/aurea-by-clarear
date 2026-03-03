@@ -476,9 +476,11 @@ function atualizarComparativo() {
 }
 
 // Adicionando a interação ao box de comparativo
-document.getElementById("comparativo-container").addEventListener("mouseenter", function() {
-    document.getElementById("comparativo-container").classList.add("show");
-    atualizarComparativo(); // Atualiza os valores quando o usuário passa o mouse
+document.getElementById("comparativo-container").addEventListener("click", function() {
+    document.getElementById("comparativo-container").classList.toggle("show");
+    
+    // Atualiza os valores ao clicar
+    atualizarComparativo();
 });
 
 document.getElementById("comparativo-container").addEventListener("mouseleave", function() {
