@@ -66,6 +66,29 @@
                 <p id="comparativo-receita">—</p>
                 <p id="comparativo-despesa">—</p>
             </div>
+
+            <!-- INÍCIO: Formulário de Cadastro de Contas e Cartões -->
+            <div class="formulario-contas">
+                <h3>Adicionar Conta ou Cartão</h3>
+                <select id="tipo-conta">
+                <option value="conta">Conta Corrente</option>
+                <option value="cartao">Cartão de Crédito</option>
+                </select>
+
+                <input type="text" id="nome-conta" placeholder="Nome da conta ou cartão" />
+                <input type="number" id="saldo-conta" placeholder="Saldo ou limite" />
+                <input type="date" id="vencimento-cartao" placeholder="Data de vencimento (Cartão de Crédito)" />
+                <button onclick="adicionarConta()">Adicionar</button>
+            </div>
+            <!-- FIM: Formulário de Cadastro de Contas e Cartões -->
+
+            <!-- INÍCIO: Exibir Contas e Cartões Cadastrados -->
+            <div class="contas-lista">
+                <h3>Contas e Cartões Cadastrados</h3>
+                <ul id="lista-contas"></ul>
+                <ul id="lista-cartoes"></ul>
+            </div>
+            <!-- FIM: Exibir Contas e Cartões Cadastrados -->
         </div>
     </div>
 
@@ -120,6 +143,25 @@ if ('serviceWorker' in navigator) {
       <button id="confirmar-exclusao" class="btn-primary">Remover</button>
     </div>
   </div>
+</div>
+
+<div class="formulario-contas">
+    <h3>Adicionar Conta ou Cartão</h3>
+    <select id="tipo-conta">
+        <option value="conta">Conta Corrente</option>
+        <option value="cartao">Cartão de Crédito</option>
+    </select>
+
+    <input type="text" id="nome-conta" placeholder="Nome da conta ou cartão" />
+    <input type="number" id="saldo-conta" placeholder="Saldo ou limite" />
+    <input type="date" id="vencimento-cartao" placeholder="Data de vencimento (Cartão de Crédito)" />
+    <button onclick="adicionarConta()">Adicionar</button>
+</div>
+
+<div class="contas-lista">
+    <h3>Contas e Cartões Cadastrados</h3>
+    <ul id="lista-contas"></ul>
+    <ul id="lista-cartoes"></ul>
 </div>
 
 </body>
