@@ -409,20 +409,19 @@ window.editarTransacao = async function(id) {
     });
 };
 
-function converterDataBR(dataBR) {
-    const [dia, mes, ano] = dataBR.split("/");
-    return new Date(ano, mes - 1, dia);
+function converterDataFirestore(dataFirestore) {
+    const [ano, mes, dia] = dataFirestore.split("-"); // formato YYYY-MM-DD
+    return new Date(ano, mes - 1, dia); // meses começam do zero
 }
 
 function calcularTotaisPorMes(mes, ano) {
-
     let totalReceitas = 0;
     let totalDespesas = 0;
 
     transacoes.forEach(t => {
+        const data = converterDataFirestore(t.data); // Usando a função nova para converter a data
 
-        const data = converterDataBR(t.data);
-
+        // Verificar se a transação é do mês e ano correto
         if (data.getMonth() === mes && data.getFullYear() === ano) {
             if (t.tipo === "receita") {
                 totalReceitas += t.valor;
@@ -436,16 +435,15 @@ function calcularTotaisPorMes(mes, ano) {
 }
 
 function atualizarComparativo() {
-
     const mesFiltro = document.getElementById("mes-filtro").value;
     if (!mesFiltro) return;
 
     const [anoAtual, mesAtual] = mesFiltro.split("-");
-    const mes = parseInt(mesAtual) - 1;
+    const mes = parseInt(mesAtual) - 1; // mês começa de 0 (Janeiro = 0)
     const ano = parseInt(anoAtual);
 
     // Mês anterior
-    const dataAnterior = new Date(ano, mes - 1, 1);
+    const dataAnterior = new Date(ano, mes - 1, 1); // Ajuste para pegar mês anterior
 
     const atual = calcularTotaisPorMes(mes, ano);
     const anterior = calcularTotaisPorMes(
