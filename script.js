@@ -474,3 +474,12 @@ function atualizarComparativo() {
     document.getElementById("comparativo-despesa").textContent =
         `${variacaoDespesa.toFixed(1)}% (R$ ${(atual.totalDespesas - anterior.totalDespesas).toFixed(2)})`;
 }
+
+console.log("Salvando transação:", tipo, categoria, descricao, valor, data);
+await addDoc(collection(db, "users", user.uid, "transacoes"), {
+    tipo,
+    categoria,
+    descricao,
+    valor,
+    data
+});
