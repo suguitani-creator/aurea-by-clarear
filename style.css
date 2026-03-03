@@ -545,3 +545,41 @@ li.despesa {
     margin: 6px 0;
     font-weight: 500;
 }
+
+.comparativo-card {
+    background: #F0E7DA;
+    padding: 16px;
+    font-size: 14px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.comparativo-card h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #4E3B2A;
+    margin-bottom: 12px;
+}
+
+.comparativo-item {
+    margin-bottom: 12px;
+}
+
+.comparativo-item small {
+    color: #8B6F4E;
+    font-size: 12px;
+}
+
+.comparativo-item p {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+.comparativo-item p#comparativo-receita {
+    color: #4A7C59;
+}
+
+.comparativo-item p#comparativo-despesa {
+    color: #A94442;
+}

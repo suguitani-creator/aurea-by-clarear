@@ -439,11 +439,11 @@ function atualizarComparativo() {
     if (!mesFiltro) return;
 
     const [anoAtual, mesAtual] = mesFiltro.split("-");
-    const mes = parseInt(mesAtual) - 1; // mês começa de 0 (Janeiro = 0)
+    const mes = parseInt(mesAtual) - 1;
     const ano = parseInt(anoAtual);
 
     // Mês anterior
-    const dataAnterior = new Date(ano, mes - 1, 1); // Ajuste para pegar mês anterior
+    const dataAnterior = new Date(ano, mes - 1, 1);
 
     const atual = calcularTotaisPorMes(mes, ano);
     const anterior = calcularTotaisPorMes(
@@ -466,11 +466,13 @@ function atualizarComparativo() {
         anterior.totalDespesas
     );
 
+    // Exibe as receitas com valor absoluto e porcentagem
     document.getElementById("comparativo-receita").textContent =
-        `${variacaoReceita.toFixed(1)}% (R$ ${(atual.totalReceitas - anterior.totalReceitas).toFixed(2)})`;
+        `${variacaoReceita.toFixed(1)}% (+R$ ${(atual.totalReceitas - anterior.totalReceitas).toFixed(2)})`;
 
+    // Exibe as despesas com valor absoluto e porcentagem
     document.getElementById("comparativo-despesa").textContent =
-        `${variacaoDespesa.toFixed(1)}% (R$ ${(atual.totalDespesas - anterior.totalDespesas).toFixed(2)})`;
+        `${variacaoDespesa.toFixed(1)}% (-R$ ${(atual.totalDespesas - anterior.totalDespesas).toFixed(2)})`;
 }
 
 console.log("Salvando transação:", tipo, categoria, descricao, valor, data);
