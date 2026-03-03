@@ -514,3 +514,87 @@ document.getElementById("comparativo-container").addEventListener("click", funct
         document.getElementById("comparativo-despesa").textContent = "—";
     }
 });
+
+async function adicionarConta() {
+    const tipo = document.getElementById("tipo-conta").value;
+    const nome = document.getElementById("nome-conta").value;
+    const saldo = parseFloat(document.getElementById("saldo-conta").value);
+    const vencimento = document.getElementById("vencimento-cartao").value;
+
+    // Verificando se todos os campos foram preenchidos
+    if (!nome || isNaN(saldo) || (tipo === "cartao" && !vencimento)) {
+        alert("Preencha todos os campos corretamente.");
+        return;
+    }
+
+    const user = auth.currentUser;
+    if (!user) {
+        alert("Você precisa estar logado para adicionar uma conta.");
+        return;
+    }
+
+    try {
+        // Salva a conta ou cartão no Firestore
+        if (tipo === "conta") {
+            // Se for uma conta, adiciona no Firestore
+            await addDoc(collection(db, "users", user.uid, "contas"), {
+                nome: nome,
+                saldo: saldo,
+                tipo: tipo,
+            });
+        } else if (tipo === "cartao") {
+            // Se for um cartão de crédito, adiciona no Firestore com a data de vencimento
+            await addDoc(collection(db, "users", user.uid, "cartoes"), {
+                nome: nome,
+                saldo: saldo,
+                vencimento: vencimento,
+                tipo: tipo,
+            });
+        }
+
+        alert("Conta ou cartão adicionado com sucesso!");
+        // Limpar os campos após adicionar
+        document.getElementById("nome-conta").value = "";
+        document.getElementById("saldo-conta").value = "";
+        document.getElementById("vencimento-cartao").value = "";
+    } catch (error) {
+        alert("Erro ao adicionar conta ou cartão: " + error.message);
+    }
+}
+
+async function carregarContasECartoes() {
+    const user = auth.currentUser;
+    if (!user) {
+        return;
+    }
+
+    const contasRef = collection(db, "users", user.uid, "contas");
+    const cartoesRef = collection(db, "users", user.uid, "cartoes");
+
+    const contasSnapshot = await getDocs(contasRef);
+    const cartoesSnapshot = await getDocs(cartoesRef);
+
+    const listaContas = document.getElementById("lista-contas");
+    const listaCartoes = document.getElementById("lista-cartoes");
+
+    listaContas.innerHTML = "";
+    listaCartoes.innerHTML = "";
+
+    contasSnapshot.forEach(doc => {
+        const li = document.createElement("li");
+        li.textContent = `Conta: ${doc.data().nome} - Saldo: R$ ${doc.data().saldo.toFixed(2)}`;
+        listaContas.appendChild(li);
+    });
+
+    cartoesSnapshot.forEach(doc => {
+        const li = document.createElement("li");
+        li.textContent = `Cartão: ${doc.data().nome} - Limite: R$ ${doc.data().saldo.toFixed(2)} - Vencimento: ${doc.data().vencimento}`;
+        listaCartoes.appendChild(li);
+    });
+}
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        carregarContasECartoes();
+    }
+});
