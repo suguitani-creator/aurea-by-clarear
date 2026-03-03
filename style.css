@@ -535,3 +535,13 @@ li.despesa {
     font-size: 14px;
     margin-top: 4px;
 }
+
+.comparativo-card {
+    background: #F0E7DA;
+    font-size: 13px;
+}
+
+.comparativo-card p {
+    margin: 6px 0;
+    font-weight: 500;
+}
