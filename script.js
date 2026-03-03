@@ -475,6 +475,18 @@ function atualizarComparativo() {
         `${variacaoDespesa.toFixed(1)}% (-R$ ${(atual.totalDespesas - anterior.totalDespesas).toFixed(2)})`;
 }
 
+// Adicionando a interação ao box de comparativo
+document.getElementById("comparativo-container").addEventListener("mouseenter", function() {
+    document.getElementById("comparativo-container").classList.add("show");
+    atualizarComparativo(); // Atualiza os valores quando o usuário passa o mouse
+});
+
+document.getElementById("comparativo-container").addEventListener("mouseleave", function() {
+    document.getElementById("comparativo-container").classList.remove("show");
+    document.getElementById("comparativo-receita").textContent = "—"; // Esconde os valores
+    document.getElementById("comparativo-despesa").textContent = "—"; // Esconde os valores
+});
+
 console.log("Salvando transação:", tipo, categoria, descricao, valor, data);
 await addDoc(collection(db, "users", user.uid, "transacoes"), {
     tipo,
