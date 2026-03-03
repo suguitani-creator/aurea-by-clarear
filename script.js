@@ -122,6 +122,12 @@ async function adicionarTransacao() {
         showToast("Transação atualizada!");
         idEmEdicao = null;
 
+        document.getElementById("indicador-edicao").style.display = "none";
+
+        document.querySelectorAll("li").forEach(li => {
+        li.classList.remove("linha-editando");
+        });
+
         const btn = document.getElementById("btn-adicionar");
         btn.textContent = "Adicionar";
         btn.classList.remove("modo-edicao");
@@ -373,11 +379,31 @@ window.editarTransacao = async function(id) {
     document.getElementById("valor").value = transacao.valor;
     document.getElementById("data").value = transacao.data;
 
+    document.getElementById("indicador-edicao").style.display = "block";
+
     idEmEdicao = id;
+
+    // Remover destaque anterior
+    document.querySelectorAll("li").forEach(li => {
+        li.classList.remove("linha-editando");
+    });
+
+    // Destacar linha atual
+    const linha = document
+        .querySelector(`button[onclick*="${id}"]`)
+        .closest("li");
+
+    if (linha) {
+        linha.classList.add("linha-editando");
+    }
 
     const btn = document.getElementById("btn-adicionar");
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
 
-    showToast("Editando transação...");
+    // 🔥 NOVO: scroll suave até o formulário
+    document.querySelector(".form").scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
 };
