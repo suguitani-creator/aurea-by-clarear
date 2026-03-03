@@ -594,7 +594,19 @@ async function carregarContasECartoes() {
 }
 
 onAuthStateChanged(auth, (user) => {
+    const authContainer = document.getElementById("auth-container");
+    const appContainer = document.getElementById("app-container");
+
     if (user) {
-        carregarContasECartoes();
+        // Se o usuário estiver logado, exibe o conteúdo do app e esconde o login
+        authContainer.style.display = "none";
+        appContainer.style.display = "block";
+
+        // Carregar as contas e cartões do usuário
+        carregarContasECartoes(); // Função para carregar contas e cartões do usuário
+    } else {
+        // Se o usuário não estiver logado, exibe a tela de login e esconde o conteúdo do app
+        authContainer.style.display = "block";
+        appContainer.style.display = "none";
     }
 });

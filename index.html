@@ -19,8 +19,7 @@
     <p class="subtitle">by Clarear</p>
 
     <!-- LOGIN -->
-   <div id="auth-container">
-
+    <div id="auth-container">
         <h2>Acesse sua gestão patrimonial</h2>
         <p class="login-subtitle">Clareza financeira começa com organização.</p>
 
@@ -29,21 +28,23 @@
 
         <button id="btn-login">Entrar</button>
         <button id="btn-cadastro" class="secondary-btn">Criar conta</button>
-
     </div>
 
-    <!-- APP (escondido até login) -->
+    <!-- APP (aparece após o login) -->
     <div id="app-container" style="display:none;">
 
+        <!-- Info do usuário -->
         <div class="usuario-info">
             <span id="usuario-email"></span>
             <button id="btn-logout">Sair</button>
         </div>
 
+        <!-- Filtro de mês -->
         <div class="filtro-mes">
             <input type="month" id="mes-filtro">
         </div>
 
+        <!-- Dashboard -->
         <div class="dashboard">
             <div class="card">
                 <h4>Receitas</h4>
@@ -60,42 +61,39 @@
                 <p id="saldo">R$ 0.00</p>
             </div>
 
+            <!-- Comparativo com mês anterior -->
             <div class="filtro-comparativo">
-            <div id="comparativo-container" class="comparativo-container">
-                <small>Comparativo com mês anterior</small>
-                <p id="comparativo-receita">—</p>
-                <p id="comparativo-despesa">—</p>
+                <div id="comparativo-container" class="comparativo-container">
+                    <small>Comparativo com mês anterior</small>
+                    <p id="comparativo-receita">—</p>
+                    <p id="comparativo-despesa">—</p>
+                </div>
             </div>
+        </div>
 
-            <!-- INÍCIO: Formulário de Cadastro de Contas e Cartões -->
-            <div class="formulario-contas">
-                <h3>Adicionar Conta ou Cartão</h3>
-                <select id="tipo-conta">
+        <!-- INÍCIO: Formulário de Cadastro de Contas e Cartões (aparece após login) -->
+        <div class="formulario-contas">
+            <h3>Adicionar Conta ou Cartão</h3>
+            <select id="tipo-conta">
                 <option value="conta">Conta Corrente</option>
                 <option value="cartao">Cartão de Crédito</option>
-                </select>
+            </select>
 
-                <input type="text" id="nome-conta" placeholder="Nome da conta ou cartão" />
-                <input type="number" id="saldo-conta" placeholder="Saldo ou limite" />
-                <input type="date" id="vencimento-cartao" placeholder="Data de vencimento (Cartão de Crédito)" />
-                <button onclick="adicionarConta()">Adicionar</button>
-            </div>
-            <!-- FIM: Formulário de Cadastro de Contas e Cartões -->
-
-            <!-- INÍCIO: Exibir Contas e Cartões Cadastrados -->
-            <div class="contas-lista">
-                <h3>Contas e Cartões Cadastrados</h3>
-                <ul id="lista-contas"></ul>
-                <ul id="lista-cartoes"></ul>
-            </div>
-            <!-- FIM: Exibir Contas e Cartões Cadastrados -->
+            <input type="text" id="nome-conta" placeholder="Nome da conta ou cartão" />
+            <input type="number" id="saldo-conta" placeholder="Saldo ou limite" />
+            <input type="date" id="vencimento-cartao" placeholder="Data de vencimento (Cartão de Crédito)" />
+            <button onclick="adicionarConta()">Adicionar</button>
         </div>
-    </div>
+        <!-- FIM: Formulário de Cadastro de Contas e Cartões -->
 
-        <div id="indicador-edicao" class="indicador-edicao">
-            Editando transação
+        <!-- Exibir Contas e Cartões Cadastrados -->
+        <div class="contas-lista">
+            <h3>Contas e Cartões Cadastrados</h3>
+            <ul id="lista-contas"></ul>
+            <ul id="lista-cartoes"></ul>
         </div>
 
+        <!-- INÍCIO: Formulário de Transações -->
         <div class="form">
             <select id="tipo">
                 <option value="receita">Receita</option>
@@ -110,6 +108,7 @@
 
             <button id="btn-adicionar">Adicionar</button>
         </div>
+        <!-- FIM: Formulário de Transações -->
 
         <h2>Fluxo Financeiro</h2>
         <ul id="lista-despesas"></ul>
@@ -143,25 +142,6 @@ if ('serviceWorker' in navigator) {
       <button id="confirmar-exclusao" class="btn-primary">Remover</button>
     </div>
   </div>
-</div>
-
-<div class="formulario-contas">
-    <h3>Adicionar Conta ou Cartão</h3>
-    <select id="tipo-conta">
-        <option value="conta">Conta Corrente</option>
-        <option value="cartao">Cartão de Crédito</option>
-    </select>
-
-    <input type="text" id="nome-conta" placeholder="Nome da conta ou cartão" />
-    <input type="number" id="saldo-conta" placeholder="Saldo ou limite" />
-    <input type="date" id="vencimento-cartao" placeholder="Data de vencimento (Cartão de Crédito)" />
-    <button onclick="adicionarConta()">Adicionar</button>
-</div>
-
-<div class="contas-lista">
-    <h3>Contas e Cartões Cadastrados</h3>
-    <ul id="lista-contas"></ul>
-    <ul id="lista-cartoes"></ul>
 </div>
 
 </body>
