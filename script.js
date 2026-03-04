@@ -520,9 +520,10 @@ async function adicionarConta() {
     const nome = document.getElementById("nome-conta").value;
     const saldo = parseFloat(document.getElementById("saldo-conta").value);
     const vencimento = document.getElementById("vencimento-cartao").value;
+    const fechamento = document.getElementById("fechamento-cartao").value;
 
     // Verificando se todos os campos foram preenchidos
-    if (!nome || isNaN(saldo) || (tipo === "cartao" && !vencimento)) {
+    if (!nome || isNaN(saldo) || (tipo === "cartao" && !vencimento) || (tipo === "cartao" && !fechamento)) {
         alert("Preencha todos os campos corretamente.");
         return;
     }
@@ -536,27 +537,23 @@ async function adicionarConta() {
     try {
         // Salva a conta ou cartão no Firestore
         if (tipo === "conta") {
-            // Se for uma conta, adiciona no Firestore
             await addDoc(collection(db, "users", user.uid, "contas"), {
                 nome: nome,
                 saldo: saldo,
                 tipo: tipo,
             });
         } else if (tipo === "cartao") {
-            // Se for um cartão de crédito, adiciona no Firestore com a data de vencimento
             await addDoc(collection(db, "users", user.uid, "cartoes"), {
                 nome: nome,
                 saldo: saldo,
                 vencimento: vencimento,
+                fechamento: fechamento,
                 tipo: tipo,
             });
         }
 
         alert("Conta ou cartão adicionado com sucesso!");
-        // Limpar os campos após adicionar
-        document.getElementById("nome-conta").value = "";
-        document.getElementById("saldo-conta").value = "";
-        document.getElementById("vencimento-cartao").value = "";
+        carregarContasECartoes(); // Carregar as contas e cartões após adicionar
     } catch (error) {
         alert("Erro ao adicionar conta ou cartão: " + error.message);
     }
