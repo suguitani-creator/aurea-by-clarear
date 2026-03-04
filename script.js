@@ -60,12 +60,14 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("btn-login").addEventListener("click", async () => {
-        try {
-            await signInWithEmailAndPassword(auth, emailInput.value, senhaInput.value);
-        } catch (error) {
-            showToast("Erro ao entrar", "error");
-        }
-    });
+    try {
+        await signInWithEmailAndPassword(auth, emailInput.value, senhaInput.value);
+        console.log("Login bem-sucedido"); // Log de depuração
+    } catch (error) {
+        console.log("Erro ao fazer login:", error.message); // Log de depuração
+        showToast("Erro ao entrar", "error");
+    }
+});
 
     document.getElementById("btn-logout").addEventListener("click", async () => {
         await signOut(auth);
@@ -98,9 +100,12 @@ window.addEventListener("DOMContentLoaded", () => {
 // ================= FINANÇAS =================
 
 async function adicionarTransacao() {
-
+    // Garantir que a variável `user` seja acessada apenas após autenticação.
     const user = auth.currentUser;
-    if (!user) return;
+    if (!user) {
+        console.log("Usuário não autenticado, abortando transação...");
+        return;
+    }
 
     const tipo = document.getElementById("tipo").value;
     const categoria = document.getElementById("categoria").value;
@@ -109,7 +114,7 @@ async function adicionarTransacao() {
     const data = document.getElementById("data").value;
 
     if (!descricao || isNaN(valor) || !data) {
-        showToast("Preencha todos os campos", "error");
+        showToast("Preencha todos os campos corretamente", "error");
         return;
     }
 
@@ -118,14 +123,13 @@ async function adicionarTransacao() {
             doc(db, "users", user.uid, "transacoes", idEmEdicao),
             { tipo, categoria, descricao, valor, data }
         );
-
         showToast("Transação atualizada!");
         idEmEdicao = null;
 
         document.getElementById("indicador-edicao").style.display = "none";
 
         document.querySelectorAll("li").forEach(li => {
-        li.classList.remove("linha-editando");
+            li.classList.remove("linha-editando");
         });
 
         const btn = document.getElementById("btn-adicionar");
@@ -137,7 +141,6 @@ async function adicionarTransacao() {
             collection(db, "users", user.uid, "transacoes"),
             { tipo, categoria, descricao, valor, data }
         );
-
         showToast("Transação adicionada!");
     }
 
@@ -605,17 +608,17 @@ onAuthStateChanged(auth, (user) => {
     const appContainer = document.getElementById("app-container");
 
     if (user) {
-        // Mostrar email do usuário
+        // O usuário está autenticado, acessamos o `user` aqui.
         document.getElementById("usuario-email").textContent = user.email;
 
         // Esconder login e mostrar app
         authContainer.style.display = "none";
         appContainer.style.display = "block";
 
-        // Carregar dados do Firestore
-        carregarContasECartoes();
+        // Carregar transações após o login
+        carregarTransacoes();
     } else {
-        // Mostrar login e esconder app
+        // O usuário não está autenticado, mostramos a tela de login
         authContainer.style.display = "block";
         appContainer.style.display = "none";
         limparFormulario();
