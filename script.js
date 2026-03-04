@@ -523,7 +523,7 @@ async function adicionarConta() {
     const fechamento = document.getElementById("fechamento-cartao").value;
 
     // Verificando se todos os campos foram preenchidos
-    if (!nome || isNaN(saldo) || (tipo === "cartao" && !vencimento) || (tipo === "cartao" && !fechamento)) {
+    if (!nome || isNaN(saldo) || (tipo === "cartao" && (!vencimento || !fechamento))) {
         alert("Preencha todos os campos corretamente.");
         return;
     }
@@ -535,14 +535,16 @@ async function adicionarConta() {
     }
 
     try {
-        // Salva a conta ou cartão no Firestore
+        // Se for uma conta corrente
         if (tipo === "conta") {
             await addDoc(collection(db, "users", user.uid, "contas"), {
                 nome: nome,
                 saldo: saldo,
                 tipo: tipo,
             });
-        } else if (tipo === "cartao") {
+        } 
+        // Se for um cartão de crédito
+        else if (tipo === "cartao") {
             await addDoc(collection(db, "users", user.uid, "cartoes"), {
                 nome: nome,
                 saldo: saldo,
@@ -585,7 +587,7 @@ async function carregarContasECartoes() {
 
     cartoesSnapshot.forEach(doc => {
         const li = document.createElement("li");
-        li.textContent = `Cartão: ${doc.data().nome} - Limite: R$ ${doc.data().saldo.toFixed(2)} - Vencimento: ${doc.data().vencimento}`;
+        li.textContent = `Cartão: ${doc.data().nome} - Limite: R$ ${doc.data().saldo.toFixed(2)} - Vencimento: ${doc.data().vencimento} - Fechamento: ${doc.data().fechamento}`;
         listaCartoes.appendChild(li);
     });
 }
