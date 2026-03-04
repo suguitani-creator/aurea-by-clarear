@@ -536,7 +536,7 @@ async function adicionarConta() {
     }
 
     try {
-        // Se for uma conta corrente
+        // Adicionar Conta Corrente
         if (tipo === "conta") {
             await addDoc(collection(db, "users", user.uid, "contas"), {
                 nome: nome,
@@ -545,7 +545,7 @@ async function adicionarConta() {
                 dataSaldo: dataSaldo
             });
         } 
-        // Se for um cartão de crédito
+        // Adicionar Cartão de Crédito
         else if (tipo === "cartao") {
             await addDoc(collection(db, "users", user.uid, "cartoes"), {
                 nome: nome,
