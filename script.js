@@ -1,34 +1,16 @@
 import { auth, db } from "./firebase.js";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  doc,
-  query,
-  orderBy,
-  updateDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const categorias = {
     receita: ["Salário", "Pró-labore", "Investimentos", "Dividendos", "Outros"],
     despesa: ["Alimentação", "Moradia", "Transporte", "Lazer", "Saúde", "Educação", "Outros"]
 };
 
-let idEmEdicao = null;
 let transacoes = [];
-let grafico;
 
-// 🔥 GARANTE QUE TUDO SÓ RODE APÓS O DOM CARREGAR
 window.addEventListener("DOMContentLoaded", () => {
     atualizarCategorias();
-
     const hoje = new Date().toISOString().slice(0,7);
     document.getElementById("mes-filtro").value = hoje;
 
@@ -36,7 +18,6 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("tipo").addEventListener("change", atualizarCategorias);
     document.getElementById("btn-adicionar").addEventListener("click", adicionarTransacao);
 
-    // AUTH ELEMENTOS
     const authContainer = document.getElementById("auth-container");
     const appContainer = document.getElementById("app-container");
     const emailInput = document.getElementById("email");
@@ -84,12 +65,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 async function adicionarTransacao() {
     const user = auth.currentUser;
-    console.log("Usuário atual:", user);  // Log de depuração
-
-    if (!user) {
-        console.log("Usuário não autenticado!");  // Log de depuração
-        return;
-    }
+    if (!user) return;
 
     const tipo = document.getElementById("tipo").value;
     const categoria = document.getElementById("categoria").value;
@@ -97,41 +73,17 @@ async function adicionarTransacao() {
     const valor = parseFloat(document.getElementById("valor").value);
     const data = document.getElementById("data").value;
 
-    console.log("Dados da transação:", tipo, categoria, descricao, valor, data);  // Log de depuração
-
     if (!descricao || isNaN(valor) || !data) {
         showToast("Preencha todos os campos corretamente", "error");
         return;
     }
 
-    if (idEmEdicao) {
-        await updateDoc(
-            doc(db, "users", user.uid, "transacoes", idEmEdicao),
-            { tipo, categoria, descricao, valor, data }
-        );
-        showToast("Transação atualizada!");
-        idEmEdicao = null;
+    await addDoc(
+        collection(db, "users", user.uid, "transacoes"),
+        { tipo, categoria, descricao, valor, data }
+    );
 
-        document.getElementById("indicador-edicao").style.display = "none";
-
-        document.querySelectorAll("li").forEach(li => {
-            li.classList.remove("linha-editando");
-        });
-
-        const btn = document.getElementById("btn-adicionar");
-        btn.textContent = "Adicionar";
-        btn.classList.remove("modo-edicao");
-
-    } else {
-        // **Log** para verificar se estamos indo para a adição de uma nova transação
-        console.log("Adicionando nova transação...");
-        await addDoc(
-            collection(db, "users", user.uid, "transacoes"),
-            { tipo, categoria, descricao, valor, data }
-        );
-        showToast("Transação adicionada!");
-    }
-
+    showToast("Transação adicionada!");
     limparFormulario();
     carregarTransacoes();
 }
@@ -161,7 +113,6 @@ function aplicarFiltro() {
 
     atualizarTela(filtradas);
     calcularSaldo(filtradas);
-    atualizarGrafico(filtradas);
 }
 
 function atualizarTela(listaTransacoes) {
@@ -195,7 +146,6 @@ function atualizarTela(listaTransacoes) {
                 </button>
             </div>
         `;
-
         lista.appendChild(item);
     });
 }
@@ -249,72 +199,8 @@ async function carregarTransacoes() {
     aplicarFiltro();
 }
 
-function atualizarComparativo() {
-    const mesFiltro = document.getElementById("mes-filtro").value;
-    if (!mesFiltro) return;
-
-    const [anoAtual, mesAtual] = mesFiltro.split("-");
-    const mes = parseInt(mesAtual) - 1; // Ajuste do mês para o formato correto
-    const ano = parseInt(anoAtual);
-
-    // Mês anterior
-    const dataAnterior = new Date(ano, mes - 1, 1);
-
-    console.log("Calculando para o mês atual:", mes, ano); // Log de depuração
-    console.log("Calculando para o mês anterior:", dataAnterior); // Log de depuração
-
-    const atual = calcularTotaisPorMes(mes, ano);
-    const anterior = calcularTotaisPorMes(
-        dataAnterior.getMonth(),
-        dataAnterior.getFullYear()
-    );
-
-    console.log("Totais do mês atual:", atual); // Log de depuração
-    console.log("Totais do mês anterior:", anterior); // Log de depuração
-
-    function calcularVariacao(atual, anterior) {
-        if (anterior === 0) return 0;
-        return ((atual - anterior) / anterior) * 100;
-    }
-
-    const variacaoReceita = calcularVariacao(
-        atual.totalReceitas,
-        anterior.totalReceitas
-    );
-
-    const variacaoDespesa = calcularVariacao(
-        atual.totalDespesas,
-        anterior.totalDespesas
-    );
-
-    // Exibe as receitas com valor absoluto e porcentagem
-    document.getElementById("comparativo-receita").textContent =
-        `${variacaoReceita.toFixed(1)}% (+R$ ${(atual.totalReceitas - anterior.totalReceitas).toFixed(2)})`;
-
-    // Exibe as despesas com valor absoluto e porcentagem
-    document.getElementById("comparativo-despesa").textContent =
-        `${variacaoDespesa.toFixed(1)}% (-R$ ${(atual.totalDespesas - anterior.totalDespesas).toFixed(2)})`;
-}
-
 function limparFormulario() {
     document.getElementById("descricao").value = "";
     document.getElementById("valor").value = "";
     document.getElementById("data").value = "";
 }
-
-// Evento de click para o comparativo
-document.getElementById("comparativo-container").addEventListener("click", function() {
-    const comparativoContainer = document.getElementById("comparativo-container");
-
-    // Alternar a classe 'show' para mostrar/esconder os valores
-    comparativoContainer.classList.toggle("show");
-
-    // Verifica se a classe 'show' está ativa
-    if (comparativoContainer.classList.contains("show")) {
-        atualizarComparativo(); // Atualiza os valores quando o comparativo é exibido
-    } else {
-        // Limpa os valores quando o comparativo é ocultado
-        document.getElementById("comparativo-receita").textContent = "—";
-        document.getElementById("comparativo-despesa").textContent = "—";
-    }
-});

@@ -12,9 +12,7 @@
 
 
 <body>
-
 <div class="container">
-
     <h1>Áurea</h1>
     <p class="subtitle">by Clarear</p>
 
@@ -22,10 +20,8 @@
     <div id="auth-container">
         <h2>Acesse sua gestão patrimonial</h2>
         <p class="login-subtitle">Clareza financeira começa com organização.</p>
-
         <input type="email" id="email" placeholder="Seu email">
         <input type="password" id="senha" placeholder="Sua senha">
-
         <button id="btn-login">Entrar</button>
         <button id="btn-cadastro" class="secondary-btn">Criar conta</button>
     </div>
@@ -60,19 +56,9 @@
                 <h4>Saldo</h4>
                 <p id="saldo">R$ 0.00</p>
             </div>
-
-            <!-- Comparativo com mês anterior -->
-            <div class="filtro-comparativo">
-                <div id="comparativo-container" class="comparativo-container">
-                    <small>Comparativo com mês anterior</small>
-                    <p id="comparativo-receita">—</p>
-                    <p id="comparativo-despesa">—</p>
-                </div>
-            </div>
         </div>
 
-
-        <!-- INÍCIO: Formulário de Transações -->
+        <!-- Formulário de Transações -->
         <div class="form">
             <select id="tipo">
                 <option value="receita">Receita</option>
@@ -87,41 +73,19 @@
 
             <button id="btn-adicionar">Adicionar</button>
         </div>
-        <!-- FIM: Formulário de Transações -->
 
         <h2>Fluxo Financeiro</h2>
         <ul id="lista-despesas"></ul>
-
-        <div class="grafico-container">
-            <canvas id="graficoCategorias"></canvas>
-        </div>
-
     </div>
-
 </div>
-
 <script type="module" src="firebase.js"></script>
 <script type="module" src="script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js')
-    .then(reg => console.log("SW registrado com sucesso"))
-    .catch(err => console.log("Erro ao registrar SW:", err));
+    navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log("SW registrado com sucesso"))
+        .catch(err => console.log("Erro ao registrar SW:", err));
 }
 </script>
-
-<div id="toast" class="toast"></div>
-
-<div id="modal-confirmacao" class="modal-overlay">
-  <div class="modal-box">
-    <p>Deseja remover esta transação?</p>
-    <div class="modal-actions">
-      <button id="cancelar-exclusao" class="btn-secondary">Cancelar</button>
-      <button id="confirmar-exclusao" class="btn-primary">Remover</button>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
