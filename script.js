@@ -1,23 +1,48 @@
 import { auth, db } from "./firebase.js";
-import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const categorias = {
-    receita: ["Salário", "Pró-labore", "Investimentos", "Dividendos", "Outros"],
-    despesa: ["Alimentação", "Moradia", "Transporte", "Lazer", "Saúde", "Educação", "Outros"]
+    receita: ["Salário","Pró-labore","Investimentos","Dividendos","Outros"],
+    despesa: ["Alimentação","Moradia","Transporte","Lazer","Saúde","Educação","Outros"]
 };
 
 let transacoes = [];
+let grafico;
 
+// 🔥 GARANTE QUE TUDO SÓ RODE APÓS O DOM CARREGAR
 window.addEventListener("DOMContentLoaded", () => {
+
     atualizarCategorias();
+
     const hoje = new Date().toISOString().slice(0,7);
     document.getElementById("mes-filtro").value = hoje;
 
-    document.getElementById("mes-filtro").addEventListener("change", aplicarFiltro);
-    document.getElementById("tipo").addEventListener("change", atualizarCategorias);
-    document.getElementById("btn-adicionar").addEventListener("click", adicionarTransacao);
+    document.getElementById("mes-filtro")
+        .addEventListener("change", aplicarFiltro);
 
+    document.getElementById("tipo")
+        .addEventListener("change", atualizarCategorias);
+
+    document.getElementById("btn-adicionar")
+    .addEventListener("click", adicionarTransacao);
+
+    // AUTH ELEMENTOS
     const authContainer = document.getElementById("auth-container");
     const appContainer = document.getElementById("app-container");
     const emailInput = document.getElementById("email");
@@ -45,20 +70,27 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     onAuthStateChanged(auth, (user) => {
-        const authContainer = document.getElementById("auth-container");
-        const appContainer = document.getElementById("app-container");
+    const authContainer = document.getElementById("auth-container");
+    const appContainer = document.getElementById("app-container");
 
-        if (user) {
-            document.getElementById("usuario-email").textContent = user.email;
-            authContainer.style.display = "none";
-            appContainer.style.display = "block";
-            carregarTransacoes();
-        } else {
-            authContainer.style.display = "block";
-            appContainer.style.display = "none";
-            limparFormulario();
-        }
-    });
+    if (user) {
+        // Mostrar email do usuário
+        document.getElementById("usuario-email").textContent = user.email;
+
+        // Esconder login e mostrar app
+        authContainer.style.display = "none";
+        appContainer.style.display = "block";
+
+        // 🔥 IMPORTANTE: carregar dados do Firestore
+        carregarTransacoes();
+
+    } else {
+        // Mostrar login e esconder app
+        authContainer.style.display = "block";
+        appContainer.style.display = "none";
+        limparFormulario();
+    }
+});
 });
 
 // ================= FINANÇAS =================
@@ -74,7 +106,7 @@ async function adicionarTransacao() {
     const data = document.getElementById("data").value;
 
     if (!descricao || isNaN(valor) || !data) {
-        showToast("Preencha todos os campos corretamente", "error");
+        alert("Preencha todos os campos corretamente.");
         return;
     }
 
@@ -82,7 +114,6 @@ async function adicionarTransacao() {
         collection(db, "users", user.uid, "transacoes"),
         { tipo, categoria, descricao, valor, data }
     );
-
     showToast("Transação adicionada!");
     limparFormulario();
     carregarTransacoes();
@@ -113,6 +144,7 @@ function aplicarFiltro() {
 
     atualizarTela(filtradas);
     calcularSaldo(filtradas);
+    atualizarGrafico(filtradas);
 }
 
 function atualizarTela(listaTransacoes) {
@@ -120,7 +152,9 @@ function atualizarTela(listaTransacoes) {
     lista.innerHTML = "";
 
     listaTransacoes.forEach((transacao) => {
+
         const item = document.createElement("li");
+
         item.classList.add(transacao.tipo);
         item.classList.add("item-novo");
 
@@ -133,19 +167,15 @@ function atualizarTela(listaTransacoes) {
             <div class="item-actions">
                 <span class="valor">R$ ${transacao.valor.toFixed(2)}</span>
 
-                <button class="btn-edit" onclick="editarTransacao('${transacao.id}')">
-                    <svg viewBox="0 0 24 24" width="16" height="16">
-                        <path fill="currentColor" d="M3 17.25V21h3.75L19.81 7.94l-3.75-3.75L3 17.25zM20.71 6.04c.39-.39.39-1.02 0-1.41l-1.34-1.34c-.39-.39-1.02-.39-1.41 0l-1.13 1.13 3.75 3.75 1.13-1.13z"/>
-                    </svg>
-                </button>
-
                 <button class="btn-delete" onclick="confirmarExclusao('${transacao.id}')">
                     <svg viewBox="0 0 24 24" width="16" height="16">
-                        <path fill="currentColor" d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
+                        <path fill="currentColor"
+                        d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
                     </svg>
                 </button>
             </div>
         `;
+
         lista.appendChild(item);
     });
 }
@@ -176,47 +206,68 @@ function calcularSaldo(listaTransacoes) {
         saldo >= 0 ? "#4A7C59" : "#A94442";
 }
 
-async function editarTransacao(id) {
-    const transacao = transacoes.find(t => t.id === id);
-    if (!transacao) return;
-
-    // Preencher os campos do formulário de edição com os dados da transação
-    document.getElementById("tipo").value = transacao.tipo;
-    document.getElementById("categoria").value = transacao.categoria;
-    document.getElementById("descricao").value = transacao.descricao;
-    document.getElementById("valor").value = transacao.valor;
-    document.getElementById("data").value = transacao.data;
-
-    // Atualizar o indicador de edição e mudar o botão para "Salvar"
-    document.getElementById("indicador-edicao").style.display = "block";
-    document.getElementById("btn-adicionar").textContent = "Salvar alteração";
-    document.getElementById("btn-adicionar").classList.add("modo-edicao");
-
-    idEmEdicao = id;
-}
-
 async function removerTransacao(id) {
     const user = auth.currentUser;
     if (!user) return;
 
-    // Remover a transação do Firestore
-    await deleteDoc(doc(db, "users", user.uid, "transacoes", id));
+    const elemento = document.querySelector(`button[onclick*="${id}"]`).closest("li");
 
-    // Carregar transações novamente para atualizar a lista
-    carregarTransacoes();
-    showToast("Transação removida", "delete");
+    elemento.style.transition = "all 0.3s ease";
+    elemento.style.opacity = "0";
+    elemento.style.transform = "translateX(10px)";
+
+    setTimeout(async () => {
+        await deleteDoc(doc(db, "users", user.uid, "transacoes", id));
+        carregarTransacoes();
+        showToast("Transação removida", "delete");
+    }, 300);
+}
+
+window.removerTransacao = removerTransacao;
+
+function atualizarGrafico(listaTransacoes) {
+    const despesas = listaTransacoes.filter(t => t.tipo === "despesa");
+    const categoriasAgrupadas = {};
+
+    despesas.forEach(t => {
+        if (!categoriasAgrupadas[t.categoria]) {
+            categoriasAgrupadas[t.categoria] = 0;
+        }
+        categoriasAgrupadas[t.categoria] += t.valor;
+    });
+
+    const labels = Object.keys(categoriasAgrupadas);
+    const valores = Object.values(categoriasAgrupadas);
+    const ctx = document.getElementById("graficoCategorias");
+
+    if (grafico) grafico.destroy();
+
+    grafico = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+            labels: labels,
+            datasets: [{
+                data: valores,
+                backgroundColor: [
+                    "#C6A75E","#7A5C42","#A94442",
+                    "#4A7C59","#E8DFD4","#8B6F4E"
+                ]
+            }]
+        },
+        options: {
+            plugins: { legend: { position: "bottom" } }
+        }
+    });
 }
 
 async function carregarTransacoes() {
     const user = auth.currentUser;
     if (!user) return;
 
-    const q = query(
-        collection(db, "users", user.uid, "transacoes"),
-        orderBy("data", "desc")
+    const querySnapshot = await getDocs(
+        collection(db, "users", user.uid, "transacoes")
     );
 
-    const querySnapshot = await getDocs(q);
     transacoes = [];
 
     querySnapshot.forEach(documento => {
@@ -226,7 +277,6 @@ async function carregarTransacoes() {
         });
     });
 
-    // Atualiza a tela com as transações carregadas
     aplicarFiltro();
 }
 
@@ -236,17 +286,40 @@ function limparFormulario() {
     document.getElementById("data").value = "";
 }
 
-document.getElementById("comparativo-container").addEventListener("click", function() {
-    // Alterna a classe 'show' para mostrar/esconder os valores
-    const comparativoContainer = document.getElementById("comparativo-container");
-    comparativoContainer.classList.toggle("show");
+function showToast(message, type = "success") {
+    const toast = document.getElementById("toast");
 
-    // Atualiza os valores quando o comparativo é exibido
-    if (comparativoContainer.classList.contains("show")) {
-        atualizarComparativo();
-    } else {
-        // Limpa os valores quando o comparativo é ocultado
-        document.getElementById("comparativo-receita").textContent = "—";
-        document.getElementById("comparativo-despesa").textContent = "—";
-    }
+    toast.textContent = message;
+    toast.className = "toast show " + type;
+
+    setTimeout(() => {
+        toast.className = "toast";
+    }, 3000);
+}
+
+let idParaExcluir = null;
+
+function confirmarExclusao(id) {
+    idParaExcluir = id;
+    document.getElementById("modal-confirmacao").classList.add("show");
+}
+
+document.getElementById("cancelar-exclusao").addEventListener("click", () => {
+    document.getElementById("modal-confirmacao").classList.remove("show");
+    idParaExcluir = null;
 });
+
+document.getElementById("confirmar-exclusao").addEventListener("click", async () => {
+    if (!idParaExcluir) return;
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    await deleteDoc(doc(db, "users", user.uid, "transacoes", idParaExcluir));
+
+    document.getElementById("modal-confirmacao").classList.remove("show");
+    showToast("Transação removida", "delete");
+    carregarTransacoes();
+});
+
+window.confirmarExclusao = confirmarExclusao;

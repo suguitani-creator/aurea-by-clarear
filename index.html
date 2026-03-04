@@ -87,7 +87,17 @@ if ('serviceWorker' in navigator) {
         .catch(err => console.log("Erro ao registrar SW:", err));
 }
 </script>
-<button class="btn-edit" onclick="editarTransacao('${transacao.id}')">Editar</button>
-<button class="btn-delete" onclick="removerTransacao('${transacao.id}')">Excluir</button>
+
+<div id="toast" class="toast"></div>
+
+<div id="modal-confirmacao" class="modal-overlay">
+  <div class="modal-box">
+    <p>Deseja remover esta transação?</p>
+    <div class="modal-actions">
+      <button id="cancelar-exclusao" class="btn-secondary">Cancelar</button>
+      <button id="confirmar-exclusao" class="btn-primary">Remover</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
