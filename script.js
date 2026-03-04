@@ -597,15 +597,30 @@ onAuthStateChanged(auth, (user) => {
     const appContainer = document.getElementById("app-container");
 
     if (user) {
-        // Se o usuário estiver logado, exibe o conteúdo do app e esconde o login
+        // Mostrar email do usuário
+        document.getElementById("usuario-email").textContent = user.email;
+
+        // Esconder login e mostrar app
         authContainer.style.display = "none";
         appContainer.style.display = "block";
 
-        // Carregar as contas e cartões do usuário
-        carregarContasECartoes(); // Função para carregar contas e cartões do usuário
+        carregarContasECartoes(); // Carregar as contas após o login
     } else {
-        // Se o usuário não estiver logado, exibe a tela de login e esconde o conteúdo do app
+        // Mostrar login e esconder app
         authContainer.style.display = "block";
         appContainer.style.display = "none";
+        limparFormulario();
+    }
+});
+
+// Exibir ou esconder os campos de data dependendo do tipo de conta
+document.getElementById("tipo-conta").addEventListener("change", function() {
+    const tipo = this.value;
+    if (tipo === "cartao") {
+        document.getElementById("datas-cartao").style.display = "block";
+        document.getElementById("data-saldo-conta").style.display = "none"; // Esconde o campo de data para conta corrente
+    } else {
+        document.getElementById("datas-cartao").style.display = "none";
+        document.getElementById("data-saldo-conta").style.display = "block"; // Exibe o campo de data para conta corrente
     }
 });
