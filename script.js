@@ -523,7 +523,7 @@ async function adicionarConta() {
     const fechamento = document.getElementById("fechamento-cartao").value;
     const dataSaldo = document.getElementById("data-saldo-conta").value;
 
-    // Verificando se todos os campos foram preenchidos
+    // Verificando se todos os campos foram preenchidos corretamente
     if (!nome || isNaN(saldo) || (tipo === "cartao" && (!vencimento || !fechamento)) || (tipo === "conta" && !dataSaldo)) {
         alert("Preencha todos os campos corretamente.");
         return;
@@ -536,7 +536,7 @@ async function adicionarConta() {
     }
 
     try {
-        // Se for uma conta corrente
+        // Adicionar Conta Corrente
         if (tipo === "conta") {
             await addDoc(collection(db, "users", user.uid, "contas"), {
                 nome: nome,
@@ -545,7 +545,7 @@ async function adicionarConta() {
                 dataSaldo: dataSaldo
             });
         } 
-        // Se for um cartão de crédito
+        // Adicionar Cartão de Crédito
         else if (tipo === "cartao") {
             await addDoc(collection(db, "users", user.uid, "cartoes"), {
                 nome: nome,
@@ -557,7 +557,7 @@ async function adicionarConta() {
         }
 
         alert("Conta ou cartão adicionado com sucesso!");
-        carregarContasECartoes(); // Carregar as contas e cartões após adicionar
+        carregarContasECartoes(); // Atualiza a lista após a adição
     } catch (error) {
         alert("Erro ao adicionar conta ou cartão: " + error.message);
     }
@@ -565,9 +565,7 @@ async function adicionarConta() {
 
 async function carregarContasECartoes() {
     const user = auth.currentUser;
-    if (!user) {
-        return;
-    }
+    if (!user) return;
 
     const contasRef = collection(db, "users", user.uid, "contas");
     const cartoesRef = collection(db, "users", user.uid, "cartoes");
