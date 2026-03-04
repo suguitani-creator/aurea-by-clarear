@@ -521,9 +521,10 @@ async function adicionarConta() {
     const saldo = parseFloat(document.getElementById("saldo-conta").value);
     const vencimento = document.getElementById("vencimento-cartao").value;
     const fechamento = document.getElementById("fechamento-cartao").value;
+    const dataSaldo = document.getElementById("data-saldo-conta").value;
 
     // Verificando se todos os campos foram preenchidos
-    if (!nome || isNaN(saldo) || (tipo === "cartao" && (!vencimento || !fechamento))) {
+    if (!nome || isNaN(saldo) || (tipo === "cartao" && (!vencimento || !fechamento)) || (tipo === "conta" && !dataSaldo)) {
         alert("Preencha todos os campos corretamente.");
         return;
     }
@@ -541,6 +542,7 @@ async function adicionarConta() {
                 nome: nome,
                 saldo: saldo,
                 tipo: tipo,
+                dataSaldo: dataSaldo
             });
         } 
         // Se for um cartão de crédito
@@ -550,7 +552,7 @@ async function adicionarConta() {
                 saldo: saldo,
                 vencimento: vencimento,
                 fechamento: fechamento,
-                tipo: tipo,
+                tipo: tipo
             });
         }
 
