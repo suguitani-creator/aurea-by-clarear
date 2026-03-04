@@ -301,3 +301,20 @@ function limparFormulario() {
     document.getElementById("valor").value = "";
     document.getElementById("data").value = "";
 }
+
+// Evento de click para o comparativo
+document.getElementById("comparativo-container").addEventListener("click", function() {
+    const comparativoContainer = document.getElementById("comparativo-container");
+
+    // Alternar a classe 'show' para mostrar/esconder os valores
+    comparativoContainer.classList.toggle("show");
+
+    // Verifica se a classe 'show' está ativa
+    if (comparativoContainer.classList.contains("show")) {
+        atualizarComparativo(); // Atualiza os valores quando o comparativo é exibido
+    } else {
+        // Limpa os valores quando o comparativo é ocultado
+        document.getElementById("comparativo-receita").textContent = "—";
+        document.getElementById("comparativo-despesa").textContent = "—";
+    }
+});
