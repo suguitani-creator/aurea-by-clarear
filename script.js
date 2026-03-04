@@ -431,11 +431,11 @@ function atualizarComparativo() {
     if (!mesFiltro) return;
 
     const [anoAtual, mesAtual] = mesFiltro.split("-");
-    const mes = parseInt(mesAtual) - 1; // mês começa de 0 (Janeiro = 0)
+    const mes = parseInt(mesAtual) - 1;
     const ano = parseInt(anoAtual);
 
     // Mês anterior
-    const dataAnterior = new Date(ano, mes - 1, 1); // Ajuste para pegar mês anterior
+    const dataAnterior = new Date(ano, mes - 1, 1);
 
     const atual = calcularTotaisPorMes(mes, ano);
     const anterior = calcularTotaisPorMes(
@@ -458,9 +458,23 @@ function atualizarComparativo() {
         anterior.totalDespesas
     );
 
+    // Exibe as receitas com valor absoluto e porcentagem
     document.getElementById("comparativo-receita").textContent =
-        `${variacaoReceita.toFixed(1)}% (R$ ${(atual.totalReceitas - anterior.totalReceitas).toFixed(2)})`;
+        `${variacaoReceita.toFixed(1)}% (+R$ ${(atual.totalReceitas - anterior.totalReceitas).toFixed(2)})`;
 
+    // Exibe as despesas com valor absoluto e porcentagem
     document.getElementById("comparativo-despesa").textContent =
-        `${variacaoDespesa.toFixed(1)}% (R$ ${(atual.totalDespesas - anterior.totalDespesas).toFixed(2)})`;
+        `${variacaoDespesa.toFixed(1)}% (-R$ ${(atual.totalDespesas - anterior.totalDespesas).toFixed(2)})`;
 }
+
+// Adicionando a interação ao box de comparativo
+document.getElementById("comparativo-container").addEventListener("mouseenter", function() {
+    document.getElementById("comparativo-container").classList.add("show");
+    atualizarComparativo(); // Atualiza os valores quando o usuário passa o mouse
+});
+
+document.getElementById("comparativo-container").addEventListener("mouseleave", function() {
+    document.getElementById("comparativo-container").classList.remove("show");
+    document.getElementById("comparativo-receita").textContent = "—"; // Esconde os valores
+    document.getElementById("comparativo-despesa").textContent = "—"; // Esconde os valores
+});

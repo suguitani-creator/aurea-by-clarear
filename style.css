@@ -545,3 +545,68 @@ li.despesa {
     margin: 6px 0;
     font-weight: 500;
 }
+
+.filtro-comparativo {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.comparativo-container {
+    background: #F0E7DA;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #8B6F4E;
+    transition: all 0.3s ease;
+    width: 200px;
+    text-align: center;
+}
+
+.comparativo-container:hover {
+    background: #C6A75E;
+    color: #FFFFFF;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.comparativo-container p {
+    display: none;
+}
+
+.comparativo-container.show p {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+.card {
+    flex: 1;
+    background: #FAF8F5;
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(62, 47, 35, 0.05);
+    min-height: 120px;  /* Tamanho fixo para o card */
+}
+
+.dashboard {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.comparativo-card {
+    flex: 1;
+    background: #FAF8F5;
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(62, 47, 35, 0.05);
+    min-height: 120px;
+}
