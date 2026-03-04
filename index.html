@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <!-- MOVER O FORMULÁRIO DE CONTAS E CARTÕES PARA AQUI -->
+        <!-- MOVER O FORMULÁRIO DE CONTAS E CARTÕES PARA FORA DO DASHBOARD -->
         <div class="formulario-contas">
             <h3>Adicionar Conta ou Cartão</h3>
             <select id="tipo-conta">
@@ -82,10 +82,10 @@
             <input type="text" id="nome-conta" placeholder="Nome da conta ou cartão" />
             <input type="number" id="saldo-conta" placeholder="Saldo ou limite" />
 
-            <!-- Exibir o campo de data de atualização do saldo somente para conta corrente -->
-            <input type="date" id="data-saldo-conta" style="display:none;" placeholder="Data de atualização do saldo" />
+            <!-- Exibir campo de data de saldo para contas correntes -->
+            <input type="date" id="data-saldo-conta" placeholder="Data de atualização do saldo" style="display:none;" />
 
-            <!-- Exibir campos de data de vencimento e fechamento somente para cartão -->
+            <!-- Exibir campos de vencimento e fechamento para cartão -->
             <div id="datas-cartao" style="display:none;">
                 <input type="date" id="vencimento-cartao" placeholder="Data de vencimento" />
                 <input type="date" id="fechamento-cartao" placeholder="Data de fechamento" />
