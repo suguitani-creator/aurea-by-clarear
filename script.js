@@ -604,7 +604,8 @@ onAuthStateChanged(auth, (user) => {
         authContainer.style.display = "none";
         appContainer.style.display = "block";
 
-        carregarContasECartoes(); // Carregar as contas após o login
+        // Carregar dados do Firestore
+        carregarContasECartoes();
     } else {
         // Mostrar login e esconder app
         authContainer.style.display = "block";
