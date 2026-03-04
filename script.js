@@ -517,13 +517,16 @@ document.getElementById("comparativo-container").addEventListener("click", funct
 
 async function adicionarConta() {
     const tipo = document.getElementById("tipo-conta").value;
+    console.log("Tipo de conta selecionado:", tipo);  // Log de depuração
+
     const nome = document.getElementById("nome-conta").value;
     const saldo = parseFloat(document.getElementById("saldo-conta").value);
     const vencimento = document.getElementById("vencimento-cartao").value;
     const fechamento = document.getElementById("fechamento-cartao").value;
     const dataSaldo = document.getElementById("data-saldo-conta").value;
 
-    // Verificando se todos os campos foram preenchidos corretamente
+    console.log("Valores capturados:", nome, saldo, vencimento, fechamento, dataSaldo); // Log de depuração
+
     if (!nome || isNaN(saldo) || (tipo === "cartao" && (!vencimento || !fechamento)) || (tipo === "conta" && !dataSaldo)) {
         alert("Preencha todos os campos corretamente.");
         return;
@@ -536,17 +539,20 @@ async function adicionarConta() {
     }
 
     try {
-        // Adicionar Conta Corrente
+        // Se for uma conta corrente
         if (tipo === "conta") {
+            console.log("Adicionando conta corrente..."); // Log de depuração
             await addDoc(collection(db, "users", user.uid, "contas"), {
                 nome: nome,
                 saldo: saldo,
                 tipo: tipo,
                 dataSaldo: dataSaldo
             });
+            console.log("Conta corrente adicionada com sucesso!"); // Log de depuração
         } 
-        // Adicionar Cartão de Crédito
+        // Se for um cartão de crédito
         else if (tipo === "cartao") {
+            console.log("Adicionando cartão de crédito..."); // Log de depuração
             await addDoc(collection(db, "users", user.uid, "cartoes"), {
                 nome: nome,
                 saldo: saldo,
@@ -554,11 +560,13 @@ async function adicionarConta() {
                 fechamento: fechamento,
                 tipo: tipo
             });
+            console.log("Cartão de crédito adicionado com sucesso!"); // Log de depuração
         }
 
         alert("Conta ou cartão adicionado com sucesso!");
         carregarContasECartoes(); // Atualiza a lista após a adição
     } catch (error) {
+        console.log("Erro ao adicionar conta ou cartão:", error);  // Log de depuração
         alert("Erro ao adicionar conta ou cartão: " + error.message);
     }
 }
