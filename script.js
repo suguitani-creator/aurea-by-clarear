@@ -399,3 +399,67 @@ window.editarTransacao = async function(id) {
         block: "center"
     });
 };
+
+function converterDataFirestore(dataFirestore) {
+    const [ano, mes, dia] = dataFirestore.split("-"); // formato YYYY-MM-DD
+    return new Date(ano, mes - 1, dia); // meses começam do zero
+}
+
+function calcularTotaisPorMes(mes, ano) {
+    let totalReceitas = 0;
+    let totalDespesas = 0;
+
+    transacoes.forEach(t => {
+        const data = converterDataFirestore(t.data); // Usando a função nova para converter a data
+
+        // Verificar se a transação é do mês e ano correto
+        if (data.getMonth() === mes && data.getFullYear() === ano) {
+            if (t.tipo === "receita") {
+                totalReceitas += t.valor;
+            } else {
+                totalDespesas += t.valor;
+            }
+        }
+    });
+
+    return { totalReceitas, totalDespesas };
+}
+
+function atualizarComparativo() {
+    const mesFiltro = document.getElementById("mes-filtro").value;
+    if (!mesFiltro) return;
+
+    const [anoAtual, mesAtual] = mesFiltro.split("-");
+    const mes = parseInt(mesAtual) - 1; // mês começa de 0 (Janeiro = 0)
+    const ano = parseInt(anoAtual);
+
+    // Mês anterior
+    const dataAnterior = new Date(ano, mes - 1, 1); // Ajuste para pegar mês anterior
+
+    const atual = calcularTotaisPorMes(mes, ano);
+    const anterior = calcularTotaisPorMes(
+        dataAnterior.getMonth(),
+        dataAnterior.getFullYear()
+    );
+
+    function calcularVariacao(atual, anterior) {
+        if (anterior === 0) return 0;
+        return ((atual - anterior) / anterior) * 100;
+    }
+
+    const variacaoReceita = calcularVariacao(
+        atual.totalReceitas,
+        anterior.totalReceitas
+    );
+
+    const variacaoDespesa = calcularVariacao(
+        atual.totalDespesas,
+        anterior.totalDespesas
+    );
+
+    document.getElementById("comparativo-receita").textContent =
+        `${variacaoReceita.toFixed(1)}% (R$ ${(atual.totalReceitas - anterior.totalReceitas).toFixed(2)})`;
+
+    document.getElementById("comparativo-despesa").textContent =
+        `${variacaoDespesa.toFixed(1)}% (R$ ${(atual.totalDespesas - anterior.totalDespesas).toFixed(2)})`;
+}
