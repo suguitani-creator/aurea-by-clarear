@@ -166,6 +166,7 @@ function aplicarFiltro() {
     atualizarTela(filtradas);
     calcularSaldo(filtradas);
     atualizarGrafico(filtradas);
+    atualizarComparativo();
 }
 
 function atualizarTela(listaTransacoes) {
