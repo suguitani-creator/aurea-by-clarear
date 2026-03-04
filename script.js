@@ -176,6 +176,37 @@ function calcularSaldo(listaTransacoes) {
         saldo >= 0 ? "#4A7C59" : "#A94442";
 }
 
+async function editarTransacao(id) {
+    const transacao = transacoes.find(t => t.id === id);
+    if (!transacao) return;
+
+    // Preencher os campos do formulário de edição com os dados da transação
+    document.getElementById("tipo").value = transacao.tipo;
+    document.getElementById("categoria").value = transacao.categoria;
+    document.getElementById("descricao").value = transacao.descricao;
+    document.getElementById("valor").value = transacao.valor;
+    document.getElementById("data").value = transacao.data;
+
+    // Atualizar o indicador de edição e mudar o botão para "Salvar"
+    document.getElementById("indicador-edicao").style.display = "block";
+    document.getElementById("btn-adicionar").textContent = "Salvar alteração";
+    document.getElementById("btn-adicionar").classList.add("modo-edicao");
+
+    idEmEdicao = id;
+}
+
+async function removerTransacao(id) {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    // Remover a transação do Firestore
+    await deleteDoc(doc(db, "users", user.uid, "transacoes", id));
+
+    // Carregar transações novamente para atualizar a lista
+    carregarTransacoes();
+    showToast("Transação removida", "delete");
+}
+
 async function carregarTransacoes() {
     const user = auth.currentUser;
     if (!user) return;
@@ -186,7 +217,6 @@ async function carregarTransacoes() {
     );
 
     const querySnapshot = await getDocs(q);
-
     transacoes = [];
 
     querySnapshot.forEach(documento => {
@@ -196,6 +226,7 @@ async function carregarTransacoes() {
         });
     });
 
+    // Atualiza a tela com as transações carregadas
     aplicarFiltro();
 }
 
@@ -204,3 +235,18 @@ function limparFormulario() {
     document.getElementById("valor").value = "";
     document.getElementById("data").value = "";
 }
+
+document.getElementById("comparativo-container").addEventListener("click", function() {
+    // Alterna a classe 'show' para mostrar/esconder os valores
+    const comparativoContainer = document.getElementById("comparativo-container");
+    comparativoContainer.classList.toggle("show");
+
+    // Atualiza os valores quando o comparativo é exibido
+    if (comparativoContainer.classList.contains("show")) {
+        atualizarComparativo();
+    } else {
+        // Limpa os valores quando o comparativo é ocultado
+        document.getElementById("comparativo-receita").textContent = "—";
+        document.getElementById("comparativo-despesa").textContent = "—";
+    }
+});

@@ -87,5 +87,7 @@ if ('serviceWorker' in navigator) {
         .catch(err => console.log("Erro ao registrar SW:", err));
 }
 </script>
+<button class="btn-edit" onclick="editarTransacao('${transacao.id}')">Editar</button>
+<button class="btn-delete" onclick="removerTransacao('${transacao.id}')">Excluir</button>
 </body>
 </html>
