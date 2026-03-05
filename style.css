@@ -661,3 +661,18 @@ button.modo-edicao {
 button.modo-edicao:hover {
     background-color: #4A7C59;
 }
+
+.forma-pagamento {
+    font-size: 18px; /* Tamanho maior para destacar, mas discreto */
+    padding-left: 10px;
+    cursor: default; /* Evitar que o usuário tente clicar */
+    color: #7A5C42; /* Cor suave e elegante, mais próxima da paleta */
+}
+
+.item-actions button {
+    cursor: pointer;
+}
+
+.item-actions span {
+    cursor: default;
+}

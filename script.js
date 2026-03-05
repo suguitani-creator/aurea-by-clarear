@@ -488,11 +488,11 @@ function atualizarComparativo() {
 function getIconeFormaPagamento(formaPagamento) {
     switch (formaPagamento) {
         case "pix":
-            return "📲";  // ícone para Pix (simboliza o pagamento digital)
+            return "📱";  // ícone mais discreto para Pix
         case "debito":
-            return "💵";  // ícone para Débito (simboliza dinheiro imediato)
+            return "🛒";  // ícone mais refinado para Débito
         case "credito":
-            return "💳";  // ícone para Crédito (simboliza cartão de crédito)
+            return "💳";  // ícone sutil para Crédito
         default:
             return "💳";  // ícone padrão caso não tenha sido configurado
     }
