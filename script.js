@@ -61,12 +61,29 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("btn-login").addEventListener("click", async () => {
-        try {
-            await signInWithEmailAndPassword(auth, emailInput.value, senhaInput.value);
-        } catch (error) {
-            showToast("Erro ao entrar", "error");
-        }
-    });
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+
+    try {
+        await signInWithEmailAndPassword(auth, email, senha);
+        showToast("Login bem-sucedido!");
+    } catch (error) {
+        showToast("Erro ao entrar", "error");
+    }
+});
+
+// Para a versão mobile
+document.getElementById("btn-login-mobile").addEventListener("click", async () => {
+    const email = document.getElementById("email-mobile").value;
+    const senha = document.getElementById("senha-mobile").value;
+
+    try {
+        await signInWithEmailAndPassword(auth, email, senha);
+        showToast("Login bem-sucedido!");
+    } catch (error) {
+        showToast("Erro ao entrar", "error");
+    }
+});
 
     document.getElementById("btn-logout").addEventListener("click", async () => {
         await signOut(auth);
