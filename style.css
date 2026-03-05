@@ -617,3 +617,47 @@ li.despesa {
     margin-bottom: 12px;
     font-weight: 700; /* Deixa em negrito para maior ênfase */
 }
+
+/* Indicador de Edição - Caixa Premium */
+.indicador-edicao {
+    display: none;
+    background-color: #F0E7DA;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    font-weight: bold;
+    color: #4E3B2A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+}
+
+/* Animação suave para o modo de edição */
+.indicador-edicao.show {
+    display: flex;
+}
+
+/* Efeito de animação nos campos de edição */
+input:focus, select:focus {
+    outline: none;
+    border: 2px solid #7A5C42; /* Cor de foco */
+    box-shadow: 0 0 8px rgba(122, 92, 66, 0.5); /* Sombra suave */
+}
+
+/* Animação de botão de salvar */
+button.modo-edicao {
+    background-color: #7A5C42;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button.modo-edicao:hover {
+    background-color: #4A7C59;
+}

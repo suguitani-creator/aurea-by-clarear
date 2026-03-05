@@ -369,6 +369,7 @@ window.editarTransacao = async function(id) {
     const transacao = transacoes.find(t => t.id === id);
     if (!transacao) return;
 
+    // Preenche os campos com os dados da transação
     document.getElementById("tipo").value = transacao.tipo;
     atualizarCategorias();
 
@@ -377,16 +378,17 @@ window.editarTransacao = async function(id) {
     document.getElementById("valor").value = transacao.valor;
     document.getElementById("data").value = transacao.data;
 
-    document.getElementById("indicador-edicao").style.display = "block";
+    // Exibe o indicador de edição
+    document.getElementById("indicador-edicao").style.display = "flex";
 
     idEmEdicao = id;
 
-    // Remover destaque anterior
+    // Remover o destaque de edição de todas as transações
     document.querySelectorAll("li").forEach(li => {
         li.classList.remove("linha-editando");
     });
 
-    // Destacar linha atual
+    // Destacar a linha da transação que está sendo editada
     const linha = document
         .querySelector(`button[onclick*="${id}"]`)
         .closest("li");
@@ -395,11 +397,12 @@ window.editarTransacao = async function(id) {
         linha.classList.add("linha-editando");
     }
 
+    // Muda o texto do botão para "Salvar alteração"
     const btn = document.getElementById("btn-adicionar");
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
 
-    // 🔥 NOVO: scroll suave até o formulário
+    // Desliza suavemente até o formulário de edição
     document.querySelector(".form").scrollIntoView({
         behavior: "smooth",
         block: "center"
