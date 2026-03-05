@@ -468,13 +468,32 @@ function atualizarComparativo() {
 }
 
 // Adicionando a interação ao box de comparativo
-document.getElementById("comparativo-container").addEventListener("mouseenter", function() {
-    document.getElementById("comparativo-container").classList.add("show");
-    atualizarComparativo(); // Atualiza os valores quando o usuário passa o mouse
+    document.getElementById("comparativo-container").addEventListener("click", function() {
+    document.getElementById("comparativo-container").classList.toggle("show");
+    
+    // Atualiza os valores ao clicar
+    atualizarComparativo();
 });
 
 document.getElementById("comparativo-container").addEventListener("mouseleave", function() {
     document.getElementById("comparativo-container").classList.remove("show");
     document.getElementById("comparativo-receita").textContent = "—"; // Esconde os valores
     document.getElementById("comparativo-despesa").textContent = "—"; // Esconde os valores
+});
+
+// Evento de click para o comparativo
+document.getElementById("comparativo-container").addEventListener("click", function() {
+    const comparativoContainer = document.getElementById("comparativo-container");
+
+    // Alternar a classe 'show' para mostrar/esconder os valores
+    comparativoContainer.classList.toggle("show");
+
+    // Verifica se a classe 'show' está ativa
+    if (comparativoContainer.classList.contains("show")) {
+        atualizarComparativo(); // Atualiza os valores quando o comparativo é exibido
+    } else {
+        // Limpa os valores quando o comparativo é ocultado
+        document.getElementById("comparativo-receita").textContent = "—";
+        document.getElementById("comparativo-despesa").textContent = "—";
+    }
 });

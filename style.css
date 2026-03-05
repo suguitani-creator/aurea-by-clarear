@@ -610,3 +610,10 @@ li.despesa {
     box-shadow: 0 4px 10px rgba(62, 47, 35, 0.05);
     min-height: 120px;
 }
+
+.card h4 {
+    font-size: 18px; /* Aumenta o tamanho da fonte */
+    color: #4E3B2A;
+    margin-bottom: 12px;
+    font-weight: 700; /* Deixa em negrito para maior ênfase */
+}
