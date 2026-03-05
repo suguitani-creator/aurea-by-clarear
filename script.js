@@ -99,7 +99,6 @@ window.addEventListener("DOMContentLoaded", () => {
 // ================= FINANÇAS =================
 
 async function adicionarTransacao() {
-
     const user = auth.currentUser;
     if (!user) return;
 
@@ -108,51 +107,42 @@ async function adicionarTransacao() {
     const descricao = document.getElementById("descricao").value;
     const valor = parseFloat(document.getElementById("valor").value);
     const data = document.getElementById("data").value;
+    const formaPagamento = document.getElementById("forma-pagamento").value;  // Captura a forma de pagamento
 
     if (!descricao || isNaN(valor) || !data) {
-        showToast("Preencha todos os campos", "error");
+        showToast("Preencha todos os campos corretamente", "error");
         return;
     }
 
     if (idEmEdicao) {
+        await updateDoc(
+            doc(db, "users", user.uid, "transacoes", idEmEdicao),
+            { tipo, categoria, descricao, valor, data, formaPagamento }  // Inclui forma de pagamento
+        );
 
-    // Atualiza a transação no Firestore
-    await updateDoc(
-        doc(db, "users", user.uid, "transacoes", idEmEdicao),
-        { tipo, categoria, descricao, valor, data }
-    );
+        showToast("Transação atualizada!");
+        idEmEdicao = null;
 
-    showToast("Transação atualizada!");
+        document.getElementById("indicador-edicao").style.display = "none";
+        document.querySelectorAll("li").forEach(li => {
+            li.classList.remove("linha-editando");
+        });
 
-    // Resetando o estado de edição
-    idEmEdicao = null;
+        const btn = document.getElementById("btn-adicionar");
+        btn.textContent = "Adicionar";
+        btn.classList.remove("modo-edicao");
 
-    // Esconde o indicador de "Editando transação"
-    document.getElementById("indicador-edicao").style.display = "none";
+    } else {
+        await addDoc(
+            collection(db, "users", user.uid, "transacoes"),
+            { tipo, categoria, descricao, valor, data, formaPagamento }  // Inclui forma de pagamento
+        );
 
-    // Remove o destaque da linha editada
-    document.querySelectorAll("li").forEach(li => {
-        li.classList.remove("linha-editando");
-    });
+        showToast("Transação adicionada!");
+    }
 
-    // Altera o botão de "Salvar" para "Adicionar" e remove a classe de edição
-    const btn = document.getElementById("btn-adicionar");
-    btn.textContent = "Adicionar";
-    btn.classList.remove("modo-edicao");
-
-} else {
-    // Caso não esteja editando, adiciona uma nova transação
-    await addDoc(
-        collection(db, "users", user.uid, "transacoes"),
-        { tipo, categoria, descricao, valor, data }
-    );
-
-    showToast("Transação adicionada!");
-}
-
-// Após a operação (adição ou edição), limpa o formulário
-limparFormulario();
-carregarTransacoes();
+    limparFormulario();
+    carregarTransacoes();
 }
 
 function atualizarCategorias() {
@@ -189,9 +179,7 @@ function atualizarTela(listaTransacoes) {
     lista.innerHTML = "";
 
     listaTransacoes.forEach((transacao) => {
-
         const item = document.createElement("li");
-
         item.classList.add(transacao.tipo);
         item.classList.add("item-novo");
 
@@ -203,21 +191,17 @@ function atualizarTela(listaTransacoes) {
 
             <div class="item-actions">
                 <span class="valor">R$ ${transacao.valor.toFixed(2)}</span>
+                <span class="forma-pagamento">${transacao.formaPagamento}</span> <!-- Exibe a forma de pagamento -->
 
                 <button class="btn-edit" onclick="editarTransacao('${transacao.id}')">
                     <svg viewBox="0 0 24 24" width="16" height="16">
-                        <path fill="currentColor"
-                        d="M3 17.25V21h3.75L19.81 7.94l-3.75-3.75L3 17.25zM20.71 
-                        6.04c.39-.39.39-1.02 
-                        0-1.41l-1.34-1.34c-.39-.39-1.02-.39-1.41 
-                        0l-1.13 1.13 3.75 3.75 1.13-1.13z"/>
+                        <path fill="currentColor" d="M3 17.25V21h3.75L19.81 7.94l-3.75-3.75L3 17.25zM20.71 6.04c.39-.39.39-1.02 0-1.41l-1.34-1.34c-.39-.39-1.02-.39-1.41 0l-1.13 1.13 3.75 3.75 1.13-1.13z"/>
                     </svg>
                 </button>
 
                 <button class="btn-delete" onclick="confirmarExclusao('${transacao.id}')">
                     <svg viewBox="0 0 24 24" width="16" height="16">
-                        <path fill="currentColor"
-                        d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
+                        <path fill="currentColor" d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
                     </svg>
                 </button>
             </div>
