@@ -67,6 +67,11 @@ window.addEventListener("DOMContentLoaded", () => {
     try {
         await signInWithEmailAndPassword(auth, email, senha);
         showToast("Login bem-sucedido!");
+
+        // Aqui, vamos garantir que a tela de login desapareça e o app seja exibido
+        document.getElementById("auth-container").style.display = "none";  // Esconde o login
+        document.getElementById("app-container").style.display = "block";  // Exibe o app
+
     } catch (error) {
         showToast("Erro ao entrar", "error");
     }
@@ -80,6 +85,11 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
     try {
         await signInWithEmailAndPassword(auth, email, senha);
         showToast("Login bem-sucedido!");
+
+        // Aqui, vamos garantir que a tela de login desapareça e o app seja exibido
+        document.getElementById("auth-container").style.display = "none";  // Esconde o login
+        document.getElementById("app-container").style.display = "block";  // Exibe o app
+
     } catch (error) {
         showToast("Erro ao entrar", "error");
     }

@@ -40,6 +40,7 @@ h1 {
 }
 
 /* ================= LOGIN PREMIUM ================= */
+
 #auth-container {
     display: flex;
     flex-direction: column;
@@ -49,14 +50,14 @@ h1 {
 }
 
 #auth-container h2 {
-    font-size: 18px;
+    font-size: 22px;  /* Aumentando o tamanho da fonte para o título */
     font-weight: 500;
     color: #3E2F23;
     margin-bottom: 5px;
 }
 
 .login-subtitle {
-    font-size: 13px;
+    font-size: 15px;  /* Aumentando a fonte da legenda para melhorar a visibilidade */
     color: #8B6F4E;
     margin-bottom: 15px;
 }
@@ -67,6 +68,9 @@ h1 {
     border: 1px solid #E8DFD4;
     background: #FAF8F5;
     font-size: 14px;
+    width: 100%;  /* Garantir que os campos de input ocupem toda a largura */
+    max-width: 400px;  /* Limitar o tamanho máximo do formulário */
+    margin: 0 auto;  /* Centralizar os inputs */
 }
 
 #auth-container input:focus {
@@ -85,6 +89,9 @@ h1 {
     letter-spacing: 0.5px;
     transition: 0.3s ease;
     cursor: pointer;
+    width: 100%;
+    max-width: 400px; /* Para que o botão tenha o mesmo tamanho dos inputs */
+    margin: 15px auto;
 }
 
 #btn-login:hover {
