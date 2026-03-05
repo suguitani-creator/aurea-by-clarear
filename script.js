@@ -61,39 +61,12 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("btn-login").addEventListener("click", async () => {
-    const email = document.getElementById("email").value;
-    const senha = document.getElementById("senha").value;
-
-    try {
-        await signInWithEmailAndPassword(auth, email, senha);
-        showToast("Login bem-sucedido!");
-    } catch (error) {
-        showToast("Erro ao entrar", "error");
-    }
-});
-
-// Função para quando o status de autenticação mudar (login ou logout)
-onAuthStateChanged(auth, (user) => {
-    const authContainer = document.getElementById("auth-container");
-    const appContainer = document.getElementById("app-container");
-
-    if (user) {
-        // Mostrar email do usuário
-        document.getElementById("usuario-email").textContent = user.email;
-
-        // Esconder login e mostrar app
-        authContainer.style.display = "none";
-        appContainer.style.display = "block";
-
-        // Carregar as transações após o login
-        carregarTransacoes();
-    } else {
-        // Mostrar login e esconder app
-        authContainer.style.display = "block";
-        appContainer.style.display = "none";
-        limparFormulario();
-    }
-});
+        try {
+            await signInWithEmailAndPassword(auth, emailInput.value, senhaInput.value);
+        } catch (error) {
+            showToast("Erro ao entrar", "error");
+        }
+    });
 
     document.getElementById("btn-logout").addEventListener("click", async () => {
         await signOut(auth);
@@ -529,15 +502,4 @@ async function salvarEdicao() {
     // Esconde o indicador de edição
     document.getElementById("indicador-edicao").style.display = "none";
     // Lógica de salvar a transação...
-}
-
-function showToast(message, type = "success") {
-    const toast = document.getElementById("toast");
-
-    toast.textContent = message;
-    toast.className = "toast show " + type;
-
-    setTimeout(() => {
-        toast.className = "toast";
-    }, 3000);
 }
