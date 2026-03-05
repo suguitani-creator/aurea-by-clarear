@@ -73,7 +73,19 @@ window.addEventListener("DOMContentLoaded", () => {
         document.getElementById("app-container").style.display = "block";  // Exibe o app
 
     } catch (error) {
-        showToast("Erro ao entrar", "error");
+        console.log("Erro no login: ", error); // Exibe o erro no console para depuração
+        let errorMessage = "Erro ao entrar";
+        
+        // Verifica o tipo de erro e exibe uma mensagem específica
+        if (error.code === 'auth/user-not-found') {
+            errorMessage = "Usuário não encontrado";
+        } else if (error.code === 'auth/wrong-password') {
+            errorMessage = "Senha incorreta";
+        } else if (error.code === 'auth/invalid-email') {
+            errorMessage = "Email inválido";
+        }
+
+        showToast(errorMessage, "error");
     }
 });
 
@@ -91,7 +103,19 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         document.getElementById("app-container").style.display = "block";  // Exibe o app
 
     } catch (error) {
-        showToast("Erro ao entrar", "error");
+        console.log("Erro no login: ", error); // Exibe o erro no console para depuração
+        let errorMessage = "Erro ao entrar";
+        
+        // Verifica o tipo de erro e exibe uma mensagem específica
+        if (error.code === 'auth/user-not-found') {
+            errorMessage = "Usuário não encontrado";
+        } else if (error.code === 'auth/wrong-password') {
+            errorMessage = "Senha incorreta";
+        } else if (error.code === 'auth/invalid-email') {
+            errorMessage = "Email inválido";
+        }
+
+        showToast(errorMessage, "error");
     }
 });
 
