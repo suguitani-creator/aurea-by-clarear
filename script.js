@@ -174,14 +174,14 @@ function aplicarFiltro() {
 
 function atualizarTela(listaTransacoes) {
     const lista = document.getElementById("lista-despesas");
-    lista.innerHTML = "";
+    lista.innerHTML = ""; // Limpa a lista antes de preencher
 
     listaTransacoes.forEach((transacao) => {
         const item = document.createElement("li");
         item.classList.add(transacao.tipo);
         item.classList.add("item-novo");
 
-        // Verifica se a transação é despesa, para mostrar o ícone da forma de pagamento
+        // Verifica se é uma despesa e adiciona o ícone da forma de pagamento
         let formaPagamentoDisplay = "";
         if (transacao.tipo === "despesa") {
             formaPagamentoDisplay = `<span class="forma-pagamento">${getIconeFormaPagamento(transacao.formaPagamento)}</span>`;
@@ -195,11 +195,11 @@ function atualizarTela(listaTransacoes) {
 
             <div class="item-actions">
                 <span class="valor">R$ ${transacao.valor.toFixed(2)}</span>
-                ${formaPagamentoDisplay}  <!-- Exibe o ícone da forma de pagamento apenas para despesas -->
+                ${formaPagamentoDisplay} <!-- Exibe o ícone da forma de pagamento para despesas -->
 
                 <button class="btn-edit" onclick="editarTransacao('${transacao.id}')">
                     <svg viewBox="0 0 24 24" width="16" height="16">
-                        <path fill="currentColor" d="M3 17.25V21h3.75L19.81 7.94l-3.75-3.75L3 17.25zM20.71 6.04c.39-.39.39-1.02 0-1.41l-1.34-1.34c-.39-.39-1.02-.39-1.41 0l-1.13 1.13 3.75 3.75 1.13-1.13z"/>
+                    <path fill="currentColor" d="M3 17.25V21h3.75L19.81 7.94l-3.75-3.75L3 17.25zM20.71 6.04c.39-.39.39-1.02 0-1.41l-1.34-1.34c-.39-.39-1.02-.39-1.41 0l-1.13 1.13 3.75 3.75 1.13-1.13z"/>
                     </svg>
                 </button>
 
