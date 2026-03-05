@@ -126,8 +126,19 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
 });
 
     document.getElementById("btn-logout").addEventListener("click", async () => {
+    try {
         await signOut(auth);
-    });
+        showToast("Logout bem-sucedido!");
+
+        // Mostrar login e esconder app após logout
+        document.getElementById("auth-container-desktop").style.display = "block";
+        document.getElementById("app-container").style.display = "none";
+
+    } catch (error) {
+        console.log("Erro ao fazer logout: ", error); // Exibe o erro no console para depuração
+        showToast("Erro ao fazer logout", "error");
+    }
+});
 
     onAuthStateChanged(auth, (user) => {
     const authContainer = document.getElementById("auth-container-desktop");
