@@ -663,16 +663,18 @@ button.modo-edicao:hover {
 }
 
 .forma-pagamento {
-    font-size: 18px; /* Tamanho maior para destacar, mas discreto */
+    font-size: 18px; /* Tamanho maior para destaque, mas discreto */
     padding-left: 10px;
     cursor: default; /* Evitar que o usuário tente clicar */
-    color: #7A5C42; /* Cor suave e elegante, mais próxima da paleta */
+    color: #7A5C42; /* Cor suave e elegante */
 }
 
-.item-actions button {
-    cursor: pointer;
+.item-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.item-actions span {
-    cursor: default;
+.item-actions span.valor {
+    margin-left: 10px; /* Garantir espaçamento entre ícone de pagamento e valor */
 }

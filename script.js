@@ -181,12 +181,13 @@ function atualizarTela(listaTransacoes) {
         item.classList.add(transacao.tipo);
         item.classList.add("item-novo");
 
-        // Verifica se é uma despesa e adiciona o ícone da forma de pagamento
+        // Verifica se é uma despesa e adiciona o ícone da forma de pagamento antes do valor
         let formaPagamentoDisplay = "";
         if (transacao.tipo === "despesa") {
             formaPagamentoDisplay = `<span class="forma-pagamento">${getIconeFormaPagamento(transacao.formaPagamento)}</span>`;
         }
 
+        // Alteração para colocar ícone antes do valor
         item.innerHTML = `
             <div class="item-info">
                 <strong>${transacao.descricao}</strong>
@@ -194,8 +195,9 @@ function atualizarTela(listaTransacoes) {
             </div>
 
             <div class="item-actions">
+                ${formaPagamentoDisplay} <!-- Exibe o ícone da forma de pagamento antes do valor -->
+
                 <span class="valor">R$ ${transacao.valor.toFixed(2)}</span>
-                ${formaPagamentoDisplay} <!-- Exibe o ícone da forma de pagamento para despesas -->
 
                 <button class="btn-edit" onclick="editarTransacao('${transacao.id}')">
                     <svg viewBox="0 0 24 24" width="16" height="16">
