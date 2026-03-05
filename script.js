@@ -69,15 +69,19 @@ window.addEventListener("DOMContentLoaded", () => {
         showToast("Login bem-sucedido!");
 
         // Verifica se estamos em uma tela mobile ou desktop e altera a visibilidade dos containers de login
-        const isMobile = window.innerWidth <= 768;  // Defina o limite para mobile
+const isMobile = window.innerWidth <= 768;  // Defina o limite para mobile
 
-        if (isMobile) {
-            document.getElementById("auth-container-mobile").style.display = "none";  // Esconde o login mobile
-        } else {
-            document.getElementById("auth-container-desktop").style.display = "none";  // Esconde o login desktop
-        }
+// Esconde o login desktop se estiver no mobile e esconde o login mobile se estiver no desktop
+if (isMobile) {
+    document.getElementById("auth-container-desktop").style.display = "none";  // Esconde a versão desktop
+    document.getElementById("auth-container-mobile").style.display = "block";  // Exibe a versão mobile
+} else {
+    document.getElementById("auth-container-desktop").style.display = "block";  // Exibe a versão desktop
+    document.getElementById("auth-container-mobile").style.display = "none";  // Esconde a versão mobile
+}
 
-        document.getElementById("app-container").style.display = "block";  // Exibe o app
+// Quando o login é bem-sucedido, mostra o app e esconde a tela de login
+document.getElementById("app-container").style.display = "block";  // Exibe o app
 
     } catch (error) {
         console.log("Erro no login: ", error); // Exibe o erro no console para depuração
