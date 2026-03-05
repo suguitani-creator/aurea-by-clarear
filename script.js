@@ -468,18 +468,18 @@ function atualizarComparativo() {
 }
 
 // Adicionando a interação ao box de comparativo
-    document.getElementById("comparativo-container").addEventListener("click", function() {
-    document.getElementById("comparativo-container").classList.toggle("show");
+    //document.getElementById("comparativo-container").addEventListener("click", function() {
+    //document.getElementById("comparativo-container").classList.toggle("show");
     
     // Atualiza os valores ao clicar
-    atualizarComparativo();
-});
+    //atualizarComparativo();
+//});
 
-document.getElementById("comparativo-container").addEventListener("mouseleave", function() {
-    document.getElementById("comparativo-container").classList.remove("show");
-    document.getElementById("comparativo-receita").textContent = "—"; // Esconde os valores
-    document.getElementById("comparativo-despesa").textContent = "—"; // Esconde os valores
-});
+//document.getElementById("comparativo-container").addEventListener("mouseleave", function() {
+    //document.getElementById("comparativo-container").classList.remove("show");
+    //document.getElementById("comparativo-receita").textContent = "—"; // Esconde os valores
+    //document.getElementById("comparativo-despesa").textContent = "—"; // Esconde os valores
+//});
 
 // Evento de click para o comparativo
 document.getElementById("comparativo-container").addEventListener("click", function() {
