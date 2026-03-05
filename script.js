@@ -183,6 +183,12 @@ function atualizarTela(listaTransacoes) {
         item.classList.add(transacao.tipo);
         item.classList.add("item-novo");
 
+        // Verifica se a transação é despesa, para mostrar o ícone da forma de pagamento
+        let formaPagamentoDisplay = "";
+        if (transacao.tipo === "despesa") {
+            formaPagamentoDisplay = `<span class="forma-pagamento">${getIconeFormaPagamento(transacao.formaPagamento)}</span>`;
+        }
+
         item.innerHTML = `
             <div class="item-info">
                 <strong>${transacao.descricao}</strong>
@@ -191,7 +197,7 @@ function atualizarTela(listaTransacoes) {
 
             <div class="item-actions">
                 <span class="valor">R$ ${transacao.valor.toFixed(2)}</span>
-                <span class="forma-pagamento">${transacao.formaPagamento}</span> <!-- Exibe a forma de pagamento -->
+                ${formaPagamentoDisplay}  <!-- Exibe o ícone da forma de pagamento apenas para despesas -->
 
                 <button class="btn-edit" onclick="editarTransacao('${transacao.id}')">
                     <svg viewBox="0 0 24 24" width="16" height="16">
@@ -482,3 +488,16 @@ function atualizarComparativo() {
         document.getElementById("comparativo-despesa").textContent = "—";
     }
 });
+
+function getIconeFormaPagamento(formaPagamento) {
+    switch (formaPagamento) {
+        case "pix":
+            return "💸";  // ícone para Pix
+        case "debito":
+            return "💳";  // ícone para Débito
+        case "credito":
+            return "💳";  // ícone para Crédito
+        default:
+            return "💳";  // ícone padrão caso não tenha sido configurado
+    }
+}
