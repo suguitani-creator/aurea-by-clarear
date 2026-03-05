@@ -40,40 +40,45 @@ h1 {
 }
 
 /* ================= LOGIN PREMIUM ================= */
-
-#auth-container {
+#auth-container-desktop {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;  /* Centraliza todos os elementos dentro do container */
     gap: 16px;
     text-align: center;
-    transition: opacity 0.5s ease; /* Suaviza a transição */
+    width: 100%;
+    max-width: 400px; /* Definindo a largura máxima do container de login */
+    margin: 0 auto; /* Centraliza o container na página */
+    padding: 20px;
+    background-color: #fff; /* Fundo branco para o container */
+    border-radius: 10px; /* Bordas arredondadas */
 }
 
-#auth-container h2 {
-    font-size: 22px;  /* Aumentando o tamanho da fonte para o título */
-    font-weight: 500;
+#auth-container-desktop h2 {
+    font-size: 24px;  /* Aumentei o tamanho da fonte para destacar mais */
+    font-weight: 600;
     color: #3E2F23;
-    margin-bottom: 5px;
+    margin-bottom: 10px;  /* Espaçamento abaixo do título */
 }
 
 .login-subtitle {
-    font-size: 15px;  /* Aumentando a fonte da legenda para melhorar a visibilidade */
+    font-size: 14px;
     color: #8B6F4E;
-    margin-bottom: 15px;
+    margin-bottom: 20px; /* Ajustei o espaçamento do subtítulo */
 }
 
-#auth-container input {
+#auth-container-desktop input {
     padding: 12px;
     border-radius: 10px;
     border: 1px solid #E8DFD4;
     background: #FAF8F5;
     font-size: 14px;
-    width: 100%;  /* Garantir que os campos de input ocupem toda a largura */
-    max-width: 400px;  /* Limitar o tamanho máximo do formulário */
-    margin: 0 auto;  /* Centralizar os inputs */
+    width: 100%; /* Garante que os campos de input ocupem toda a largura disponível */
+    box-sizing: border-box; /* Faz com que o padding não ultrapasse a largura */
 }
 
-#auth-container input:focus {
+#auth-container-desktop input:focus {
     outline: none;
     border-color: #C6A75E;
 }
@@ -89,9 +94,8 @@ h1 {
     letter-spacing: 0.5px;
     transition: 0.3s ease;
     cursor: pointer;
-    width: 100%;
-    max-width: 400px; /* Para que o botão tenha o mesmo tamanho dos inputs */
-    margin: 15px auto;
+    width: 100%;  /* Ajustando o botão para ter a mesma largura dos inputs */
+    box-sizing: border-box;
 }
 
 #btn-login:hover {
