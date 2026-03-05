@@ -115,29 +115,44 @@ async function adicionarTransacao() {
     }
 
     if (idEmEdicao) {
-        await updateDoc(
-            doc(db, "users", user.uid, "transacoes", idEmEdicao),
-            { tipo, categoria, descricao, valor, data }
-        );
 
-        showToast("Transação atualizada!");
-        idEmEdicao = null;
+    // Atualiza a transação no Firestore
+    await updateDoc(
+        doc(db, "users", user.uid, "transacoes", idEmEdicao),
+        { tipo, categoria, descricao, valor, data }
+    );
 
-        const btn = document.getElementById("btn-adicionar");
-        btn.textContent = "Adicionar";
-        btn.classList.remove("modo-edicao");
+    showToast("Transação atualizada!");
 
-    } else {
-        await addDoc(
-            collection(db, "users", user.uid, "transacoes"),
-            { tipo, categoria, descricao, valor, data }
-        );
+    // Resetando o estado de edição
+    idEmEdicao = null;
 
-        showToast("Transação adicionada!");
-    }
+    // Esconde o indicador de "Editando transação"
+    document.getElementById("indicador-edicao").style.display = "none";
 
-    limparFormulario();
-    carregarTransacoes();
+    // Remove o destaque da linha editada
+    document.querySelectorAll("li").forEach(li => {
+        li.classList.remove("linha-editando");
+    });
+
+    // Altera o botão de "Salvar" para "Adicionar" e remove a classe de edição
+    const btn = document.getElementById("btn-adicionar");
+    btn.textContent = "Adicionar";
+    btn.classList.remove("modo-edicao");
+
+} else {
+    // Caso não esteja editando, adiciona uma nova transação
+    await addDoc(
+        collection(db, "users", user.uid, "transacoes"),
+        { tipo, categoria, descricao, valor, data }
+    );
+
+    showToast("Transação adicionada!");
+}
+
+// Após a operação (adição ou edição), limpa o formulário
+limparFormulario();
+carregarTransacoes();
 }
 
 function atualizarCategorias() {
@@ -467,22 +482,8 @@ function atualizarComparativo() {
         `${variacaoDespesa.toFixed(1)}% (-R$ ${(atual.totalDespesas - anterior.totalDespesas).toFixed(2)})`;
 }
 
-// Adicionando a interação ao box de comparativo
-    //document.getElementById("comparativo-container").addEventListener("click", function() {
-    //document.getElementById("comparativo-container").classList.toggle("show");
-    
-    // Atualiza os valores ao clicar
-    //atualizarComparativo();
-//});
-
-//document.getElementById("comparativo-container").addEventListener("mouseleave", function() {
-    //document.getElementById("comparativo-container").classList.remove("show");
-    //document.getElementById("comparativo-receita").textContent = "—"; // Esconde os valores
-    //document.getElementById("comparativo-despesa").textContent = "—"; // Esconde os valores
-//});
-
 // Evento de click para o comparativo
-document.getElementById("comparativo-container").addEventListener("click", function() {
+    document.getElementById("comparativo-container").addEventListener("click", function() {
     const comparativoContainer = document.getElementById("comparativo-container");
 
     // Alternar a classe 'show' para mostrar/esconder os valores
