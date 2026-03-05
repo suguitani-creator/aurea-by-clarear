@@ -130,7 +130,7 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
     });
 
     onAuthStateChanged(auth, (user) => {
-    const authContainer = document.getElementById("auth-container-mobile");
+    const authContainer = document.getElementById("auth-container-desktop");
     const appContainer = document.getElementById("app-container");
 
     // Esconde o box de "editando transação" quando o app é carregado (sem edição)
