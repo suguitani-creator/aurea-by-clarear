@@ -76,19 +76,17 @@ window.addEventListener("DOMContentLoaded", () => {
     const authContainer = document.getElementById("auth-container");
     const appContainer = document.getElementById("app-container");
 
+    // Esconde o box de "editando transação" quando o app é carregado (sem edição)
+    document.getElementById("indicador-edicao").style.display = "none";  // Esconde o indicador no login
+
     if (user) {
-        // Mostrar email do usuário
         document.getElementById("usuario-email").textContent = user.email;
 
-        // Esconder login e mostrar app
         authContainer.style.display = "none";
         appContainer.style.display = "block";
 
-        // 🔥 IMPORTANTE: carregar dados do Firestore
-        carregarTransacoes();
-
+        carregarTransacoes();  // Carregar transações após o login
     } else {
-        // Mostrar login e esconder app
         authContainer.style.display = "block";
         appContainer.style.display = "none";
         limparFormulario();
@@ -362,14 +360,12 @@ document.getElementById("confirmar-exclusao").addEventListener("click", async ()
 window.confirmarExclusao = confirmarExclusao;
 
 window.editarTransacao = async function(id) {
-
     const user = auth.currentUser;
     if (!user) return;
 
     const transacao = transacoes.find(t => t.id === id);
     if (!transacao) return;
 
-    // Preenche os campos com os dados da transação
     document.getElementById("tipo").value = transacao.tipo;
     atualizarCategorias();
 
@@ -378,17 +374,15 @@ window.editarTransacao = async function(id) {
     document.getElementById("valor").value = transacao.valor;
     document.getElementById("data").value = transacao.data;
 
-    // Exibe o indicador de edição
-    document.getElementById("indicador-edicao").style.display = "flex";
+    // Mostrar o indicador de edição apenas quando o usuário clicar em editar
+    document.getElementById("indicador-edicao").style.display = "flex";  // Mostrar indicador de edição
 
     idEmEdicao = id;
 
-    // Remover o destaque de edição de todas as transações
     document.querySelectorAll("li").forEach(li => {
         li.classList.remove("linha-editando");
     });
 
-    // Destacar a linha da transação que está sendo editada
     const linha = document
         .querySelector(`button[onclick*="${id}"]`)
         .closest("li");
@@ -397,7 +391,6 @@ window.editarTransacao = async function(id) {
         linha.classList.add("linha-editando");
     }
 
-    // Muda o texto do botão para "Salvar alteração"
     const btn = document.getElementById("btn-adicionar");
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
@@ -503,4 +496,10 @@ function getIconeFormaPagamento(formaPagamento) {
         default:
             return "💳";  // ícone padrão caso não tenha sido configurado
     }
+}
+
+async function salvarEdicao() {
+    // Esconde o indicador de edição
+    document.getElementById("indicador-edicao").style.display = "none";
+    // Lógica de salvar a transação...
 }
