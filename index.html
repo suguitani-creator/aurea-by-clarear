@@ -9,6 +9,8 @@
     <meta name="theme-color" content="#3E2F23">  
 </head>
 
+
+
 <body>
 <div class="container">
     <h1>Áurea</h1>
@@ -55,7 +57,6 @@
                 <p id="saldo">R$ 0.00</p>
             </div>
 
-            <!-- Comparativo com mês anterior -->
             <div class="filtro-comparativo">
                 <div id="comparativo-container" class="comparativo-container">
                     <small>Comparativo com mês anterior</small>
@@ -66,6 +67,13 @@
         </div>
 
         <!-- Formulário de Transações -->
+         <!-- Indicador de edição elegante -->
+        <div id="indicador-edicao" class="indicador-edicao">
+            <svg width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+            <path d="M12.146 0l3.707 3.707a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.704.293h-2a1 1 0 0 1-1-1v-2a1 1 0 0 1 .293-.704l9-9a1 1 0 0 1 1.414 0L12.146 0zM11.207 3l-9 9V13h.293l9-9L11.207 3z"/>
+            </svg>
+            Editando Transação
+        </div>
         <div class="form">
             <select id="tipo">
                 <option value="receita">Receita</option>
@@ -78,7 +86,7 @@
             <input type="number" id="valor" placeholder="Valor">
             <input type="date" id="data">
 
-            <!-- Novo campo para forma de pagamento -->
+             <!-- Novo campo para forma de pagamento -->
             <select id="forma-pagamento">
                 <option value="pix">Pix</option>
                 <option value="debito">Débito</option>
@@ -92,7 +100,6 @@
         <ul id="lista-despesas"></ul>
     </div>
 </div>
-
 <script type="module" src="firebase.js"></script>
 <script type="module" src="script.js"></script>
 <script>
@@ -114,6 +121,5 @@ if ('serviceWorker' in navigator) {
     </div>
   </div>
 </div>
-
 </body>
 </html>
