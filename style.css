@@ -723,7 +723,7 @@ button.modo-edicao:hover {
     margin-left: 10px; /* Garantir espaçamento entre ícone de pagamento e valor */
 }
 
-#formulario-conta {
+/*#formulario-conta {
     background: #f5f1eb;
     padding: 20px;
     margin-top: 20px;
@@ -754,9 +754,9 @@ button.modo-edicao:hover {
 }
 
 /* Estilo para os campos do formulário */
-.form select,
-.form input,
-.form button {
+.formulario-conta select,
+.formulario-conta input,
+.formulario-conta button {
     width: 100%;  /* Garante que todos os campos tenham a largura completa do formulário */
     padding: 12px;  /* Ajuste de padding */
     font-size: 14px;  /* Tamanho da fonte */
@@ -766,7 +766,7 @@ button.modo-edicao:hover {
 }
 
 /* Estilo para o botão */
-.form button {
+.formulario-conta button {
     background: #3E2F23;  /* Cor de fundo do botão */
     color: white;  /* Cor do texto do botão */
     font-weight: 500;  /* Peso da fonte */
@@ -775,13 +775,13 @@ button.modo-edicao:hover {
     cursor: pointer;  /* Cursor de ponteiro */
 }
 
-.form button:hover {
+.formulario-conta button:hover {
     background: #7A5C42;  /* Cor de fundo ao passar o mouse */
     transform: translateY(-1px);  /* Efeito de elevação */
 }
 
 /* Ajuste de margens e centralização */
-.form {
+.formulario-conta {
     display: flex;
     flex-direction: column;
     gap: 16px;  /* Espaçamento entre os campos */
