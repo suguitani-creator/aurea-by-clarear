@@ -592,3 +592,16 @@ document.getElementById("btn-adicionar-conta").addEventListener("click", () => {
     const formulario = document.getElementById("formulario-conta");
     formulario.style.display = formulario.style.display === "none" ? "block" : "none";  // Alterna a visibilidade
 });
+
+// Exibir a lista de contas e cartões cadastrados (simulação)
+document.getElementById("lista-contas-cartoes").style.display = "block";
+
+// Função de exemplo para carregar contas e cartões cadastrados
+function carregarContasECartoes() {
+    // Simulação de contas e cartões cadastrados
+    const listaContas = document.getElementById("lista-contas");
+    const listaCartoes = document.getElementById("lista-cartoes");
+
+    listaContas.innerHTML = "<li>Conta Corrente - Banco XYZ</li>";
+    listaCartoes.innerHTML = "<li>Cartão de Crédito - Banco ABC</li>";
+}
