@@ -731,7 +731,7 @@ button.modo-edicao:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/*#formulario-conta input, #formulario-conta select {
+#formulario-conta input, #formulario-conta select {
     width: 100%;
     padding: 10px;
     margin-bottom: 12px;
@@ -753,43 +753,3 @@ button.modo-edicao:hover {
     background: #7a5c42;
 }
 
-/* Estilo para os campos do formulário */
-.formulario-conta select,
-.formulario-conta input,
-.formulario-conta button {
-    width: 100%;  /* Garante que todos os campos tenham a largura completa do formulário */
-    padding: 12px;  /* Ajuste de padding */
-    font-size: 14px;  /* Tamanho da fonte */
-    border-radius: 10px;  /* Bordas arredondadas */
-    border: 1px solid #E8DFD4;  /* Cor de borda */
-    background: #FAF8F5;  /* Cor de fundo */
-}
-
-/* Estilo para o botão */
-.formulario-conta button {
-    background: #3E2F23;  /* Cor de fundo do botão */
-    color: white;  /* Cor do texto do botão */
-    font-weight: 500;  /* Peso da fonte */
-    letter-spacing: 0.5px;  /* Espaçamento entre letras */
-    transition: 0.3s ease;  /* Efeito de transição */
-    cursor: pointer;  /* Cursor de ponteiro */
-}
-
-.formulario-conta button:hover {
-    background: #7A5C42;  /* Cor de fundo ao passar o mouse */
-    transform: translateY(-1px);  /* Efeito de elevação */
-}
-
-/* Ajuste de margens e centralização */
-.formulario-conta {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;  /* Espaçamento entre os campos */
-    max-width: 400px;  /* Largura máxima do formulário */
-    margin: 0 auto;  /* Centraliza o formulário */
-}
-
-/* Ajuste para campos específicos de conta e cartão */
-#tipo-conta {
-    margin-bottom: 16px;  /* Margem inferior para o campo de seleção */
-}
