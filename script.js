@@ -593,6 +593,19 @@ document.getElementById("btn-adicionar-conta").addEventListener("click", () => {
     formulario.style.display = formulario.style.display === "none" ? "block" : "none";  // Alterna a visibilidade
 });
 
+document.getElementById("tipo-conta").addEventListener("change", function() {
+    const tipo = this.value;
+    
+    // Exibe/Esconde os campos de acordo com o tipo de conta
+    if (tipo === "cartao") {
+        document.getElementById("datas-cartao").style.display = "block";  // Exibe campos para cartão
+        document.getElementById("data-saldo-conta").style.display = "none"; // Esconde campo para conta corrente
+    } else {
+        document.getElementById("datas-cartao").style.display = "none";  // Esconde campos para cartão
+        document.getElementById("data-saldo-conta").style.display = "block"; // Exibe campo para conta corrente
+    }
+});
+
 // Exibir a lista de contas e cartões cadastrados (simulação)
 document.getElementById("lista-contas-cartoes").style.display = "block";
 
