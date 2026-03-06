@@ -137,12 +137,6 @@ h1 {
         display: block; /* Exibe a versão mobile em dispositivos pequenos */
     }
 
-    #auth-container {
-        display: flex;
-        flex-direction: column;
-        gap: 12px; /* Ajuste para mobile */
-    }
-
     #btn-login {
         padding: 10px;
         font-size: 14px;
