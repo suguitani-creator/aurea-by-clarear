@@ -46,7 +46,7 @@ window.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", adicionarTransacao);
 
     // AUTH ELEMENTOS
-    const authContainer = document.getElementById("auth-container");
+    //const authContainer = document.getElementById("auth-container");
     const appContainer = document.getElementById("app-container");
     const emailInput = document.getElementById("email");
     const senhaInput = document.getElementById("senha");
