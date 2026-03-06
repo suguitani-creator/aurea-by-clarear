@@ -593,16 +593,27 @@ document.getElementById("btn-adicionar-conta").addEventListener("click", () => {
     formulario.style.display = formulario.style.display === "none" ? "block" : "none";  // Alterna a visibilidade
 });
 
+// Adiciona a função que mostra ou esconde os campos de data dependendo do tipo de conta
 document.getElementById("tipo-conta").addEventListener("change", function() {
     const tipo = this.value;
-    
-    // Exibe/Esconde os campos de acordo com o tipo de conta
     if (tipo === "cartao") {
-        document.getElementById("datas-cartao").style.display = "block";  // Exibe campos para cartão
-        document.getElementById("data-saldo-conta").style.display = "none"; // Esconde campo para conta corrente
+        document.getElementById("datas-cartao").style.display = "block"; // Exibe os campos para cartão
+        document.getElementById("data-saldo-conta").style.display = "none"; // Esconde o campo de data para conta corrente
     } else {
-        document.getElementById("datas-cartao").style.display = "none";  // Esconde campos para cartão
-        document.getElementById("data-saldo-conta").style.display = "block"; // Exibe campo para conta corrente
+        document.getElementById("datas-cartao").style.display = "none"; // Esconde os campos para cartão
+        document.getElementById("data-saldo-conta").style.display = "block"; // Exibe o campo de data para conta corrente
+    }
+});
+
+// Chama a função para garantir que o campo certo seja exibido ao carregar o formulário
+document.addEventListener("DOMContentLoaded", function() {
+    const tipoConta = document.getElementById("tipo-conta").value;
+    if (tipoConta === "cartao") {
+        document.getElementById("datas-cartao").style.display = "block"; // Exibe os campos para cartão
+        document.getElementById("data-saldo-conta").style.display = "none"; // Esconde o campo de data para conta corrente
+    } else {
+        document.getElementById("datas-cartao").style.display = "none"; // Esconde os campos para cartão
+        document.getElementById("data-saldo-conta").style.display = "block"; // Exibe o campo de data para conta corrente
     }
 });
 
