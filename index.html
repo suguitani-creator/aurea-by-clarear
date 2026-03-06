@@ -109,36 +109,38 @@
         <h2>Fluxo Financeiro</h2>
         <ul id="lista-despesas"></ul>
         <div class="grafico-container">
-        <canvas id="graficoCategorias"></canvas>
-</div>
-    </div>
-</div>
+            <canvas id="graficoCategorias"></canvas>
+        </div>
 
-<!-- Botão para Adicionar Conta ou Cartão -->
-<button id="btn-adicionar-conta" class="secondary-btn">Adicionar Conta ou Cartão</button>
+        <!-- Botão para Adicionar Conta ou Cartão -->
+        <button id="btn-adicionar-conta" class="secondary-btn">Adicionar Conta ou Cartão</button>
 
-<!-- Formulário de Adicionar Conta ou Cartão (oculto inicialmente) -->
-<div id="formulario-conta" style="display: none;">
-    <h3>Adicionar Conta ou Cartão</h3>
-    <select id="tipo-conta">
-        <option value="conta">Conta Corrente</option>
-        <option value="cartao">Cartão de Crédito</option>
-    </select>
+        <!-- Formulário de Adicionar Conta ou Cartão (oculto inicialmente) -->
+        <div id="formulario-conta" style="display: none;">
+            <h3>Adicionar Conta ou Cartão</h3>
+            <select id="tipo-conta">
+            <option value="conta">Conta Corrente</option>
+            <option value="cartao">Cartão de Crédito</option>
+            </select>
 
-    <input type="text" id="nome-conta" placeholder="Nome da conta ou cartão" />
-    <input type="number" id="saldo-conta" placeholder="Saldo ou limite" />
+            <input type="text" id="nome-conta" placeholder="Nome da conta ou cartão" />
+            <input type="number" id="saldo-conta" placeholder="Saldo ou limite" />
 
-    <!-- Exibir campo de data de saldo para contas correntes -->
-    <input type="date" id="data-saldo-conta" placeholder="Data de atualização do saldo" style="display:none;" />
+            <!-- Exibir campo de data de saldo para contas correntes -->
+            <input type="date" id="data-saldo-conta" placeholder="Data de atualização do saldo" style="display:none;" />
 
-    <!-- Exibir campos de vencimento e fechamento para cartão -->
-    <div id="datas-cartao" style="display:none;">
+            <!-- Exibir campos de vencimento e fechamento para cartão -->
+        <div id="datas-cartao" style="display:none;">
         <input type="date" id="vencimento-cartao" placeholder="Data de vencimento" />
         <input type="date" id="fechamento-cartao" placeholder="Data de fechamento" />
     </div>
 
     <button id="btn-salvar-conta">Adicionar</button>
 </div>
+    </div>
+</div>
+
+
 
 <script type="module" src="firebase.js"></script>
 <script type="module" src="script.js"></script>
