@@ -722,3 +722,33 @@ button.modo-edicao:hover {
 .item-actions span.valor {
     margin-left: 10px; /* Garantir espaçamento entre ícone de pagamento e valor */
 }
+
+#formulario-conta {
+    background: #f5f1eb;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#formulario-conta input, #formulario-conta select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    border: 1px solid #e8dfd4;
+}
+
+#formulario-conta button {
+    background: #3e2f23;
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+#formulario-conta button:hover {
+    background: #7a5c42;
+}

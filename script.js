@@ -586,3 +586,9 @@ async function salvarEdicao() {
     document.getElementById("indicador-edicao").style.display = "none";
     // Lógica de salvar a transação...
 }
+
+// Exibir formulário ao clicar no botão
+document.getElementById("btn-adicionar-conta").addEventListener("click", () => {
+    const formulario = document.getElementById("formulario-conta");
+    formulario.style.display = formulario.style.display === "none" ? "block" : "none";  // Alterna a visibilidade
+});
