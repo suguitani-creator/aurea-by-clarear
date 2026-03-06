@@ -118,34 +118,34 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
     }
 });
 
-document.getElementById("btn-login-mobile").addEventListener("click", async () => {
-    const email = document.getElementById("email-mobile").value;
-    const senha = document.getElementById("senha-mobile").value;
+//document.getElementById("btn-login-mobile").addEventListener("click", async () => {
+  //  const email = document.getElementById("email-mobile").value;
+   // const senha = document.getElementById("senha-mobile").value;
 
-    try {
-        await signInWithEmailAndPassword(auth, email, senha);
-        showToast("Login bem-sucedido!");
+   // try {
+    //    await signInWithEmailAndPassword(auth, email, senha);
+     //   showToast("Login bem-sucedido!");
 
         // Aqui, vamos garantir que a tela de login desapareça e o app seja exibido
-        document.getElementById("auth-container-mobile").style.display = "none";  // Esconde o login mobile
-        document.getElementById("app-container").style.display = "block";  // Exibe o app
+     //   document.getElementById("auth-container-mobile").style.display = "none";  // Esconde o login mobile
+     //   document.getElementById("app-container").style.display = "block";  // Exibe o app
 
-    } catch (error) {
-        console.log("Erro no login: ", error); // Exibe o erro no console para depuração
-        let errorMessage = "Erro ao entrar";
+    // } catch (error) {
+    //    console.log("Erro no login: ", error); // Exibe o erro no console para depuração
+    //    let errorMessage = "Erro ao entrar";
         
         // Verifica o tipo de erro e exibe uma mensagem específica
-        if (error.code === 'auth/user-not-found') {
-            errorMessage = "Usuário não encontrado";
-        } else if (error.code === 'auth/wrong-password') {
-            errorMessage = "Senha incorreta";
-        } else if (error.code === 'auth/invalid-email') {
-            errorMessage = "Email inválido";
-        }
+     //   if (error.code === 'auth/user-not-found') {
+     //       errorMessage = "Usuário não encontrado";
+     //   } else if (error.code === 'auth/wrong-password') {
+     //       errorMessage = "Senha incorreta";
+     //   } else if (error.code === 'auth/invalid-email') {
+     //       errorMessage = "Email inválido";
+     //   }
 
-        showToast(errorMessage, "error");
-    }
-});
+     //   showToast(errorMessage, "error");
+   // }
+//});
 
     document.getElementById("btn-logout").addEventListener("click", async () => {
     try {
