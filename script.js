@@ -30,7 +30,15 @@ let grafico;
 
 // 🔥 GARANTE QUE TUDO SÓ RODE APÓS O DOM CARREGAR
 window.addEventListener("DOMContentLoaded", () => {
+const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
 
+    if (isMobile) {
+        document.getElementById("auth-container-desktop").style.display = "none";  // Esconde a versão desktop
+        document.getElementById("auth-container-mobile").style.display = "block";  // Exibe a versão mobile
+    } else {
+        document.getElementById("auth-container-desktop").style.display = "block";  // Exibe a versão desktop
+        document.getElementById("auth-container-mobile").style.display = "none";  // Esconde a versão mobile
+    }
     atualizarCategorias();
 
     const hoje = new Date().toISOString().slice(0,7);
@@ -86,6 +94,17 @@ window.addEventListener("DOMContentLoaded", () => {
         }
 
         showToast(errorMessage, "error");
+    }
+});
+
+window.addEventListener("resize", () => {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+        document.getElementById("auth-container-desktop").style.display = "none";  // Esconde a versão desktop
+        document.getElementById("auth-container-mobile").style.display = "block";  // Exibe a versão mobile
+    } else {
+        document.getElementById("auth-container-desktop").style.display = "block";  // Exibe a versão desktop
+        document.getElementById("auth-container-mobile").style.display = "none";  // Esconde a versão mobile
     }
 });
 
