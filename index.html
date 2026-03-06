@@ -7,23 +7,31 @@
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#3E2F23">  
+    
 </head>
-
-
 
 <body>
 <div class="container">
     <h1>Áurea</h1>
     <p class="subtitle">by Clarear</p>
 
-    <!-- LOGIN -->
-    <div id="auth-container">
+    <!-- LOGIN: Versão Desktop -->
+    <div id="auth-container-desktop">
         <h2>Acesse sua gestão patrimonial</h2>
         <p class="login-subtitle">Clareza financeira começa com organização.</p>
         <input type="email" id="email" placeholder="Seu email">
         <input type="password" id="senha" placeholder="Sua senha">
         <button id="btn-login">Entrar</button>
         <button id="btn-cadastro" class="secondary-btn">Criar conta</button>
+    </div>
+
+    <!-- LOGIN: Versão Mobile (visível em telas pequenas) -->
+    <div id="auth-container-mobile">
+        <h2>Acesse sua gestão patrimonial</h2>
+        <input type="email" id="email-mobile" placeholder="Seu email">
+        <input type="password" id="senha-mobile" placeholder="Sua senha">
+        <button id="btn-login-mobile">Entrar</button>
+        <button id="btn-cadastro-mobile" class="secondary-btn">Criar conta</button>
     </div>
 
     <!-- APP (aparece após o login) -->
@@ -67,7 +75,7 @@
         </div>
 
         <!-- Formulário de Transações -->
-         <!-- Indicador de edição elegante -->
+        <!-- Indicador de edição elegante -->
         <div id="indicador-edicao" class="indicador-edicao">
             <svg width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
             <path d="M12.146 0l3.707 3.707a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.704.293h-2a1 1 0 0 1-1-1v-2a1 1 0 0 1 .293-.704l9-9a1 1 0 0 1 1.414 0L12.146 0zM11.207 3l-9 9V13h.293l9-9L11.207 3z"/>
@@ -84,7 +92,7 @@
 
             <input type="text" id="descricao" placeholder="Descrição">
             <input type="number" id="valor" placeholder="Valor">
-            <input type="date" id="data">
+            <input type="date" id="data" placeholder="Data" inputmode="date">
 
              <!-- Novo campo para forma de pagamento -->
             <select id="forma-pagamento">
@@ -100,6 +108,7 @@
         <ul id="lista-despesas"></ul>
     </div>
 </div>
+
 <script type="module" src="firebase.js"></script>
 <script type="module" src="script.js"></script>
 <script>
@@ -121,5 +130,6 @@ if ('serviceWorker' in navigator) {
     </div>
   </div>
 </div>
+
 </body>
 </html>

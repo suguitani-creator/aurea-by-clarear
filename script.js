@@ -28,9 +28,17 @@ const categorias = {
 let transacoes = [];
 let grafico;
 
-// �� GARANTE QUE TUDO SÓ RODE APÓS O DOM CARREGAR
+// 🔥 GARANTE QUE TUDO SÓ RODE APÓS O DOM CARREGAR
 window.addEventListener("DOMContentLoaded", () => {
+const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
 
+    if (isMobile) {
+        document.getElementById("auth-container-desktop").style.display = "none";  // Esconde a versão desktop
+        document.getElementById("auth-container-mobile").style.display = "block";  // Exibe a versão mobile
+    } else {
+        document.getElementById("auth-container-desktop").style.display = "block";  // Exibe a versão desktop
+        document.getElementById("auth-container-mobile").style.display = "none";  // Esconde a versão mobile
+    }
     atualizarCategorias();
 
     const hoje = new Date().toISOString().slice(0,7);
@@ -46,7 +54,7 @@ window.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", adicionarTransacao);
 
     // AUTH ELEMENTOS
-    const authContainer = document.getElementById("auth-container");
+    //const authContainer = document.getElementById("auth-container");
     const appContainer = document.getElementById("app-container");
     const emailInput = document.getElementById("email");
     const senhaInput = document.getElementById("senha");
@@ -60,20 +68,93 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    document.getElementById("btn-login").addEventListener("click", async () => {
-        try {
-            await signInWithEmailAndPassword(auth, emailInput.value, senhaInput.value);
-        } catch (error) {
-            showToast("Erro ao entrar", "error");
+   document.getElementById("btn-login").addEventListener("click", async () => {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+
+    try {
+        await signInWithEmailAndPassword(auth, email, senha);
+        showToast("Login bem-sucedido!");
+
+        // Esconde o login e exibe o app
+        document.getElementById("auth-container-desktop").style.display = "none";  // Esconde a versão desktop
+        document.getElementById("auth-container-mobile").style.display = "none";  // Esconde a versão mobile
+        document.getElementById("app-container").style.display = "block";  // Exibe o app
+
+    } catch (error) {
+        console.log("Erro no login: ", error);
+        let errorMessage = "Erro ao entrar";
+
+        if (error.code === 'auth/user-not-found') {
+            errorMessage = "Usuário não encontrado";
+        } else if (error.code === 'auth/wrong-password') {
+            errorMessage = "Senha incorreta";
+        } else if (error.code === 'auth/invalid-email') {
+            errorMessage = "Email inválido";
         }
-    });
+
+        showToast(errorMessage, "error");
+    }
+});
+
+window.addEventListener("resize", () => {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+        document.getElementById("auth-container-desktop").style.display = "none";  // Esconde a versão desktop
+        document.getElementById("auth-container-mobile").style.display = "block";  // Exibe a versão mobile
+    } else {
+        document.getElementById("auth-container-desktop").style.display = "block";  // Exibe a versão desktop
+        document.getElementById("auth-container-mobile").style.display = "none";  // Esconde a versão mobile
+    }
+});
+
+// Para a versão mobile
+document.getElementById("btn-login-mobile").addEventListener("click", async () => {
+    const email = document.getElementById("email-mobile").value;
+    const senha = document.getElementById("senha-mobile").value;
+
+    try {
+        await signInWithEmailAndPassword(auth, email, senha);
+        showToast("Login bem-sucedido!");
+
+        // Esconde o login mobile e exibe o app
+        document.getElementById("auth-container-mobile").style.display = "none";  // Esconde o login mobile
+        document.getElementById("app-container").style.display = "block";  // Exibe o app
+
+    } catch (error) {
+        console.log("Erro no login: ", error);
+        let errorMessage = "Erro ao entrar";
+        
+        if (error.code === 'auth/user-not-found') {
+            errorMessage = "Usuário não encontrado";
+        } else if (error.code === 'auth/wrong-password') {
+            errorMessage = "Senha incorreta";
+        } else if (error.code === 'auth/invalid-email') {
+            errorMessage = "Email inválido";
+        }
+
+        showToast(errorMessage, "error");
+    }
+});
+
 
     document.getElementById("btn-logout").addEventListener("click", async () => {
+    try {
         await signOut(auth);
-    });
+        showToast("Logout bem-sucedido!");
+
+        // Mostrar login e esconder app após logout
+        document.getElementById("auth-container-desktop").style.display = "block";
+        document.getElementById("app-container").style.display = "none";
+
+    } catch (error) {
+        console.log("Erro ao fazer logout: ", error); // Exibe o erro no console para depuração
+        showToast("Erro ao fazer logout", "error");
+    }
+});
 
     onAuthStateChanged(auth, (user) => {
-    const authContainer = document.getElementById("auth-container");
+    const authContainer = document.getElementById("auth-container-desktop");
     const appContainer = document.getElementById("app-container");
 
     // Esconde o box de "editando transação" quando o app é carregado (sem edição)
@@ -490,13 +571,13 @@ function atualizarComparativo() {
 function getIconeFormaPagamento(formaPagamento) {
     switch (formaPagamento) {
         case "pix":
-            return "��";  // ícone mais discreto para Pix
+            return "📱";  // ícone mais discreto para Pix
         case "debito":
-            return "��";  // ícone mais refinado para Débito
+            return "🛒";  // ícone mais refinado para Débito
         case "credito":
-            return "��";  // ícone sutil para Crédito
+            return "💳";  // ícone sutil para Crédito
         default:
-            return "��";  // ícone padrão caso não tenha sido configurado
+            return "💳";  // ícone padrão caso não tenha sido configurado
     }
 }
 
