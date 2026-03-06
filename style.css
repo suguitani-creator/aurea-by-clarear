@@ -40,45 +40,36 @@ h1 {
 }
 
 /* ================= LOGIN PREMIUM ================= */
-#auth-container-desktop {
+
+#auth-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;  /* Centraliza todos os elementos dentro do container */
     gap: 16px;
     text-align: center;
-    width: 100%;
-    max-width: 400px; /* Definindo a largura máxima do container de login */
-    margin: 0 auto; /* Centraliza o container na página */
-    padding: 20px;
-    background-color: #fff; /* Fundo branco para o container */
-    border-radius: 10px; /* Bordas arredondadas */
 }
 
-#auth-container-desktop h2 {
-    font-size: 24px;  /* Aumentei o tamanho da fonte para destacar mais */
-    font-weight: 600;
+#auth-container h2 {
+    font-size: 18px;
+    font-weight: 500;
     color: #3E2F23;
-    margin-bottom: 10px;  /* Espaçamento abaixo do título */
+    margin-bottom: 5px;
 }
 
 .login-subtitle {
-    font-size: 14px;
+    font-size: 13px;
     color: #8B6F4E;
-    margin-bottom: 20px; /* Ajustei o espaçamento do subtítulo */
+    margin-bottom: 15px;
 }
 
-#auth-container-desktop input {
+#auth-container input {
     padding: 12px;
     border-radius: 10px;
     border: 1px solid #E8DFD4;
     background: #FAF8F5;
     font-size: 14px;
-    width: 100%; /* Garante que os campos de input ocupem toda a largura disponível */
-    box-sizing: border-box; /* Faz com que o padding não ultrapasse a largura */
 }
 
-#auth-container-desktop input:focus {
+#auth-container input:focus {
     outline: none;
     border-color: #C6A75E;
 }
@@ -94,8 +85,6 @@ h1 {
     letter-spacing: 0.5px;
     transition: 0.3s ease;
     cursor: pointer;
-    width: 100%;  /* Ajustando o botão para ter a mesma largura dos inputs */
-    box-sizing: border-box;
 }
 
 #btn-login:hover {
@@ -114,33 +103,6 @@ h1 {
 
 .secondary-btn:hover {
     color: #3E2F23;
-}
-
-/* ================= CONTROLAR VISIBILIDADE POR TIPO DE DISPOSITIVO ================= */
-
-/* Versão Desktop */
-#auth-container-desktop {
-    display: block; /* Exibe a versão desktop */
-}
-
-#auth-container-mobile {
-    display: none; /* Esconde a versão mobile */
-}
-
-/* Mobile */
-@media screen and (max-width: 768px) {
-    #auth-container-desktop {
-        display: none; /* Esconde a versão desktop em dispositivos pequenos */
-    }
-
-    #auth-container-mobile {
-        display: block; /* Exibe a versão mobile em dispositivos pequenos */
-    }
-
-    #btn-login {
-        padding: 10px;
-        font-size: 14px;
-    }
 }
 
 /* ================= TRANSIÇÃO ================= */
