@@ -723,7 +723,7 @@ button.modo-edicao:hover {
     margin-left: 10px; /* Garantir espaçamento entre ícone de pagamento e valor */
 }
 
-/*#formulario-conta {
+#formulario-conta {
     background: #f5f1eb;
     padding: 20px;
     margin-top: 20px;
