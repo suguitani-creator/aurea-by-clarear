@@ -68,26 +68,44 @@ window.addEventListener("DOMContentLoaded", () => {
         await signInWithEmailAndPassword(auth, email, senha);
         showToast("Login bem-sucedido!");
 
-        // Verifica se estamos em uma tela mobile ou desktop e altera a visibilidade dos containers de login
-const isMobile = window.innerWidth <= 768;  // Defina o limite para mobile
-
-// Esconde o login desktop se estiver no mobile e esconde o login mobile se estiver no desktop
-if (isMobile) {
-    document.getElementById("auth-container-desktop").style.display = "none";  // Esconde a versão desktop
-    document.getElementById("auth-container-mobile").style.display = "block";  // Exibe a versão mobile
-} else {
-    document.getElementById("auth-container-desktop").style.display = "block";  // Exibe a versão desktop
-    document.getElementById("auth-container-mobile").style.display = "none";  // Esconde a versão mobile
-}
-
-// Quando o login é bem-sucedido, mostra o app e esconde a tela de login
-document.getElementById("app-container").style.display = "block";  // Exibe o app
+        // Esconde o login e exibe o app
+        document.getElementById("auth-container-desktop").style.display = "none";  // Esconde a versão desktop
+        document.getElementById("auth-container-mobile").style.display = "none";  // Esconde a versão mobile
+        document.getElementById("app-container").style.display = "block";  // Exibe o app
 
     } catch (error) {
-        console.log("Erro no login: ", error); // Exibe o erro no console para depuração
+        console.log("Erro no login: ", error);
         let errorMessage = "Erro ao entrar";
 
-        // Verifica o tipo de erro e exibe uma mensagem específica
+        if (error.code === 'auth/user-not-found') {
+            errorMessage = "Usuário não encontrado";
+        } else if (error.code === 'auth/wrong-password') {
+            errorMessage = "Senha incorreta";
+        } else if (error.code === 'auth/invalid-email') {
+            errorMessage = "Email inválido";
+        }
+
+        showToast(errorMessage, "error");
+    }
+});
+
+// Para a versão mobile
+document.getElementById("btn-login-mobile").addEventListener("click", async () => {
+    const email = document.getElementById("email-mobile").value;
+    const senha = document.getElementById("senha-mobile").value;
+
+    try {
+        await signInWithEmailAndPassword(auth, email, senha);
+        showToast("Login bem-sucedido!");
+
+        // Esconde o login mobile e exibe o app
+        document.getElementById("auth-container-mobile").style.display = "none";  // Esconde o login mobile
+        document.getElementById("app-container").style.display = "block";  // Exibe o app
+
+    } catch (error) {
+        console.log("Erro no login: ", error);
+        let errorMessage = "Erro ao entrar";
+        
         if (error.code === 'auth/user-not-found') {
             errorMessage = "Usuário não encontrado";
         } else if (error.code === 'auth/wrong-password') {
