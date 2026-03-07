@@ -651,6 +651,8 @@ async function adicionarConta() {
     const fechamento = document.getElementById("fechamento-cartao").value;
     const dataSaldo = document.getElementById("data-saldo-conta").value;
 
+    console.log("Dados do formulário:", tipo, nome, saldo, vencimento, fechamento, dataSaldo); // Log dos dados capturados
+
     // Verificando se todos os campos foram preenchidos corretamente
     if (!nome || isNaN(saldo) || (tipo === "cartao" && (!vencimento || !fechamento)) || (tipo === "conta" && !dataSaldo)) {
         alert("Preencha todos os campos corretamente.");
