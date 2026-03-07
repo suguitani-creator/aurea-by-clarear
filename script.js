@@ -644,6 +644,7 @@ document.getElementById("btn-adicionar-conta").addEventListener("click", async (
 async function adicionarConta() {
     console.log('Função de adicionar conta foi chamada'); // Log para verificar se a função está sendo chamada
     
+    // Captura os valores dos campos
     const tipo = document.getElementById("tipo-conta").value;
     const nome = document.getElementById("nome-conta").value;
     const saldo = parseFloat(document.getElementById("saldo-conta").value);
@@ -653,12 +654,14 @@ async function adicionarConta() {
 
     console.log("Dados do formulário:", tipo, nome, saldo, vencimento, fechamento, dataSaldo); // Log dos dados capturados
 
-    // Verificando se todos os campos foram preenchidos corretamente
+    // Verificando se os campos estão preenchidos corretamente
+    // A lógica agora foi corrigida para que a validação aconteça somente após o preenchimento
     if (!nome || isNaN(saldo) || (tipo === "cartao" && (!vencimento || !fechamento)) || (tipo === "conta" && !dataSaldo)) {
         alert("Preencha todos os campos corretamente.");
         return;
     }
 
+    // Verifica se o usuário está autenticado
     const user = auth.currentUser;
     if (!user) {
         alert("Você precisa estar logado para adicionar uma conta.");
@@ -666,7 +669,7 @@ async function adicionarConta() {
     }
 
     console.log("Adicionando uma conta/cartão no Firestore...");
-    
+
     try {
         // Adicionar Conta Corrente
         if (tipo === "conta") {
