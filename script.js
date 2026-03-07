@@ -638,6 +638,8 @@ document.addEventListener("DOMContentLoaded", function() {
 //});
 
 async function adicionarConta() {
+    console.log('Função de adicionar conta foi chamada'); // Log para verificar se a função está sendo chamada
+    
     const tipo = document.getElementById("tipo-conta").value;
     const nome = document.getElementById("nome-conta").value;
     const saldo = parseFloat(document.getElementById("saldo-conta").value);
