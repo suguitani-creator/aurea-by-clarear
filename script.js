@@ -637,6 +637,10 @@ document.addEventListener("DOMContentLoaded", function() {
 //    }
 //});
 
+document.getElementById("btn-adicionar-conta").addEventListener("click", async () => {
+    await adicionarConta();  // Chama a função para adicionar a conta
+});
+
 async function adicionarConta() {
     console.log('Função de adicionar conta foi chamada'); // Log para verificar se a função está sendo chamada
     
