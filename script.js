@@ -637,7 +637,7 @@ document.addEventListener("DOMContentLoaded", function() {
 //    }
 //});
 
-document.getElementById("btn-adicionar-conta").addEventListener("click", async () => {
+document.getElementById("btn-salvar-conta").addEventListener("click", async () => {
     await adicionarConta();  // Chama a função para adicionar a conta
 });
 
