@@ -657,9 +657,12 @@ async function adicionarConta() {
         return;
     }
 
+    console.log("Adicionando uma conta/cartão no Firestore...");
+    
     try {
         // Adicionar Conta Corrente
         if (tipo === "conta") {
+            console.log("Salvando conta corrente:", nome, saldo, dataSaldo); // Log para depuração
             await addDoc(collection(db, "users", user.uid, "contas"), {
                 nome: nome,
                 saldo: saldo,
@@ -669,6 +672,7 @@ async function adicionarConta() {
         } 
         // Adicionar Cartão de Crédito
         else if (tipo === "cartao") {
+            console.log("Salvando cartão de crédito:", nome, saldo, vencimento, fechamento); // Log para depuração
             await addDoc(collection(db, "users", user.uid, "cartoes"), {
                 nome: nome,
                 saldo: saldo,
@@ -678,9 +682,12 @@ async function adicionarConta() {
             });
         }
 
-        alert("Conta ou cartão adicionado com sucesso!");
+        console.log("Conta ou cartão adicionado com sucesso!");
+        showToast("Conta ou cartão adicionado com sucesso!");
         carregarContasECartoes(); // Atualiza a lista após a adição
+
     } catch (error) {
+        console.log("Erro ao adicionar conta ou cartão: ", error); // Log do erro para depuração
         alert("Erro ao adicionar conta ou cartão: " + error.message);
     }
 }
@@ -714,9 +721,3 @@ async function carregarContasECartoes() {
     });
 }
 
-// Carregar as contas e cartões após login
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        carregarContasECartoes(); // Carregar dados após login
-    }
-});
