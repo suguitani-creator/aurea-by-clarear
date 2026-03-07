@@ -713,3 +713,10 @@ async function carregarContasECartoes() {
         listaCartoes.appendChild(li);
     });
 }
+
+// Carregar as contas e cartões após login
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        carregarContasECartoes(); // Carregar dados após login
+    }
+});
