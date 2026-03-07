@@ -167,6 +167,8 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         appContainer.style.display = "block";
 
         carregarTransacoes();  // Carregar transações após o login
+        carregarContasECartoes();  // Carregar contas e cartões após o login
+
     } else {
         authContainer.style.display = "block";
         appContainer.style.display = "none";
@@ -707,28 +709,36 @@ async function carregarContasECartoes() {
     const user = auth.currentUser;
     if (!user) return;
 
+    // Recuperar contas
     const contasRef = collection(db, "users", user.uid, "contas");
     const cartoesRef = collection(db, "users", user.uid, "cartoes");
 
-    const contasSnapshot = await getDocs(contasRef);
-    const cartoesSnapshot = await getDocs(cartoesRef);
+    try {
+        const contasSnapshot = await getDocs(contasRef);
+        const cartoesSnapshot = await getDocs(cartoesRef);
 
-    const listaContas = document.getElementById("lista-contas");
-    const listaCartoes = document.getElementById("lista-cartoes");
+        const listaContas = document.getElementById("lista-contas");
+        const listaCartoes = document.getElementById("lista-cartoes");
 
-    listaContas.innerHTML = "";
-    listaCartoes.innerHTML = "";
+        listaContas.innerHTML = ""; // Limpa a lista antes de adicionar
+        listaCartoes.innerHTML = ""; // Limpa a lista antes de adicionar
 
-    contasSnapshot.forEach(doc => {
-        const li = document.createElement("li");
-        li.textContent = `Conta: ${doc.data().nome} - Saldo: R$ ${doc.data().saldo.toFixed(2)}`;
-        listaContas.appendChild(li);
-    });
+        // Adicionar contas à lista
+        contasSnapshot.forEach(doc => {
+            const li = document.createElement("li");
+            li.textContent = `Conta: ${doc.data().nome} - Saldo: R$ ${doc.data().saldo.toFixed(2)}`;
+            listaContas.appendChild(li);
+        });
 
-    cartoesSnapshot.forEach(doc => {
-        const li = document.createElement("li");
-        li.textContent = `Cartão: ${doc.data().nome} - Limite: R$ ${doc.data().saldo.toFixed(2)} - Vencimento: ${doc.data().vencimento} - Fechamento: ${doc.data().fechamento}`;
-        listaCartoes.appendChild(li);
-    });
+        // Adicionar cartões à lista
+        cartoesSnapshot.forEach(doc => {
+            const li = document.createElement("li");
+            li.textContent = `Cartão: ${doc.data().nome} - Limite: R$ ${doc.data().saldo.toFixed(2)} - Vencimento: ${doc.data().vencimento} - Fechamento: ${doc.data().fechamento}`;
+            listaCartoes.appendChild(li);
+        });
+
+    } catch (error) {
+        console.error("Erro ao carregar contas e cartões:", error);
+    }
 }
 
