@@ -16,11 +16,6 @@ const firebaseConfig = {
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 
-// Após inicializar o Firebase
-console.log('Firebase App inicializado: ', app);
-console.log('Auth:', auth);
-console.log('Firestore DB:', db);
-
 // Exportar auth e db
 export const auth = getAuth(app);
 export const db = getFirestore(app);
