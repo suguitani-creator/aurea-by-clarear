@@ -750,7 +750,7 @@ async function carregarContasECartoes() {
         li.innerHTML = `
             <div class="item-info">
                 <strong>Cartão: ${doc.data().nome}</strong><br>
-                Vencimento: ${doc.data().vencimento} 
+                Vencimento: ${doc.data().vencimento}<br> 
                 Fechamento: ${doc.data().fechamento}
             </div>
             <div class="item-actions">
