@@ -799,25 +799,36 @@ button.modo-edicao:hover {
     margin-left: 10px;
 }
 
-/* Estilo do botão para exibir/ocultar contas e cartões */
+/* Estilo comum para os botões "Adicionar" e "Exibir Contas e Cartões" */
+#btn-adicionar-conta,
 #btn-exibir-contas {
-    background: transparent;
-    border: none;
-    color: #7A5C42;
-    font-size: 16px;
-    cursor: pointer;
+    background: #F0E7DA; /* Cor de fundo igual ao comparativo */
+    padding: 10px 20px;
+    font-size: 14px;
     font-weight: 500;
-    padding: 10px;
-    transition: 0.3s ease;
-    margin-top: 15px; /* Dá um espaço entre o botão de adicionar e este */
+    border-radius: 10px;
+    border: none;
+    color: #8B6F4E;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, font-size 0.2s ease;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box; /* Garante que o botão ocupe a largura correta */
 }
 
+/* Efeito de hover - mudança de cor e fonte */
+#btn-adicionar-conta:hover,
 #btn-exibir-contas:hover {
-    color: #3E2F23;
+    background: #C6A75E;  /* Altere para o tom desejado */
+    color: white;  /* Texto fica branco */
+    transform: scale(1.05);  /* Leve aumento de tamanho */
+    font-size: 15px;  /* Aumenta o tamanho da fonte ao passar o mouse */
 }
 
-/* Inicialmente escondendo a lista de contas e cartões */
-#contas-cartoes-container {
-    display: none;
+
+/* Ajuste para dar um pouco de espaço ao botão */
+#btn-adicionar-conta,
+#btn-exibir-contas {
+    margin-top: 20px; /* Espaço entre o botão e outros elementos */
 }
 
