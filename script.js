@@ -489,7 +489,14 @@ window.editarTransacao = async function(id) {
 
 function converterDataFirestore(dataFirestore) {
     const [ano, mes, dia] = dataFirestore.split("-"); // formato YYYY-MM-DD
-    return new Date(ano, mes - 1, dia); // meses começam do zero
+    const data = new Date(ano, mes - 1, dia); // meses começam do zero
+    
+    // Formatar para DD/MM/YYYY
+    const diaFormatado = data.getDate().toString().padStart(2, '0');  // Garantir que o dia tenha 2 dígitos
+    const mesFormatado = (data.getMonth() + 1).toString().padStart(2, '0');  // Meses começam do 0, então +1
+    const anoFormatado = data.getFullYear();
+    
+    return `${diaFormatado}/${mesFormatado}/${anoFormatado}`;
 }
 
 function calcularTotaisPorMes(mes, ano) {
@@ -724,11 +731,12 @@ async function carregarContasECartoes() {
 
     contasSnapshot.forEach(doc => {
         const li = document.createElement("li");
+        const dataSaldoFormatado = converterDataFirestore(doc.data().dataSaldo);
         li.innerHTML = `
             <div class="item-info">
                 <strong>Conta Corrente: ${doc.data().nome}</strong><br>
                 <small>Saldo Inicial: R$ ${doc.data().saldo.toFixed(2)}</small><br>
-                <small>Informado em: ${doc.data().dataSaldo}</small><br>
+                <small>Informado em: ${doc.data().dataSaldoFormatado}</small>
             </div>
             <div class="item-actions">
                 <button class="btn-edit" onclick="editarConta('${doc.id}')">
@@ -748,11 +756,13 @@ async function carregarContasECartoes() {
 
     cartoesSnapshot.forEach(doc => {
         const li = document.createElement("li");
+        const vencimentoFormatado = converterDataFirestore(doc.data().vencimento);
+        const fechamentoFormatado = converterDataFirestore(doc.data().fechamento);
         li.innerHTML = `
             <div class="item-info">
                 <strong>Cartão: ${doc.data().nome}</strong><br>
-                <small>Vencimento: ${doc.data().vencimento}<small><br> 
-                <small>Fechamento: ${doc.data().fechamento}<small>
+                <small>Vencimento: ${doc.data().vencimentoFormatado}<small><br> 
+                <small>Fechamento: ${doc.data().fechamentoFormatado}<small>
             </div>
             <div class="item-actions">
                 <button class="btn-edit" onclick="editarCartao('${doc.id}')">
