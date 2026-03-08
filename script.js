@@ -740,7 +740,7 @@ async function carregarContasECartoes() {
         li.innerHTML = `
             <div class="item-info">
                 <strong>Conta Corrente: ${doc.data().nome}</strong><br>
-                <small>Saldo Inicial: R$ ${doc.data().saldo.toFixed(2)}</small><br>
+                <small>Saldo Inicial: R$ ${doc.data().saldo.toFixed(2)}</small>
                 <small>Informado em: ${saldoFormatado}</small>
             </div>
             <div class="item-actions">
