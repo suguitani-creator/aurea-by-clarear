@@ -753,3 +753,49 @@ button.modo-edicao:hover {
     background: #7a5c42;
 }
 
+/* Estilo para o título de Contas e Cartões */
+.contas-cartoes-lista h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #4E3B2A; /* Um tom de marrom para harmonizar com o tema */
+}
+
+/* Estilo para os itens de contas/cartões */
+#lista-contas-cartoes {
+    list-style-type: none;
+    padding: 0;
+}
+
+#lista-contas-cartoes li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: #FAF8F5;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(62, 47, 35, 0.05);
+}
+
+#lista-contas-cartoes li span {
+    font-size: 14px;
+    color: #3E2F23;
+}
+
+#lista-contas-cartoes li button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+#lista-contas-cartoes li button:hover {
+    opacity: 0.7;
+}
+
+/* Estilo dos ícones de edição e exclusão */
+#lista-contas-cartoes li .btn-edit, 
+#lista-contas-cartoes li .btn-delete {
+    margin-left: 10px;
+}
+

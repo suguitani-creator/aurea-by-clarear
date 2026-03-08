@@ -796,22 +796,22 @@ async function removerConta(id) {
     }
 }
 
-async function removerConta(id) {
+async function removerCartao(id) {
     const user = auth.currentUser;
     if (!user) return;
 
     try {
-        // Deletar a conta do Firestore
-        await deleteDoc(doc(db, "users", user.uid, "contas", id));
+        // Deletar o cartão do Firestore
+        await deleteDoc(doc(db, "users", user.uid, "cartoes", id));
 
         // Exibir confirmação
-        showToast("Conta removida!");
+        showToast("Cartão removido!");
         
         // Recarregar as listas
         carregarContasECartoes();
     } catch (error) {
-        console.error("Erro ao remover conta:", error);
-        showToast("Erro ao remover conta", "error");
+        console.error("Erro ao remover cartão:", error);
+        showToast("Erro ao remover cartão", "error");
     }
 }
 
