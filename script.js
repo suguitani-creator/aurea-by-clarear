@@ -505,6 +505,7 @@ function calcularTotaisPorMes(mes, ano) {
 
     transacoes.forEach(t => {
         const data = converterDataFirestore(t.data); // Usando a função nova para converter a data
+        console.log(data); // Verifica o valor retornado
 
         // Verificar se a transação é do mês e ano correto
         if (data.getMonth() === mes && data.getFullYear() === ano) {
