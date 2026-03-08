@@ -705,75 +705,66 @@ async function adicionarConta() {
     }
 }
 
+// Exibir as contas e cartões cadastrados
 async function carregarContasECartoes() {
     const user = auth.currentUser;
     if (!user) return;
 
-    // Referências para as coleções de contas e cartões no Firestore
     const contasRef = collection(db, "users", user.uid, "contas");
     const cartoesRef = collection(db, "users", user.uid, "cartoes");
 
-    // Carregar dados de contas e cartões
     const contasSnapshot = await getDocs(contasRef);
     const cartoesSnapshot = await getDocs(cartoesRef);
 
-    // Listas que serão atualizadas
     const listaContas = document.getElementById("lista-contas");
     const listaCartoes = document.getElementById("lista-cartoes");
 
-    listaContas.innerHTML = "";  // Limpa a lista antes de adicionar novos itens
-    listaCartoes.innerHTML = ""; // Limpa a lista de cartões
+    listaContas.innerHTML = "";
+    listaCartoes.innerHTML = "";
 
-    // Adicionando contas à lista
     contasSnapshot.forEach(doc => {
         const li = document.createElement("li");
-
         li.innerHTML = `
-            <div>
-                <strong>Conta: ${doc.data().nome}</strong><br>
-                <small>Saldo: R$ ${doc.data().saldo.toFixed(2)}</small>
+            <div class="item-info">
+                <strong>Conta Corrente: ${doc.data().nome}</strong>
             </div>
-            <div>
+            <div class="item-actions">
                 <button class="btn-edit" onclick="editarConta('${doc.id}')">
-                    <svg width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                        <path d="M12.146 0l3.707 3.707a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.704.293h-2a1 1 0 0 1-1-1v-2a1 1 0 0 1 .293-.704l9-9a1 1 0 0 1 1.414 0L12.146 0zM11.207 3l-9 9V13h.293l9-9L11.207 3z"/>
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="currentColor" d="M3 17.25V21h3.75L19.81 7.94l-3.75-3.75L3 17.25zM20.71 6.04c.39-.39.39-1.02 0-1.41l-1.34-1.34c-.39-.39-1.02-.39-1.41 0l-1.13 1.13 3.75 3.75 1.13-1.13z"/>
                     </svg>
                 </button>
-                <button class="btn-delete" onclick="removerConta('${doc.id}')">
-                    <svg width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                        <path d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
+                <button class="btn-delete" onclick="confirmarExclusaoConta('${doc.id}')">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="currentColor" d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
                     </svg>
                 </button>
             </div>
         `;
-
-        listaContas.appendChild(li);  // Adiciona a conta à lista
+        listaContas.appendChild(li);
     });
 
-    // Adicionando cartões à lista
     cartoesSnapshot.forEach(doc => {
         const li = document.createElement("li");
-
         li.innerHTML = `
-            <div>
+            <div class="item-info">
                 <strong>Cartão: ${doc.data().nome}</strong><br>
-                <small>Limite: R$ ${doc.data().saldo.toFixed(2)} | Vencimento: ${doc.data().vencimento}</small>
+                Vencimento: ${doc.data().vencimento} - Fechamento: ${doc.data().fechamento}
             </div>
-            <div>
+            <div class="item-actions">
                 <button class="btn-edit" onclick="editarCartao('${doc.id}')">
-                    <svg width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                        <path d="M12.146 0l3.707 3.707a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.704.293h-2a1 1 0 0 1-1-1v-2a1 1 0 0 1 .293-.704l9-9a1 1 0 0 1 1.414 0L12.146 0zM11.207 3l-9 9V13h.293l9-9L11.207 3z"/>
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="currentColor" d="M3 17.25V21h3.75L19.81 7.94l-3.75-3.75L3 17.25zM20.71 6.04c.39-.39.39-1.02 0-1.41l-1.34-1.34c-.39-.39-1.02-.39-1.41 0l-1.13 1.13 3.75 3.75 1.13-1.13z"/>
                     </svg>
                 </button>
-                <button class="btn-delete" onclick="removerCartao('${doc.id}')">
-                    <svg width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                        <path d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
+                <button class="btn-delete" onclick="confirmarExclusaoCartao('${doc.id}')">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path fill="currentColor" d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
                     </svg>
                 </button>
             </div>
         `;
-
-        listaCartoes.appendChild(li);  // Adiciona o cartão à lista
+        listaCartoes.appendChild(li);
     });
 }
 
