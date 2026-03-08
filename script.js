@@ -786,6 +786,17 @@ async function carregarContasECartoes() {
     });
 }
 
+document.getElementById("btn-exibir-contas").addEventListener("click", () => {
+    const contasCartoesContainer = document.getElementById("contas-cartoes-container");
+    
+    // Alterna a visibilidade da lista de contas e cartões
+    if (contasCartoesContainer.style.display === "none" || contasCartoesContainer.style.display === "") {
+        contasCartoesContainer.style.display = "block";  // Exibe
+    } else {
+        contasCartoesContainer.style.display = "none";   // Esconde
+    }
+});
+
 async function removerConta(id) {
     const user = auth.currentUser;
     if (!user) return;
@@ -824,14 +835,5 @@ async function removerCartao(id) {
     }
 }
 
-document.getElementById("btn-exibir-contas").addEventListener("click", () => {
-    const contasCartoesContainer = document.getElementById("contas-cartoes-container");
-    
-    // Alterna a visibilidade da lista de contas e cartões
-    if (contasCartoesContainer.style.display === "none" || contasCartoesContainer.style.display === "") {
-        contasCartoesContainer.style.display = "block";  // Exibe
-    } else {
-        contasCartoesContainer.style.display = "none";   // Esconde
-    }
-});
+
 
