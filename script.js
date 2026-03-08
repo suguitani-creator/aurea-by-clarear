@@ -736,11 +736,12 @@ async function carregarContasECartoes() {
 
     contasSnapshot.forEach(doc => {
         const li = document.createElement("li");
+        const saldoFormatado = converterDataFirestore(doc.data().dataSaldo);
         li.innerHTML = `
             <div class="item-info">
                 <strong>Conta Corrente: ${doc.data().nome}</strong><br>
                 <small>Saldo Inicial: R$ ${doc.data().saldo.toFixed(2)}</small><br>
-                <small>Informado em: ${doc.data().dataSaldo}</small>
+                <small>Informado em: ${saldoFormatado}</small>
             </div>
             <div class="item-actions">
                 <button class="btn-edit" onclick="editarConta('${doc.id}')">
