@@ -726,8 +726,9 @@ async function carregarContasECartoes() {
         const li = document.createElement("li");
         li.innerHTML = `
             <div class="item-info">
-                <strong>Conta Corrente: ${doc.data().nome}</strong>
-                <small>Saldo: R$ ${doc.data().saldo.toFixed(2)}</small>
+                <strong>Conta Corrente: ${doc.data().nome}</strong><br>
+                <small>Saldo Inicial: R$ ${doc.data().saldo.toFixed(2)}</small><br>
+                <small>Informado em: ${doc.data().dataSaldo}</small><br>
             </div>
             <div class="item-actions">
                 <button class="btn-edit" onclick="editarConta('${doc.id}')">
@@ -750,8 +751,8 @@ async function carregarContasECartoes() {
         li.innerHTML = `
             <div class="item-info">
                 <strong>Cartão: ${doc.data().nome}</strong><br>
-                Vencimento: ${doc.data().vencimento}<br> 
-                Fechamento: ${doc.data().fechamento}
+                <small>Vencimento: ${doc.data().vencimento}<small><br> 
+                <small>Fechamento: ${doc.data().fechamento}<small>
             </div>
             <div class="item-actions">
                 <button class="btn-edit" onclick="editarCartao('${doc.id}')">
