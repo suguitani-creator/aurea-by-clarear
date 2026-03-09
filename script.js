@@ -431,24 +431,28 @@ window.confirmarExclusao = function(id) {
     document.getElementById("modal-confirmacao").classList.add("show");
 }
 
-window.confirmarExclusaoConta = function(id) {
+window.confirmarExclusaoConta = function(id, nome) {
+
     idParaExcluir = id;
     tipoParaExcluir = "conta";
 
     document.getElementById("texto-confirmacao").textContent =
-        "Deseja remover esta conta?";
+        `Deseja remover a conta "${nome}"?`;
 
     document.getElementById("modal-confirmacao").classList.add("show");
+
 }
 
-window.confirmarExclusaoCartao = function(id) {
+window.confirmarExclusaoCartao = function(id, nome) {
+
     idParaExcluir = id;
     tipoParaExcluir = "cartao";
 
     document.getElementById("texto-confirmacao").textContent =
-        "Deseja remover este cartão?";
+        `Deseja remover o cartão "${nome}"?`;
 
     document.getElementById("modal-confirmacao").classList.add("show");
+
 }
 
 document.getElementById("cancelar-exclusao").addEventListener("click", () => {
@@ -812,7 +816,7 @@ async function carregarContasECartoes() {
                         <path fill="currentColor" d="M3 17.25V21h3.75L19.81 7.94l-3.75-3.75L3 17.25zM20.71 6.04c.39-.39.39-1.02 0-1.41l-1.34-1.34c-.39-.39-1.02-.39-1.41 0l-1.13 1.13 3.75 3.75 1.13-1.13z"/>
                     </svg>
                 </button>
-                <button class="btn-delete" onclick="confirmarExclusaoConta('${doc.id}')">
+                <button class="btn-delete" onclick="confirmarExclusaoConta('${doc.id}','${doc.data().nome}')"
                     <svg viewBox="0 0 24 24" width="16" height="16">
                         <path fill="currentColor" d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
                     </svg>
@@ -842,7 +846,7 @@ async function carregarContasECartoes() {
                         <path fill="currentColor" d="M3 17.25V21h3.75L19.81 7.94l-3.75-3.75L3 17.25zM20.71 6.04c.39-.39.39-1.02 0-1.41l-1.34-1.34c-.39-.39-1.02-.39-1.41 0l-1.13 1.13 3.75 3.75 1.13-1.13z"/>
                     </svg>
                 </button>
-                <button class="btn-delete" onclick="confirmarExclusaoCartao('${doc.id}')">
+                <button class="btn-delete" onclick="confirmarExclusaoCartao('${doc.id}','${doc.data().nome}')"
                     <svg viewBox="0 0 24 24" width="16" height="16">
                         <path fill="currentColor" d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
                     </svg>
