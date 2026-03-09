@@ -731,7 +731,6 @@ async function carregarContasECartoes() {
     listaCartoes.innerHTML = "";
 
     contasSnapshot.forEach(doc => {
-        const dataSaldo = doc.data().dataSaldo; // Garantir que estamos pegando a data corretamente
         console.log("Data do saldo:", dataSaldo); // Verifique o valor retornado
         
         const li = document.createElement("li");
