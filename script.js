@@ -425,13 +425,13 @@ function confirmarExclusao(id) {
     document.getElementById("modal-confirmacao").classList.add("show");
 }
 
-function confirmarExclusaoConta(id) {
+window.confirmarExclusaoConta = function(id) {
     idParaExcluir = id;
     tipoParaExcluir = "conta";
     document.getElementById("modal-confirmacao").classList.add("show");
 }
 
-function confirmarExclusaoCartao(id) {
+window.confirmarExclusaoCartao = function(id) {
     idParaExcluir = id;
     tipoParaExcluir = "cartao";
     document.getElementById("modal-confirmacao").classList.add("show");
@@ -783,8 +783,6 @@ async function carregarContasECartoes() {
 
     contasSnapshot.forEach(doc => {
         const dataSaldo = doc.data().dataSaldo; // Acessando o campo de dataSaldo
-        console.log("Data do saldo:", dataSaldo); // Verifique o valor retornado
-        
         const saldoFormatado = formatarData(dataSaldo); // Usando a função formatarData
 
         const li = document.createElement("li");
