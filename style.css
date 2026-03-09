@@ -832,3 +832,48 @@ button.modo-edicao:hover {
     margin-top: 20px; /* Espaço entre o botão e outros elementos */
 }
 
+.contas-lista li {
+
+    background: #FAF8F5;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border: 1px solid #E8DFD4;
+
+    transition: all 0.2s ease;
+
+}
+
+.contas-lista li:hover {
+
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+
+}
+
+.contas-lista .item-info strong {
+
+    font-size: 14px;
+    color: #3E2F23;
+
+}
+
+.contas-lista small {
+
+    display: block;
+    color: #8B6F4E;
+    font-size: 12px;
+}
+
+.contas-lista .item-actions {
+
+    display: flex;
+    gap: 10px;
+
+}
+
