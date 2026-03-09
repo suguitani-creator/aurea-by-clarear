@@ -420,20 +420,34 @@ function showToast(message, type = "success") {
 let idParaExcluir = null;
 let tipoParaExcluir = null;
 
-function confirmarExclusao(id) {
+window.confirmarExclusao = function(id) {
+
     idParaExcluir = id;
+    tipoParaExcluir = "transacao";
+
+    document.getElementById("texto-confirmacao").textContent =
+        "Deseja remover esta transação?";
+
     document.getElementById("modal-confirmacao").classList.add("show");
 }
 
 window.confirmarExclusaoConta = function(id) {
     idParaExcluir = id;
     tipoParaExcluir = "conta";
+
+    document.getElementById("texto-confirmacao").textContent =
+        "Deseja remover esta conta?";
+
     document.getElementById("modal-confirmacao").classList.add("show");
 }
 
 window.confirmarExclusaoCartao = function(id) {
     idParaExcluir = id;
     tipoParaExcluir = "cartao";
+
+    document.getElementById("texto-confirmacao").textContent =
+        "Deseja remover este cartão?";
+
     document.getElementById("modal-confirmacao").classList.add("show");
 }
 
