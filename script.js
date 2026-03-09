@@ -660,7 +660,7 @@ async function adicionarConta() {
     const saldo = parseFloat(document.getElementById("saldo-conta").value);
     const vencimento = document.getElementById("vencimento-cartao").value;
     const fechamento = document.getElementById("fechamento-cartao").value;
-    
+    const dataSaldo = doc.data().dataSaldo;
 
     console.log("Dados do formulário:", tipo, nome, saldo, vencimento, fechamento, dataSaldo); // Log dos dados capturados
 
