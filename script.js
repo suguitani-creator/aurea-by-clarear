@@ -696,25 +696,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-// Função para carregar contas e cartões (simulação)
-//function carregarContasECartoes() {
-    // Simulando as contas e cartões cadastrados
-//    const listaContas = document.getElementById("lista-contas");
-//    const listaCartoes = document.getElementById("lista-cartoes");
-
-//    listaContas.innerHTML = "<li>Conta Corrente - Banco XYZ - R$ 1.500,00</li>";
-//    listaCartoes.innerHTML = "<li>Cartão de Crédito - Banco ABC - Limite: R$ 2.000,00</li>";
-
-    // Exibe o container com as listas
-//    document.getElementById("lista-contas-cartoes").style.display = "block";
-//}
-
-// Carregar as contas e cartões após login
-//onAuthStateChanged(auth, (user) => {
-//    if (user) {
-//        carregarContasECartoes(); // Carregar dados após login
-//    }
-//});
 
 document.getElementById("btn-salvar-conta").addEventListener("click", async () => {
     await adicionarConta();  // Chama a função para adicionar a conta

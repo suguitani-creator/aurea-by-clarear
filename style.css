@@ -761,37 +761,6 @@ button.modo-edicao:hover {
     color: #4E3B2A; /* Um tom de marrom para harmonizar com o tema */
 }
 
-/* Estilo para os itens de contas/cartões */
-#lista-contas-cartoes {
-    list-style-type: none;
-    padding: 0;
-}
-
-#lista-contas-cartoes li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    background-color: #FAF8F5;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 10px rgba(62, 47, 35, 0.05);
-}
-
-#lista-contas-cartoes li span {
-    font-size: 14px;
-    color: #3E2F23;
-}
-
-#lista-contas-cartoes li button {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-}
-
-#lista-contas-cartoes li button:hover {
-    opacity: 0.7;
-}
 
 /* Estilo dos ícones de edição e exclusão */
 #lista-contas-cartoes li .btn-edit, 
@@ -832,7 +801,11 @@ button.modo-edicao:hover {
     margin-top: 20px; /* Espaço entre o botão e outros elementos */
 }
 
-.contas-lista li {
+
+/* ================= CONTAS E CARTÕES ================= */
+
+#lista-contas li,
+#lista-cartoes li {
 
     background: #FAF8F5;
     border-radius: 12px;
@@ -849,28 +822,34 @@ button.modo-edicao:hover {
 
 }
 
-.contas-lista li:hover {
+#lista-contas li:hover,
+#lista-cartoes li:hover {
 
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0,0,0,0.06);
 
 }
 
-.contas-lista .item-info strong {
+/* informação do card */
+
+.item-info strong {
 
     font-size: 14px;
     color: #3E2F23;
 
 }
 
-.contas-lista small {
+.item-info small {
 
     display: block;
-    color: #8B6F4E;
     font-size: 12px;
+    color: #8B6F4E;
+
 }
 
-.contas-lista .item-actions {
+/* botões */
+
+.item-actions {
 
     display: flex;
     gap: 10px;
