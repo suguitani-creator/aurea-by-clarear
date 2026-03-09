@@ -418,28 +418,78 @@ function showToast(message, type = "success") {
 }
 
 let idParaExcluir = null;
+let tipoParaExcluir = null;
 
 function confirmarExclusao(id) {
     idParaExcluir = id;
     document.getElementById("modal-confirmacao").classList.add("show");
 }
 
+function confirmarExclusaoConta(id) {
+    idParaExcluir = id;
+    tipoParaExcluir = "conta";
+    document.getElementById("modal-confirmacao").classList.add("show");
+}
+
+function confirmarExclusaoCartao(id) {
+    idParaExcluir = id;
+    tipoParaExcluir = "cartao";
+    document.getElementById("modal-confirmacao").classList.add("show");
+}
+
 document.getElementById("cancelar-exclusao").addEventListener("click", () => {
-    document.getElementById("modal-confirmacao").classList.remove("show");
-    idParaExcluir = null;
+document.getElementById("modal-confirmacao").classList.remove("show");
+idParaExcluir = null;
 });
 
 document.getElementById("confirmar-exclusao").addEventListener("click", async () => {
+
     if (!idParaExcluir) return;
 
     const user = auth.currentUser;
     if (!user) return;
 
-    await deleteDoc(doc(db, "users", user.uid, "transacoes", idParaExcluir));
+    try {
 
-    document.getElementById("modal-confirmacao").classList.remove("show");
-    showToast("Transação removida", "delete");
-    carregarTransacoes();
+        if (tipoParaExcluir === "conta") {
+
+            await deleteDoc(
+                doc(db, "users", user.uid, "contas", idParaExcluir)
+            );
+
+            showToast("Conta removida");
+
+        } else if (tipoParaExcluir === "cartao") {
+
+            await deleteDoc(
+                doc(db, "users", user.uid, "cartoes", idParaExcluir)
+            );
+
+            showToast("Cartão removido");
+
+        } else {
+
+            await deleteDoc(
+                doc(db, "users", user.uid, "transacoes", idParaExcluir)
+            );
+
+            showToast("Transação removida", "delete");
+
+        }
+
+        document.getElementById("modal-confirmacao").classList.remove("show");
+
+        idParaExcluir = null;
+        tipoParaExcluir = null;
+
+        carregarTransacoes();
+        carregarContasECartoes();
+
+    } catch (error) {
+        console.log(error);
+        showToast("Erro ao remover", "error");
+    }
+
 });
 
 window.confirmarExclusao = confirmarExclusao;
@@ -507,7 +557,6 @@ function calcularTotaisPorMes(mes, ano) {
 
     transacoes.forEach(t => {
         const data = converterDataFirestore(t.data); // Usando a função nova para converter a data
-        console.log(data); // Verifica o valor retornado
 
         // Verificar se a transação é do mês e ano correto
         if (data.getMonth() === mes && data.getFullYear() === ano) {
@@ -517,7 +566,7 @@ function calcularTotaisPorMes(mes, ano) {
                 totalDespesas += t.valor;
             }
         }
-    });
+    })
 
     return { totalReceitas, totalDespesas };
 }
