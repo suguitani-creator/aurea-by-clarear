@@ -733,10 +733,12 @@ async function carregarContasECartoes() {
     listaCartoes.innerHTML = "";
 
     contasSnapshot.forEach(doc => {
+        const dataSaldo = doc.data().dataSaldo; // Acessando o campo de dataSaldo
         console.log("Data do saldo:", dataSaldo); // Verifique o valor retornado
         
+        const saldoFormatado = formatarData(dataSaldo); // Usando a função formatarData
+
         const li = document.createElement("li");
-        const saldoFormatado = formatarData(dataSaldo);
         li.innerHTML = `
             <div class="item-info">
                 <strong>Conta Corrente: ${doc.data().nome}</strong><br>
@@ -760,14 +762,18 @@ async function carregarContasECartoes() {
     });
 
     cartoesSnapshot.forEach(doc => {
+        const vencimento = doc.data().vencimento; // Acessando a data de vencimento
+        const fechamento = doc.data().fechamento; // Acessando a data de fechamento
+
+        const vencimentoFormatado = formatarData(vencimento); // Usando a função formatarData
+        const fechamentoFormatado = formatarData(fechamento); // Usando a função formatarData
+
         const li = document.createElement("li");
-        const vencimentoFormatado = formatarData(vencimento);
-        const fechamentoFormatado = formatarData(fechamento);
         li.innerHTML = `
             <div class="item-info">
                 <strong>Cartão: ${doc.data().nome}</strong><br>
-                <small>Vencimento: ${vencimentoFormatado}<small><br> 
-                <small>Fechamento: ${fechamentoFormatado}<small>
+                <small>Vencimento: ${vencimentoFormatado}</small><br> 
+                <small>Fechamento: ${fechamentoFormatado}</small>
             </div>
             <div class="item-actions">
                 <button class="btn-edit" onclick="editarCartao('${doc.id}')">
