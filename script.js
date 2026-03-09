@@ -660,7 +660,7 @@ async function adicionarConta() {
     const saldo = parseFloat(document.getElementById("saldo-conta").value);
     const vencimento = document.getElementById("vencimento-cartao").value;
     const fechamento = document.getElementById("fechamento-cartao").value;
-    const dataSaldo = doc.data().dataSaldo;
+    const dataSaldo = document.getElementById("data-saldo-conta").value;
 
     console.log("Dados do formulário:", tipo, nome, saldo, vencimento, fechamento, dataSaldo); // Log dos dados capturados
 
@@ -733,7 +733,7 @@ async function carregarContasECartoes() {
     contasSnapshot.forEach(doc => {
         const dataSaldo = doc.data().dataSaldo; // Garantir que estamos pegando a data corretamente
         console.log("Data do saldo:", dataSaldo); // Verifique o valor retornado
-
+        
         const li = document.createElement("li");
         const saldoFormatado = formatarData(dataSaldo);
         li.innerHTML = `
