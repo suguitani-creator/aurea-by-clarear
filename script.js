@@ -493,10 +493,12 @@ function converterDataFirestore(dataFirestore) {
 }
 
 function formatarData(data) {
-    const dia = data.getDate().toString().padStart(2, '0');
-    const mes = (data.getMonth() + 1).toString().padStart(2, '0'); // meses começam no 0, então adicionamos +1
-    const ano = data.getFullYear();
-    return `${dia}/${mes}/${ano}`;
+    const [ano, mes, dia] = data.split("-");  // Formato esperado: YYYY-MM-DD
+    const dataFormatada = new Date(ano, mes - 1, dia);  // Ajuste para meses que começam do 0
+    const diaFormatado = dataFormatada.getDate().toString().padStart(2, '0');
+    const mesFormatado = (dataFormatada.getMonth() + 1).toString().padStart(2, '0');
+    const anoFormatado = dataFormatada.getFullYear();
+    return `${diaFormatado}/${mesFormatado}/${anoFormatado}`;  // Retorna a data formatada como DD/MM/YYYY
 }
 
 function calcularTotaisPorMes(mes, ano) {
