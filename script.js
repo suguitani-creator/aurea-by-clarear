@@ -788,7 +788,7 @@ async function carregarContasECartoes() {
         li.innerHTML = `
             <div class="item-info">
                 <strong>Conta Corrente: ${doc.data().nome}</strong><br>
-                <small>Saldo Inicial: R$ ${doc.data().saldo.toFixed(2)}</small>
+                <small>Saldo Inicial: R$ ${doc.data().saldo.toFixed(2)}</small><br>
                 <small>Informado em: ${saldoFormatado}</small>
             </div>
             <div class="item-actions">
@@ -812,15 +812,15 @@ async function carregarContasECartoes() {
         const vencimento = doc.data().vencimento; // Acessando a data de vencimento
         const fechamento = doc.data().fechamento; // Acessando a data de fechamento
 
-        const vencimentoFormatado = formatarData(vencimento); // Usando a função formatarData
-        const fechamentoFormatado = formatarData(fechamento); // Usando a função formatarData
+        const vencimentoDia = cartao.vencimento.split("-")[2];
+        const fechamentoDia = cartao.fechamento.split("-")[2];
 
         const li = document.createElement("li");
         li.innerHTML = `
             <div class="item-info">
                 <strong>Cartão: ${doc.data().nome}</strong><br>
-                <small>Vencimento: ${vencimentoFormatado}</small><br> 
-                <small>Fechamento: ${fechamentoFormatado}</small>
+                <small>Vence dia ${vencimentoDia}</small><br>
+                <small>Fecha dia ${fechamentoDia}</small>
             </div>
             <div class="item-actions">
                 <button class="btn-edit" onclick="editarCartao('${doc.id}')">
