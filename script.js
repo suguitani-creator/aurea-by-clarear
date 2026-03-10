@@ -812,8 +812,8 @@ async function carregarContasECartoes() {
         const vencimento = doc.data().vencimento; // Acessando a data de vencimento
         const fechamento = doc.data().fechamento; // Acessando a data de fechamento
 
-        const vencimentoDia = cartao.vencimento.split("-")[2];
-        const fechamentoDia = cartao.fechamento.split("-")[2];
+        const vencimentoDia = vencimento.split("-")[2];
+        const fechamentoDia = fechamento.split("-")[2];
 
         const li = document.createElement("li");
         li.innerHTML = `
