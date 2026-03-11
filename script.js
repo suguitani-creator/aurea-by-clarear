@@ -875,13 +875,15 @@ async function carregarContasECartoes() {
         const vencimentoDia = vencimento.split("-")[2];
         const fechamentoDia = fechamento.split("-")[2];
 
+        const limiteCartao = doc.data().limite ?? doc.data().saldo;
+
         const li = document.createElement("li");
         li.innerHTML = `
             <div class="item-info">
                 <strong>Cartão: ${doc.data().nome}</strong><br>
                 <small>Vence dia ${vencimentoDia}</small><br>
                 <small>Fecha dia ${fechamentoDia}</small><br>
-                <small>Limite: R$ ${doc.data().limite.toFixed(2)}</small>
+                <small>Limite: R$ ${limiteCartao.toFixed(2)}</small>
             </div>
             <div class="item-actions">
                 <button class="btn-edit" onclick="editarCartao('${doc.id}')">
