@@ -672,16 +672,20 @@ document.getElementById("btn-adicionar-conta").addEventListener("click", () => {
     formulario.style.display = formulario.style.display === "none" ? "block" : "none";  // Alterna a visibilidade
 });
 
-// Adiciona a função que mostra ou esconde os campos de data dependendo do tipo de conta
-document.getElementById("tipo-conta").addEventListener("change", function() {
+    document.getElementById("tipo-conta").addEventListener("change", function() {
+
     const tipo = this.value;
+
     if (tipo === "cartao") {
-        document.getElementById("datas-cartao").style.display = "block"; // Exibe os campos para cartão
-        document.getElementById("data-saldo-conta").style.display = "none"; // Esconde o campo de data para conta corrente
+        document.getElementById("datas-cartao").style.display = "block";
+        document.getElementById("data-saldo-conta").style.display = "none";
     } else {
-        document.getElementById("datas-cartao").style.display = "none"; // Esconde os campos para cartão
-        document.getElementById("data-saldo-conta").style.display = "block"; // Exibe o campo de data para conta corrente
+        document.getElementById("datas-cartao").style.display = "none";
+        document.getElementById("data-saldo-conta").style.display = "block";
     }
+
+    atualizarPlaceholderSaldo();
+
 });
 
 // Chama a função para garantir que o campo certo seja exibido ao carregar o formulário
@@ -746,7 +750,7 @@ async function adicionarConta() {
             console.log("Salvando cartão de crédito:", nome, saldo, vencimento, fechamento); // Log para depuração
             await addDoc(collection(db, "users", user.uid, "cartoes"), {
                 nome: nome,
-                saldo: saldo,
+                limite: saldo,
                 vencimento: vencimento,
                 fechamento: fechamento,
                 tipo: tipo
@@ -761,6 +765,21 @@ async function adicionarConta() {
         console.log("Erro ao adicionar conta ou cartão: ", error); // Log do erro para depuração
         alert("Erro ao adicionar conta ou cartão: " + error.message);
     }
+}
+
+function atualizarPlaceholderSaldo() {
+
+    const tipo = document.getElementById("tipo-conta").value;
+    const campoSaldo = document.getElementById("saldo-conta");
+
+    if (tipo === "conta") {
+        campoSaldo.placeholder = "Saldo inicial";
+    }
+
+    if (tipo === "cartao") {
+        campoSaldo.placeholder = "Limite do cartão";
+    }
+
 }
 
 // Exibir as contas e cartões cadastrados
@@ -820,7 +839,8 @@ async function carregarContasECartoes() {
             <div class="item-info">
                 <strong>Cartão: ${doc.data().nome}</strong><br>
                 <small>Vence dia ${vencimentoDia}</small><br>
-                <small>Fecha dia ${fechamentoDia}</small>
+                <small>Fecha dia ${fechamentoDia}</small><br>
+                <small>Limite: R$ ${doc.data().limite.toFixed(2)}</small>
             </div>
             <div class="item-actions">
                 <button class="btn-edit" onclick="editarCartao('${doc.id}')">
