@@ -1,4 +1,6 @@
 let idEmEdicao = null;
+let contaEmEdicao = null;
+let cartaoEmEdicao = null;
 
 import { auth, db } from "./firebase.js";
 
@@ -734,6 +736,43 @@ async function adicionarConta() {
         return;
     }
 
+    if (contaEmEdicao) {
+
+        await updateDoc(
+            doc(db, "users", user.uid, "contas", contaEmEdicao),
+            {
+                nome: nome,
+                saldo: saldo,
+                dataSaldo: dataSaldo
+            }
+        );
+
+        showToast("Conta atualizada!");
+        contaEmEdicao = null;
+
+        carregarContasECartoes();
+        return; 
+    }    
+
+    if (cartaoEmEdicao) {
+
+        await updateDoc(
+            doc(db, "users", user.uid, "cartoes", cartaoEmEdicao),
+            {
+                nome: nome,
+                limite: saldo,
+                vencimento: vencimento,
+                fechamento: fechamento
+            }
+        );
+
+        showToast("Cartão atualizado!");
+        cartaoEmEdicao = null;
+
+        carregarContasECartoes();
+        return;
+    }
+
     console.log("Adicionando uma conta/cartão no Firestore...");
 
     try {
@@ -909,6 +948,66 @@ async function removerCartao(id) {
         console.error("Erro ao remover cartão:", error);
         showToast("Erro ao remover cartão", "error");
     }
+}
+
+window.editarConta = async function(id) {
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const docRef = doc(db, "users", user.uid, "contas", id);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) return;
+
+    const conta = docSnap.data();
+
+    document.getElementById("tipo-conta").value = "conta";
+    document.getElementById("nome-conta").value = conta.nome;
+    document.getElementById("saldo-conta").value = conta.saldo;
+    document.getElementById("data-saldo-conta").value = conta.dataSaldo;
+
+    document.getElementById("datas-cartao").style.display = "none";
+    document.getElementById("data-saldo-conta").style.display = "block";
+
+    contaEmEdicao = id;
+
+    document.getElementById("formulario-conta").scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+
+window.editarCartao = async function(id) {
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const docRef = doc(db, "users", user.uid, "cartoes", id);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) return;
+
+    const cartao = docSnap.data();
+
+    document.getElementById("tipo-conta").value = "cartao";
+    document.getElementById("nome-conta").value = cartao.nome;
+    document.getElementById("saldo-conta").value = cartao.limite;
+
+    document.getElementById("vencimento-cartao").value = cartao.vencimento;
+    document.getElementById("fechamento-cartao").value = cartao.fechamento;
+
+    document.getElementById("datas-cartao").style.display = "block";
+    document.getElementById("data-saldo-conta").style.display = "none";
+
+    cartaoEmEdicao = id;
+
+    document.getElementById("formulario-conta").scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
 }
 
 
