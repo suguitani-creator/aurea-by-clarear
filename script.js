@@ -39,7 +39,9 @@ const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
         document.getElementById("auth-container-desktop").style.display = "block";  // Exibe a versão desktop
         document.getElementById("auth-container-mobile").style.display = "none";  // Esconde a versão mobile
     }
+
     atualizarCategorias();
+    atualizarPlaceholderSaldo();
 
     const hoje = new Date().toISOString().slice(0,7);
     document.getElementById("mes-filtro").value = hoje;
