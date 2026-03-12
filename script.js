@@ -984,18 +984,16 @@ window.editarConta = async function(id) {
     document.getElementById("data-saldo-conta").style.display = "block";
 
     contaEmEdicao = id;
+    document.getElementById("indicador-edicao").textContent = "Editando Conta";
+    document.getElementById("indicador-edicao").style.display = "block";
     document.getElementById("formulario-conta").style.display = "block";
     document.getElementById("formulario-conta").scrollIntoView({
         behavior: "smooth",
         block: "center"
     });
-    document.getElementById("indicador-edicao").textContent = "Editando Conta";
-    document.getElementById("indicador-edicao").style.display = "block";
-
     const btn = document.getElementById("btn-adicionar-conta");
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
-
 }
 
 window.editarCartao = async function(id) {
@@ -1021,15 +1019,13 @@ window.editarCartao = async function(id) {
     document.getElementById("data-saldo-conta").style.display = "none";
 
     cartaoEmEdicao = id;
-
+    document.getElementById("indicador-edicao").textContent = "Editando Cartão";
+    document.getElementById("indicador-edicao").style.display = "block";
     document.getElementById("formulario-conta").style.display = "block";
     document.getElementById("formulario-conta").scrollIntoView({
         behavior: "smooth",
         block: "center"
     });
-    document.getElementById("indicador-edicao").textContent = "Editando Cartão";
-    document.getElementById("indicador-edicao").style.display = "block";
-
     const btn = document.getElementById("btn-adicionar-conta");
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
