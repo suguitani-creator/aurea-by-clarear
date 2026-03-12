@@ -862,13 +862,15 @@ button.modo-edicao:hover {
 
 .indicador-edicao-conta {
     display: none;
-    margin: 10px 0 12px 0;
-    padding: 8px 14px;
+    margin-top: 14px;
+    margin-bottom: 10px;
+    padding: 8px 12px;
     background: #F0E7DA;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 13px;
     color: #7A5C42;
-    width: fit-content;
+    width: 200px;
+    text-align: center;
     transition: all 0.3s ease;
 }
 
