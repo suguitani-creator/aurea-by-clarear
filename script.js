@@ -749,12 +749,12 @@ async function adicionarConta() {
         );
 
         showToast("Conta atualizada!");
+        contaEmEdicao = null;
         document.getElementById("indicador-edicao").style.display = "none";
 
         const btn = document.getElementById("btn-adicionar-conta");
         btn.textContent = "Adicionar";
         btn.classList.remove("modo-edicao");
-        contaEmEdicao = null;
 
         carregarContasECartoes();
         return; 
@@ -773,12 +773,12 @@ async function adicionarConta() {
         );
 
         showToast("Cartão atualizado!");
+        cartaoEmEdicao = null;
         document.getElementById("indicador-edicao").style.display = "none";
 
         const btn = document.getElementById("btn-adicionar-conta");
         btn.textContent = "Adicionar";
         btn.classList.remove("modo-edicao");
-        cartaoEmEdicao = null;
 
         carregarContasECartoes();
         return;
