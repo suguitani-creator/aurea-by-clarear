@@ -864,10 +864,10 @@ button.modo-edicao:hover {
     display: none;
     margin-top: 14px;
     margin-bottom: 10px;
-    padding: 8px 12px;
+    padding: 10px 20px;
     background: #F0E7DA;
     border-radius: 10px;
-    font-size: 13px;
+    font-size: 14px;
     color: #7A5C42;
     width: 200px;
     text-align: center;
