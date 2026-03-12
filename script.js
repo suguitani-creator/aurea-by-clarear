@@ -749,6 +749,11 @@ async function adicionarConta() {
         );
 
         showToast("Conta atualizada!");
+        document.getElementById("indicador-edicao").style.display = "none";
+
+        const btn = document.getElementById("btn-adicionar-conta");
+        btn.textContent = "Adicionar";
+        btn.classList.remove("modo-edicao");
         contaEmEdicao = null;
 
         carregarContasECartoes();
@@ -768,6 +773,11 @@ async function adicionarConta() {
         );
 
         showToast("Cartão atualizado!");
+        document.getElementById("indicador-edicao").style.display = "none";
+
+        const btn = document.getElementById("btn-adicionar-conta");
+        btn.textContent = "Adicionar";
+        btn.classList.remove("modo-edicao");
         cartaoEmEdicao = null;
 
         carregarContasECartoes();
@@ -974,11 +984,17 @@ window.editarConta = async function(id) {
     document.getElementById("data-saldo-conta").style.display = "block";
 
     contaEmEdicao = id;
-
+    document.getElementById("formulario-conta").style.display = "block";
     document.getElementById("formulario-conta").scrollIntoView({
         behavior: "smooth",
         block: "center"
     });
+    document.getElementById("indicador-edicao").textContent = "Editando Conta";
+    document.getElementById("indicador-edicao").style.display = "block";
+
+    const btn = document.getElementById("btn-adicionar-conta");
+    btn.textContent = "Salvar alteração";
+    btn.classList.add("modo-edicao");
 
 }
 
@@ -1006,10 +1022,17 @@ window.editarCartao = async function(id) {
 
     cartaoEmEdicao = id;
 
+    document.getElementById("formulario-conta").style.display = "block";
     document.getElementById("formulario-conta").scrollIntoView({
         behavior: "smooth",
         block: "center"
     });
+    document.getElementById("indicador-edicao").textContent = "Editando Cartão";
+    document.getElementById("indicador-edicao").style.display = "block";
+
+    const btn = document.getElementById("btn-adicionar-conta");
+    btn.textContent = "Salvar alteração";
+    btn.classList.add("modo-edicao");
 
 }
 
