@@ -984,7 +984,7 @@ window.editarConta = async function(id) {
     document.getElementById("data-saldo-conta").style.display = "block";
 
     contaEmEdicao = id;
-    document.getElementById("indicador-edicao-conta").textContent = "✏️ Editando Conta";
+    document.getElementById("indicador-edicao-conta").textContent = "Editando Conta";
     document.getElementById("indicador-edicao-conta").style.display = "block";
     document.getElementById("formulario-conta").style.display = "block";
     document.getElementById("formulario-conta").scrollIntoView({
@@ -1019,7 +1019,7 @@ window.editarCartao = async function(id) {
     document.getElementById("data-saldo-conta").style.display = "none";
 
     cartaoEmEdicao = id;
-    document.getElementById("indicador-edicao-conta").textContent = "✏️ Editando Cartão";
+    document.getElementById("indicador-edicao-conta").textContent = "Editando Cartão";
     document.getElementById("indicador-edicao-conta").style.display = "block";
     document.getElementById("formulario-conta").style.display = "block";
     document.getElementById("formulario-conta").scrollIntoView({
