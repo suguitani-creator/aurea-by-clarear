@@ -753,7 +753,7 @@ async function adicionarConta() {
         document.getElementById("indicador-edicao").style.display = "none";
 
         const btn = document.getElementById("btn-adicionar-conta");
-        btn.textContent = "Adicionar";
+        btn.textContent = "Adicionar Conta ou Cartão";
         btn.classList.remove("modo-edicao");
 
         carregarContasECartoes();
@@ -777,7 +777,7 @@ async function adicionarConta() {
         document.getElementById("indicador-edicao").style.display = "none";
 
         const btn = document.getElementById("btn-salvar-conta");
-        btn.textContent = "Adicionar";
+        btn.textContent = "Adicionar Conta ou Cartão";
         btn.classList.remove("modo-edicao");
 
         carregarContasECartoes();
