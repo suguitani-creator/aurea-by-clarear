@@ -776,7 +776,7 @@ async function adicionarConta() {
         cartaoEmEdicao = null;
         document.getElementById("indicador-edicao").style.display = "none";
 
-        const btn = document.getElementById("btn-adicionar-conta");
+        const btn = document.getElementById("btn-salvar-conta");
         btn.textContent = "Adicionar";
         btn.classList.remove("modo-edicao");
 
@@ -991,7 +991,7 @@ window.editarConta = async function(id) {
         behavior: "smooth",
         block: "center"
     });
-    const btn = document.getElementById("btn-adicionar-conta");
+    const btn = document.getElementById("btn-salvar-conta");
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
 }
@@ -1026,7 +1026,7 @@ window.editarCartao = async function(id) {
         behavior: "smooth",
         block: "center"
     });
-    const btn = document.getElementById("btn-adicionar-conta");
+    const btn = document.getElementById("btn-salvar-conta");
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
 
