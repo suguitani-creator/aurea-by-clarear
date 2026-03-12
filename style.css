@@ -866,7 +866,7 @@ button.modo-edicao:hover {
     margin-bottom: 10px;
     padding: 10px 20px;
     background: #F0E7DA;
-    border-radius: 10px;
+    box-sizing: border-box;
     font-size: 14px;
     color: #7A5C42;
     width: 200px;
