@@ -750,7 +750,7 @@ async function adicionarConta() {
 
         showToast("Conta atualizada!");
         contaEmEdicao = null;
-        document.getElementById("indicador-edicao").style.display = "none";
+        document.getElementById("indicador-edicao-conta").style.display = "none";
 
         const btn = document.getElementById("btn-adicionar-conta");
         btn.textContent = "Adicionar Conta ou Cartão";
@@ -774,7 +774,7 @@ async function adicionarConta() {
 
         showToast("Cartão atualizado!");
         cartaoEmEdicao = null;
-        document.getElementById("indicador-edicao").style.display = "none";
+        document.getElementById("indicador-edicao-conta").style.display = "none";
 
         const btn = document.getElementById("btn-salvar-conta");
         btn.textContent = "Adicionar Conta ou Cartão";
@@ -984,8 +984,8 @@ window.editarConta = async function(id) {
     document.getElementById("data-saldo-conta").style.display = "block";
 
     contaEmEdicao = id;
-    document.getElementById("indicador-edicao").textContent = "Editando Conta";
-    document.getElementById("indicador-edicao").style.display = "block";
+    document.getElementById("indicador-edicao-conta").textContent = "✏️ Editando Conta";
+    document.getElementById("indicador-edicao-conta").style.display = "block";
     document.getElementById("formulario-conta").style.display = "block";
     document.getElementById("formulario-conta").scrollIntoView({
         behavior: "smooth",
@@ -1019,8 +1019,8 @@ window.editarCartao = async function(id) {
     document.getElementById("data-saldo-conta").style.display = "none";
 
     cartaoEmEdicao = id;
-    document.getElementById("indicador-edicao").textContent = "Editando Cartão";
-    document.getElementById("indicador-edicao").style.display = "block";
+    document.getElementById("indicador-edicao-conta").textContent = "✏️ Editando Cartão";
+    document.getElementById("indicador-edicao-conta").style.display = "block";
     document.getElementById("formulario-conta").style.display = "block";
     document.getElementById("formulario-conta").scrollIntoView({
         behavior: "smooth",
