@@ -749,6 +749,7 @@ async function adicionarConta() {
         );
 
         showToast("Conta atualizada!");
+        limparFormularioConta();
         contaEmEdicao = null;
         document.getElementById("indicador-edicao-conta").style.display = "none";
 
@@ -773,6 +774,7 @@ async function adicionarConta() {
         );
 
         showToast("Cartão atualizado!");
+        limparFormularioConta();
         cartaoEmEdicao = null;
         document.getElementById("indicador-edicao-conta").style.display = "none";
 
@@ -811,6 +813,7 @@ async function adicionarConta() {
 
         console.log("Conta ou cartão adicionado com sucesso!");
         showToast("Conta ou cartão adicionado com sucesso!");
+        limparFormularioConta();
         carregarContasECartoes(); // Atualiza a lista após a adição
 
     } catch (error) {
@@ -1029,6 +1032,28 @@ window.editarCartao = async function(id) {
     const btn = document.getElementById("btn-salvar-conta");
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
+
+}
+
+function limparFormularioConta() {
+
+    document.getElementById("nome-conta").value = "";
+    document.getElementById("saldo-conta").value = "";
+    document.getElementById("data-saldo-conta").value = "";
+
+    document.getElementById("vencimento-cartao").value = "";
+    document.getElementById("fechamento-cartao").value = "";
+
+    document.getElementById("tipo-conta").value = "conta";
+
+    document.getElementById("datas-cartao").style.display = "none";
+    document.getElementById("data-saldo-conta").style.display = "block";
+
+    document.getElementById("indicador-edicao-conta").style.display = "none";
+
+    const btn = document.getElementById("btn-salvar-conta");
+    btn.textContent = "Adicionar";
+    btn.classList.remove("modo-edicao");
 
 }
 
