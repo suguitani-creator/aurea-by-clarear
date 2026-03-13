@@ -753,7 +753,7 @@ async function adicionarConta() {
         contaEmEdicao = null;
         document.getElementById("indicador-edicao-conta").style.display = "none";
 
-        const btn = document.getElementById("btn-adicionar-conta");
+        const btn = document.getElementById("btn-abrir-form-conta");
         btn.textContent = "Adicionar Conta ou Cartão";
         btn.classList.remove("modo-edicao");
 
