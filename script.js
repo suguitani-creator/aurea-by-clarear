@@ -1060,5 +1060,17 @@ function limparFormularioConta() {
 
 }
 
+function cancelarEdicaoConta() {
+
+    contaEmEdicao = null;
+    cartaoEmEdicao = null;
+
+    limparFormularioConta();
+
+}
+
+document
+.getElementById("btn-cancelar-edicao-conta").addEventListener("click", cancelarEdicaoConta);
+
 
 
