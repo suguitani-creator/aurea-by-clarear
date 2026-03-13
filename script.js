@@ -655,13 +655,13 @@ function atualizarComparativo() {
 function getIconeFormaPagamento(formaPagamento) {
     switch (formaPagamento) {
         case "pix":
-            return "��";  // ícone mais discreto para Pix
+            return "🏦";  // ícone mais discreto para Pix
         case "debito":
-            return "��";  // ícone mais refinado para Débito
+            return "🏦";  // ícone mais refinado para Débito
         case "credito":
-            return "��";  // ícone sutil para Crédito
+            return "💳";  // ícone sutil para Crédito
         default:
-            return "��";  // ícone padrão caso não tenha sido configurado
+            return "💳";  // ícone padrão caso não tenha sido configurado
     }
 }
 
