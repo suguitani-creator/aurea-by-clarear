@@ -1035,30 +1035,6 @@ window.editarCartao = async function(id) {
 
 }
 
-function limparFormularioConta() {
-
-    document.getElementById("nome-conta").value = "";
-    document.getElementById("saldo-conta").value = "";
-    document.getElementById("data-saldo-conta").value = "";
-
-    document.getElementById("vencimento-cartao").value = "";
-    document.getElementById("fechamento-cartao").value = "";
-
-    document.getElementById("tipo-conta").value = "conta";
-
-    document.getElementById("datas-cartao").style.display = "none";
-    document.getElementById("data-saldo-conta").style.display = "block";
-
-    document.getElementById("indicador-edicao-conta").style.display = "none";
-
-    const btn = document.getElementById("btn-salvar-conta");
-    btn.textContent = "Adicionar";
-    btn.classList.remove("modo-edicao");
-
-    // 🔽 NOVO: fechar o formulário
-    document.getElementById("formulario-conta").style.display = "none";
-
-}
 
 
 
