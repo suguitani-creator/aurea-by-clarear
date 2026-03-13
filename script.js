@@ -31,7 +31,7 @@ const categorias = {
 let transacoes = [];
 let grafico;
 
-// 🔥 GARANTE QUE TUDO SÓ RODE APÓS O DOM CARREGAR
+// �� GARANTE QUE TUDO SÓ RODE APÓS O DOM CARREGAR
 window.addEventListener("DOMContentLoaded", () => {
 const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
 
@@ -655,13 +655,13 @@ function atualizarComparativo() {
 function getIconeFormaPagamento(formaPagamento) {
     switch (formaPagamento) {
         case "pix":
-            return "📱";  // ícone mais discreto para Pix
+            return "��";  // ícone mais discreto para Pix
         case "debito":
-            return "🛒";  // ícone mais refinado para Débito
+            return "��";  // ícone mais refinado para Débito
         case "credito":
-            return "💳";  // ícone sutil para Crédito
+            return "��";  // ícone sutil para Crédito
         default:
-            return "💳";  // ícone padrão caso não tenha sido configurado
+            return "��";  // ícone padrão caso não tenha sido configurado
     }
 }
 
@@ -1035,6 +1035,27 @@ window.editarCartao = async function(id) {
 
 }
 
+function limparFormularioConta() {
+
+    document.getElementById("nome-conta").value = "";
+    document.getElementById("saldo-conta").value = "";
+    document.getElementById("data-saldo-conta").value = "";
+
+    document.getElementById("vencimento-cartao").value = "";
+    document.getElementById("fechamento-cartao").value = "";
+
+    document.getElementById("tipo-conta").value = "conta";
+
+    document.getElementById("datas-cartao").style.display = "none";
+    document.getElementById("data-saldo-conta").style.display = "block";
+
+    document.getElementById("indicador-edicao-conta").style.display = "none";
+
+    const btn = document.getElementById("btn-salvar-conta");
+    btn.textContent = "Adicionar";
+    btn.classList.remove("modo-edicao");
+
+}
 
 
 
