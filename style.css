@@ -861,23 +861,5 @@ button.modo-edicao:hover {
     font-size: 16px;
 }
 
-.botoes-formulario {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
 
-.btn-cancelar {
-    background: transparent;
-    border: 1px solid #E8DFD4;
-    color: #7A5C42;
-    padding: 10px 14px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-cancelar:hover {
-    background: #F0E7DA;
-}
 
