@@ -1055,7 +1055,22 @@ function limparFormularioConta() {
     btn.textContent = "Adicionar";
     btn.classList.remove("modo-edicao");
 
+    // 🔽 NOVO: fechar o formulário
+    document.getElementById("formulario-conta").style.display = "none";
+
 }
 
+function cancelarEdicaoConta() {
+
+    contaEmEdicao = null;
+    cartaoEmEdicao = null;
+
+    limparFormularioConta();
+
+}
+
+document
+.getElementById("btn-cancelar-edicao-conta")
+.addEventListener("click", cancelarEdicaoConta);
 
 
