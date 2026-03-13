@@ -672,7 +672,7 @@ async function salvarEdicao() {
 }
 
 // Exibir formulário ao clicar no botão
-document.getElementById("btn-adicionar-conta").addEventListener("click", () => {
+document.getElementById("btn-abrir-form-conta").addEventListener("click", () => {
     const formulario = document.getElementById("formulario-conta");
     formulario.style.display = formulario.style.display === "none" ? "block" : "none";  // Alterna a visibilidade
 });
