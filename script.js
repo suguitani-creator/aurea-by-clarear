@@ -100,7 +100,7 @@ const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
 
         showToast(errorMessage, "error");
     }
-
+});
 
 window.addEventListener("resize", () => {
     const isMobile = window.innerWidth <= 768;
@@ -180,9 +180,7 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         limparFormulario();
     }
 });
-});
-
-// Lógica para exibir/ocultar campos de acordo com o tipo de transação
+    // Lógica para exibir/ocultar campos de acordo com o tipo de transação
 document.getElementById("tipo").addEventListener("change", () => {
     const tipo = document.getElementById("tipo").value;
     
@@ -252,6 +250,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 });
 });
+
 // ================= FINANÇAS =================
 
 async function adicionarTransacao() {
