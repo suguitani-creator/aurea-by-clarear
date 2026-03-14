@@ -672,7 +672,7 @@ async function salvarEdicao() {
 }
 
 // Exibir formulário ao clicar no botão
-document.getElementById("btn-adicionar-conta").addEventListener("click", () => {
+document.getElementById("btn-abrir-form-conta").addEventListener("click", () => {
     const formulario = document.getElementById("formulario-conta");
     formulario.style.display = formulario.style.display === "none" ? "block" : "none";  // Alterna a visibilidade
 });
@@ -1060,5 +1060,17 @@ function limparFormularioConta() {
 
 }
 
+function cancelarEdicaoConta() {
+
+    contaEmEdicao = null;
+    cartaoEmEdicao = null;
+
+    limparFormularioConta();
+
+}
+
+document
+.getElementById("btn-cancelar-edicao-conta")
+.addEventListener("click", cancelarEdicaoConta);
 
 
