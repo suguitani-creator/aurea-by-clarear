@@ -676,8 +676,23 @@ async function salvarEdicao() {
 
 // Exibir formulário ao clicar no botão
 document.getElementById("btn-abrir-form-conta").addEventListener("click", () => {
+
     const formulario = document.getElementById("formulario-conta");
-    formulario.style.display = formulario.style.display === "none" ? "block" : "none";  // Alterna a visibilidade
+
+    const abrindo = formulario.style.display === "none";
+
+    formulario.style.display = abrindo ? "block" : "none";
+
+    if (abrindo) {
+
+        limparFormularioConta();
+
+        document
+        .getElementById("btn-cancelar-edicao-conta")
+        .style.display = "none";
+
+    }
+
 });
 
     document.getElementById("tipo-conta").addEventListener("change", function() {
