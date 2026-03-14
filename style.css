@@ -732,6 +732,14 @@ button.modo-edicao:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+#formulario-conta {
+    display: none;
+}
+
+#formulario-conta.aberto {
+    display: block;
+}
+
 #formulario-conta input, #formulario-conta select {
     width: 100%;
     padding: 10px;
