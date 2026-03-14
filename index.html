@@ -86,15 +86,19 @@
         </div>
         <!-- Formulário de Transações -->
         <div class="form">
-            <select id="essencial">
-                <option value="essencial">Essencial</option>
-                <option value="nao-essencial">Não Essencial</option>
-            </select>
-
             <select id="tipo">
                 <option value="receita">Receita</option>
                 <option value="despesa">Despesa</option>
             </select>
+
+            <!-- Campo Essencial/Não Essencial (oculto inicialmente) -->
+            <div id="campo-essencial" style="display:none;">
+                <label for="essencial">Essencial?</label>
+                <select id="essencial">
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                </select>
+            </div>
 
             <select id="categoria">
                 <!-- Categorias a serem carregadas dinamicamente -->

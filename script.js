@@ -228,6 +228,20 @@ document.getElementById("categoria").addEventListener("change", () => {
     }
 });
 
+    // Mostrar/Esconder o campo Essencial/Não Essencial dependendo da seleção de Receita/Despesa
+    document.getElementById("tipo").addEventListener("change", (e) => {
+    const tipo = e.target.value;
+
+    const campoEssencial = document.getElementById("campo-essencial");
+
+    // Se for "despesa", mostra o campo de essencial
+    if (tipo === "despesa") {
+        campoEssencial.style.display = "block";
+    } else {
+        campoEssencial.style.display = "none"; // Esconde se for "receita"
+    }
+});
+
 // 2. **Função de Adicionar Transação**
 async function adicionarTransacao() {
     const tipo = document.getElementById("tipo").value;
