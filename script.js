@@ -726,7 +726,7 @@ async function adicionarConta() {
     // Verificando se os campos estão preenchidos corretamente
     // A lógica agora foi corrigida para que a validação aconteça somente após o preenchimento
     if (!nome || isNaN(saldo) || (tipo === "cartao" && (!vencimento || !fechamento)) || (tipo === "conta" && !dataSaldo)) {
-        alert("Preencha todos os campos corretamente.");
+        showToast("Preencha todos os campos corretamente.", "error");
         return;
     }
 
