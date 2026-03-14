@@ -673,8 +673,19 @@ async function salvarEdicao() {
 
 // Exibir formulário ao clicar no botão
 document.getElementById("btn-abrir-form-conta").addEventListener("click", () => {
-    const formulario = document.getElementById("formulario-conta");
-    formulario.style.display = formulario.style.display === "none" ? "block" : "none";  // Alterna a visibilidade
+    const formularioConta = document.getElementById("formulario-conta");
+
+    // Exibe o formulário
+    formularioConta.style.display = "block";
+    
+    // Rola a página até o formulário
+    formularioConta.scrollIntoView({
+        behavior: "smooth",
+        block: "center"  // Alinha o formulário ao centro da tela
+    });
+
+    // Adicionalmente, esconde o botão de adicionar
+    document.getElementById("btn-abrir-form-conta").style.display = "none";
 });
 
     document.getElementById("tipo-conta").addEventListener("change", function() {
