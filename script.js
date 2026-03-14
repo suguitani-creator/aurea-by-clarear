@@ -228,24 +228,53 @@ document.getElementById("categoria").addEventListener("change", () => {
     }
 });
 
-    // Adiciona o evento de mudança do tipo de transação
+   // Ao mudar o tipo de transação (Receita ou Despesa)
     document.getElementById("tipo").addEventListener("change", () => {
     const tipo = document.getElementById("tipo").value;
     
-    const campoSubcategoria = document.getElementById("campo-subcategoria");
-    const campoEssencial = document.getElementById("campo-essencial");
-    const campoFormaPagamento = document.getElementById("campo-forma-pagamento");
-    
+    // Campos comuns a ambas as transações
+    const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
+    const categoria = document.getElementById("categoria");
+    const descricao = document.getElementById("descricao");
+    const valor = document.getElementById("valor");
+    const data = document.getElementById("data");
+
+    // Campos específicos para **despesas**
+    const essencial = document.getElementById("campo-essencial");
+    const subcategoria = document.getElementById("campo-subcategoria");
+    const formaPagamento = document.getElementById("campo-forma-pagamento");
+    const contaBancariaDebitada = document.getElementById("campo-conta-bancaria-debitada");
+    const cartao = document.getElementById("campo-cartao");
+    const parcelas = document.getElementById("campo-parcelas");
+    const mesFatura = document.getElementById("mes-fatura");
+
     if (tipo === "despesa") {
-        // Se for despesa, exibe os campos
-        campoSubcategoria.style.display = "block";
-        campoEssencial.style.display = "block";
-        campoFormaPagamento.style.display = "block";
+        // Para despesa, exibe campos específicos
+        essencial.style.display = "block";
+        subcategoria.style.display = "block";
+        formaPagamento.style.display = "block";
+        
+        if (formaPagamento.value === "pix" || formaPagamento.value === "debito") {
+            contaBancariaDebitada.style.display = "block";
+        }
+
+        if (formaPagamento.value === "credito") {
+            cartao.style.display = "block";
+            parcelas.style.display = "block";
+            mesFatura.style.display = "block";
+        }
+
     } else {
-        // Se for receita, esconde os campos
-        campoSubcategoria.style.display = "none";
-        campoEssencial.style.display = "none";
-        campoFormaPagamento.style.display = "none";
+        // Para receita, esconde os campos específicos da despesa
+        essencial.style.display = "none";
+        subcategoria.style.display = "none";
+        formaPagamento.style.display = "none";
+        contaBancariaDebitada.style.display = "none";
+        cartao.style.display = "none";
+        parcelas.style.display = "none";
+        mesFatura.style.display = "none";
+        
+        contaBancariaDepositada.style.display = "block"; // Exibe a conta bancária de depósito para receita
     }
 });
 
@@ -776,19 +805,23 @@ document.getElementById("btn-abrir-form-conta").addEventListener("click", () => 
 
 });
 
-// Ao carregar a página, já garante que os campos corretos estarão visíveis
+// Ao carregar a página, já verifica a seleção do tipo de transação
 window.addEventListener("DOMContentLoaded", () => {
     const tipo = document.getElementById("tipo").value;
-    
-    // Chama a lógica para definir a visibilidade dos campos com base no tipo de transação
+    const essencial = document.getElementById("campo-essencial");
+    const subcategoria = document.getElementById("campo-subcategoria");
+    const formaPagamento = document.getElementById("campo-forma-pagamento");
+    const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
+    const cartao = document.getElementById("campo-cartao");
+    const parcelas = document.getElementById("campo-parcelas");
+    const mesFatura = document.getElementById("mes-fatura");
+
     if (tipo === "despesa") {
-        document.getElementById("campo-subcategoria").style.display = "block";
-        document.getElementById("campo-essencial").style.display = "block";
-        document.getElementById("campo-forma-pagamento").style.display = "block";
+        essencial.style.display = "block";
+        subcategoria.style.display = "block";
+        formaPagamento.style.display = "block";
     } else {
-        document.getElementById("campo-subcategoria").style.display = "none";
-        document.getElementById("campo-essencial").style.display = "none";
-        document.getElementById("campo-forma-pagamento").style.display = "none";
+        contaBancariaDepositada.style.display = "block"; // Exibe a conta bancária de depósito para receita
     }
 });
 
