@@ -868,6 +868,7 @@ button.modo-edicao:hover {
 }
 
 .btn-cancelar {
+    display: none;
     background: transparent;
     border: 1px solid #E8DFD4;
     color: #7A5C42;

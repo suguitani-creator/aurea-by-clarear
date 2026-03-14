@@ -217,6 +217,7 @@ async function adicionarTransacao() {
         const btn = document.getElementById("btn-adicionar");
         btn.textContent = "Adicionar";
         btn.classList.remove("modo-edicao");
+        document.getElementById("btn-cancelar-edicao-transacao").style.display = "none";
 
     } else {
         await addDoc(
@@ -552,6 +553,8 @@ window.editarTransacao = async function(id) {
     const btn = document.getElementById("btn-adicionar");
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
+
+    document.getElementById("btn-cancelar-edicao-transacao").style.display = "inline-block";
 
     // Desliza suavemente até o formulário de edição
     document.querySelector(".form").scrollIntoView({
@@ -1083,6 +1086,8 @@ function cancelarEdicaoTransacao() {
     const btn = document.getElementById("btn-adicionar");
     btn.textContent = "Adicionar";
     btn.classList.remove("modo-edicao");
+
+    document.getElementById("btn-cancelar-edicao-transacao").style.display = "none";
 
 }
 
