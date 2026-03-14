@@ -1072,5 +1072,20 @@ function cancelarEdicaoConta() {
 document
 .getElementById("btn-cancelar-edicao-conta").addEventListener("click", cancelarEdicaoConta);
 
+function cancelarEdicaoTransacao() {
 
+    idEmEdicao = null;
+
+    limparFormulario();
+
+    document.getElementById("indicador-edicao").style.display = "none";
+
+    const btn = document.getElementById("btn-adicionar");
+    btn.textContent = "Adicionar";
+    btn.classList.remove("modo-edicao");
+
+}
+
+document
+.getElementById("btn-cancelar-edicao-transacao").addEventListener("click", cancelarEdicaoTransacao);
 
