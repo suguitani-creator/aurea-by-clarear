@@ -770,7 +770,7 @@ button.modo-edicao:hover {
 }
 
 /* Estilo comum para os botões "Adicionar" e "Exibir Contas e Cartões" */
-#btn-adicionar-conta,
+#btn-abrir-form-conta,
 #btn-exibir-contas {
     background: #F0E7DA; /* Cor de fundo igual ao comparativo */
     padding: 10px 20px;
@@ -787,7 +787,7 @@ button.modo-edicao:hover {
 }
 
 /* Efeito de hover - mudança de cor e fonte */
-#btn-adicionar-conta:hover,
+#btn-abrir-form-conta:hover,
 #btn-exibir-contas:hover {
     background: #C6A75E;  /* Altere para o tom desejado */
     color: white;  /* Texto fica branco */
@@ -797,7 +797,7 @@ button.modo-edicao:hover {
 
 
 /* Ajuste para dar um pouco de espaço ao botão */
-#btn-adicionar-conta,
+#btn-abrir-form-conta,
 #btn-exibir-contas {
     margin-top: 20px; /* Espaço entre o botão e outros elementos */
 }
