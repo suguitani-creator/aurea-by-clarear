@@ -676,7 +676,7 @@ async function salvarEdicao() {
 
 // Exibir formulário ao clicar no botão
 document.getElementById("btn-abrir-form-conta").addEventListener("click", () => {
-
+    console.log("clicou no botão");
     const formulario = document.getElementById("formulario-conta");
 
     if (
@@ -688,9 +688,7 @@ document.getElementById("btn-abrir-form-conta").addEventListener("click", () => 
 
         limparFormularioConta();
 
-        document
-        .getElementById("btn-cancelar-edicao-conta")
-        .style.display = "none";
+        document.getElementById("btn-cancelar-edicao-conta").style.display = "none";
 
     } else {
 
