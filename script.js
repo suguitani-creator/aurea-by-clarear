@@ -919,12 +919,17 @@ async function carregarContasECartoes() {
 
 document.getElementById("btn-exibir-contas").addEventListener("click", () => {
     const contasCartoesContainer = document.getElementById("contas-cartoes-container");
-    
-    // Alterna a visibilidade da lista de contas e cartões
+    const btnExibirContas = document.getElementById("btn-exibir-contas");
+
+    // Verifica se as contas e cartões estão visíveis ou não
     if (contasCartoesContainer.style.display === "none" || contasCartoesContainer.style.display === "") {
-        contasCartoesContainer.style.display = "block";  // Exibe
+        // Exibe as contas e cartões
+        contasCartoesContainer.style.display = "block";
+        btnExibirContas.textContent = "Ocultar Contas e Cartões";  // Muda o texto do botão
     } else {
-        contasCartoesContainer.style.display = "none";   // Esconde
+        // Oculta as contas e cartões
+        contasCartoesContainer.style.display = "none";
+        btnExibirContas.textContent = "Exibir Contas e Cartões";  // Restaura o texto original do botão
     }
 });
 
