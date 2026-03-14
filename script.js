@@ -685,7 +685,7 @@ document.getElementById("btn-abrir-form-conta").addEventListener("click", () => 
     });
 
     // Adicionalmente, esconde o botão de adicionar
-    document.getElementById("btn-abrir-form-conta").style.display = "none";
+    //document.getElementById("btn-abrir-form-conta").style.display = "none";
 });
 
     document.getElementById("tipo-conta").addEventListener("change", function() {
