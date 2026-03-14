@@ -184,153 +184,52 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
 
 // ================= FINANÇAS =================
 
-// 1. **Exibição de Campos Dinâmicos e Eventos**
-document.getElementById("forma-pagamento").addEventListener("change", (e) => {
-    const formaPagamento = e.target.value;
-
-    // Mostrar/ocultar campos específicos dependendo da forma de pagamento
-    if (formaPagamento === "credito") {
-        document.getElementById("campo-cartao").style.display = "block";
-        document.getElementById("campo-conta-bancaria").style.display = "none";
-    } else if (formaPagamento === "pix" || formaPagamento === "debito") {
-        document.getElementById("campo-cartao").style.display = "none";
-        document.getElementById("campo-conta-bancaria").style.display = "block";
-    } else {
-        document.getElementById("campo-cartao").style.display = "none";
-        document.getElementById("campo-conta-bancaria").style.display = "none";
-    }
-});
-
-// Carregar subcategorias com base na categoria
-document.getElementById("categoria").addEventListener("change", () => {
-    const categoriaSelecionada = document.getElementById("categoria").value;
-
-    // Exemplo de categorias e subcategorias
-    const subcategorias = {
-        Alimentação: ["Supermercado", "Restaurante", "Lanches"],
-        Moradia: ["Aluguel", "Condomínio", "Luz"],
-        Transporte: ["Gasolina", "Manutenção", "Transporte Público"]
-    };
-
-    const subcategoriaSelect = document.getElementById("subcategoria");
-    subcategoriaSelect.innerHTML = ""; // Limpar subcategorias
-
-    if (subcategorias[categoriaSelecionada]) {
-        subcategorias[categoriaSelecionada].forEach(subcat => {
-            const option = document.createElement("option");
-            option.value = subcat;
-            option.textContent = subcat;
-            subcategoriaSelect.appendChild(option);
-        });
-        subcategoriaSelect.style.display = "block";
-    } else {
-        subcategoriaSelect.style.display = "none";
-    }
-});
-
-   // Ao mudar o tipo de transação (Receita ou Despesa)
-    document.getElementById("tipo").addEventListener("change", () => {
-    const tipo = document.getElementById("tipo").value;
-    
-    // Campos comuns a ambas as transações
-    const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
-    const categoria = document.getElementById("categoria");
-    const descricao = document.getElementById("descricao");
-    const valor = document.getElementById("valor");
-    const data = document.getElementById("data");
-
-    // Campos específicos para **despesas**
-    const essencial = document.getElementById("campo-essencial");
-    const subcategoria = document.getElementById("campo-subcategoria");
-    const formaPagamento = document.getElementById("campo-forma-pagamento");
-    const contaBancariaDebitada = document.getElementById("campo-conta-bancaria-debitada");
-    const cartao = document.getElementById("campo-cartao");
-    const parcelas = document.getElementById("campo-parcelas");
-    const mesFatura = document.getElementById("mes-fatura");
-
-    if (tipo === "despesa") {
-        // Para despesa, exibe campos específicos
-        essencial.style.display = "block";
-        subcategoria.style.display = "block";
-        formaPagamento.style.display = "block";
-        
-        if (formaPagamento.value === "pix" || formaPagamento.value === "debito") {
-            contaBancariaDebitada.style.display = "block";
-        }
-
-        if (formaPagamento.value === "credito") {
-            cartao.style.display = "block";
-            parcelas.style.display = "block";
-            mesFatura.style.display = "block";
-        }
-
-    } else {
-        // Para receita, esconde os campos específicos da despesa
-        essencial.style.display = "none";
-        subcategoria.style.display = "none";
-        formaPagamento.style.display = "none";
-        contaBancariaDebitada.style.display = "none";
-        cartao.style.display = "none";
-        parcelas.style.display = "none";
-        mesFatura.style.display = "none";
-        
-        contaBancariaDepositada.style.display = "block"; // Exibe a conta bancária de depósito para receita
-    }
-});
-
-// 2. **Função de Adicionar Transação**
 async function adicionarTransacao() {
+    const user = auth.currentUser;
+    if (!user) return;
+
     const tipo = document.getElementById("tipo").value;
     const categoria = document.getElementById("categoria").value;
-    const subcategoria = document.getElementById("subcategoria").value;
-    const descricao = document.getElementById("descricao").value || null; // Campo opcional
+    const descricao = document.getElementById("descricao").value;
     const valor = parseFloat(document.getElementById("valor").value);
-    const dataCompra = document.getElementById("data-compra").value;
-    const formaPagamento = document.getElementById("forma-pagamento").value;
-    let cartao = null;
-    let parcelas = null;
-    let mesFatura = null;
-    let contaBancaria = null;
+    const data = document.getElementById("data").value;
+    const formaPagamento = document.getElementById("forma-pagamento").value;  // Captura a forma de pagamento
 
-    if (formaPagamento === "credito") {
-        cartao = document.getElementById("cartao").value;
-        parcelas = document.getElementById("parcelas").value;
-        mesFatura = document.getElementById("mes-fatura").value;
-    } else if (formaPagamento === "pix" || formaPagamento === "debito") {
-        contaBancaria = document.getElementById("conta-bancaria").value;
-    }
-
-    if (!valor || !dataCompra || !categoria) {
-        alert("Por favor, preencha todos os campos obrigatórios.");
+    if (!descricao || isNaN(valor) || !data) {
+        showToast("Preencha todos os campos corretamente", "error");
         return;
     }
 
-    // Armazenar no Firestore
-    try {
-        const user = auth.currentUser;
-        if (!user) throw new Error("Você precisa estar logado");
+    if (idEmEdicao) {
+        await updateDoc(
+            doc(db, "users", user.uid, "transacoes", idEmEdicao),
+            { tipo, categoria, descricao, valor, data, formaPagamento }  // Inclui forma de pagamento
+        );
 
-        await addDoc(collection(db, "users", user.uid, "transacoes"), {
-            tipo,
-            categoria,
-            subcategoria,
-            descricao,
-            valor,
-            dataCompra,
-            formaPagamento,
-            cartao,
-            parcelas,
-            mesFatura,
-            contaBancaria
+        showToast("Transação atualizada!");
+        idEmEdicao = null;
+
+        document.getElementById("indicador-edicao").style.display = "none";
+        document.querySelectorAll("li").forEach(li => {
+            li.classList.remove("linha-editando");
         });
 
-        showToast("Transação adicionada com sucesso!");
-    } catch (error) {
-        console.error("Erro ao adicionar transação:", error);
+        const btn = document.getElementById("btn-adicionar");
+        btn.textContent = "Adicionar";
+        btn.classList.remove("modo-edicao");
+
+    } else {
+        await addDoc(
+            collection(db, "users", user.uid, "transacoes"),
+            { tipo, categoria, descricao, valor, data, formaPagamento }  // Inclui forma de pagamento
+        );
+
+        showToast("Transação adicionada!");
     }
+
+    limparFormulario();
+    carregarTransacoes();
 }
-
-
 
 function atualizarCategorias() {
     const tipo = document.getElementById("tipo").value;
@@ -756,11 +655,11 @@ function atualizarComparativo() {
 function getIconeFormaPagamento(formaPagamento) {
     switch (formaPagamento) {
         case "pix":
-            return "🏦";  // ícone mais discreto para Pix
+            return "��";  // ícone mais discreto para Pix
         case "debito":
-            return "🏦";  // ícone mais refinado para Débito
+            return "��";  // ícone mais refinado para Débito
         case "credito":
-            return "💳";  // ícone sutil para Crédito
+            return "��";  // ícone sutil para Crédito
         default:
             return "";  // ícone padrão caso não tenha sido configurado
     }
@@ -805,23 +704,15 @@ document.getElementById("btn-abrir-form-conta").addEventListener("click", () => 
 
 });
 
-// Ao carregar a página, já verifica a seleção do tipo de transação
-window.addEventListener("DOMContentLoaded", () => {
-    const tipo = document.getElementById("tipo").value;
-    const essencial = document.getElementById("campo-essencial");
-    const subcategoria = document.getElementById("campo-subcategoria");
-    const formaPagamento = document.getElementById("campo-forma-pagamento");
-    const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
-    const cartao = document.getElementById("campo-cartao");
-    const parcelas = document.getElementById("campo-parcelas");
-    const mesFatura = document.getElementById("mes-fatura");
-
-    if (tipo === "despesa") {
-        essencial.style.display = "block";
-        subcategoria.style.display = "block";
-        formaPagamento.style.display = "block";
+// Chama a função para garantir que o campo certo seja exibido ao carregar o formulário
+document.addEventListener("DOMContentLoaded", function() {
+    const tipoConta = document.getElementById("tipo-conta").value;
+    if (tipoConta === "cartao") {
+        document.getElementById("datas-cartao").style.display = "block"; // Exibe os campos para cartão
+        document.getElementById("data-saldo-conta").style.display = "none"; // Esconde o campo de data para conta corrente
     } else {
-        contaBancariaDepositada.style.display = "block"; // Exibe a conta bancária de depósito para receita
+        document.getElementById("datas-cartao").style.display = "none"; // Esconde os campos para cartão
+        document.getElementById("data-saldo-conta").style.display = "block"; // Exibe o campo de data para conta corrente
     }
 });
 
