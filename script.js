@@ -679,17 +679,22 @@ document.getElementById("btn-abrir-form-conta").addEventListener("click", () => 
 
     const formulario = document.getElementById("formulario-conta");
 
-    const abrindo = formulario.style.display === "none";
+    if (
+        formulario.style.display === "none" ||
+        formulario.style.display === ""
+    ) {
 
-    formulario.style.display = abrindo ? "block" : "none";
-
-    if (abrindo) {
+        formulario.style.display = "block";
 
         limparFormularioConta();
 
         document
         .getElementById("btn-cancelar-edicao-conta")
         .style.display = "none";
+
+    } else {
+
+        formulario.style.display = "none";
 
     }
 
