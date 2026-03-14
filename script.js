@@ -675,11 +675,13 @@ async function salvarEdicao() {
 }
 
 // Exibir formulário ao clicar no botão
-document.getElementById("btn-abrir-form-conta").addEventListener("click", () => {
+document
+.getElementById("btn-abrir-form-conta")
+.addEventListener("click", function () {
 
     const formulario = document.getElementById("formulario-conta");
 
-    if (window.getComputedStyle(formulario).display === "none") {
+    if (formulario.style.display === "none") {
 
         formulario.style.display = "block";
 
