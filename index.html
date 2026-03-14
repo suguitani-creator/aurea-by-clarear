@@ -91,12 +91,31 @@
                 <option value="despesa">Despesa</option>
             </select>
 
-            <!-- Campo Essencial/Não Essencial (oculto inicialmente) -->
-            <div id="campo-essencial" style="display:none;">
+            <!-- Subcategoria e Forma de Pagamento (apenas para despesas) -->
+            <div id="campo-subcategoria" style="display: none;">
+                <label for="subcategoria">Subcategoria</label>
+                <select id="subcategoria">
+                    <option value="alimentacao">Alimentação</option>
+                    <option value="moradia">Moradia</option>
+                    <option value="transporte">Transporte</option>
+                    <!-- Adicione outras subcategorias conforme necessário -->
+                </select>
+            </div>
+
+            <div id="campo-essencial" style="display: none;">
                 <label for="essencial">Essencial?</label>
                 <select id="essencial">
                     <option value="sim">Sim</option>
                     <option value="nao">Não</option>
+                </select>
+            </div>
+
+            <div id="campo-forma-pagamento" style="display: none;">
+                <label for="forma-pagamento">Forma de Pagamento</label>
+                <select id="forma-pagamento">
+                    <option value="pix">Pix</option>
+                    <option value="debito">Débito</option>
+                    <option value="credito">Crédito</option>
                 </select>
             </div>
 
@@ -113,12 +132,6 @@
             <input type="number" id="valor" placeholder="Valor" />
 
             <input type="date" id="data-compra" placeholder="Data da Compra" />
-
-            <select id="forma-pagamento">
-                <option value="pix">Pix</option>
-                <option value="debito">Débito</option>
-                <option value="credito">Crédito</option>
-            </select>
 
             <!-- Campo "Cartão" só aparece se a forma de pagamento for Cartão -->
             <div id="campo-cartao" style="display:none;">

@@ -228,17 +228,24 @@ document.getElementById("categoria").addEventListener("change", () => {
     }
 });
 
-    // Mostrar/Esconder o campo Essencial/Não Essencial dependendo da seleção de Receita/Despesa
-    document.getElementById("tipo").addEventListener("change", (e) => {
-    const tipo = e.target.value;
-
+    // Adiciona o evento de mudança do tipo de transação
+    document.getElementById("tipo").addEventListener("change", () => {
+    const tipo = document.getElementById("tipo").value;
+    
+    const campoSubcategoria = document.getElementById("campo-subcategoria");
     const campoEssencial = document.getElementById("campo-essencial");
-
-    // Se for "despesa", mostra o campo de essencial
+    const campoFormaPagamento = document.getElementById("campo-forma-pagamento");
+    
     if (tipo === "despesa") {
+        // Se for despesa, exibe os campos
+        campoSubcategoria.style.display = "block";
         campoEssencial.style.display = "block";
+        campoFormaPagamento.style.display = "block";
     } else {
-        campoEssencial.style.display = "none"; // Esconde se for "receita"
+        // Se for receita, esconde os campos
+        campoSubcategoria.style.display = "none";
+        campoEssencial.style.display = "none";
+        campoFormaPagamento.style.display = "none";
     }
 });
 
@@ -769,15 +776,19 @@ document.getElementById("btn-abrir-form-conta").addEventListener("click", () => 
 
 });
 
-// Chama a função para garantir que o campo certo seja exibido ao carregar o formulário
-document.addEventListener("DOMContentLoaded", function() {
-    const tipoConta = document.getElementById("tipo-conta").value;
-    if (tipoConta === "cartao") {
-        document.getElementById("datas-cartao").style.display = "block"; // Exibe os campos para cartão
-        document.getElementById("data-saldo-conta").style.display = "none"; // Esconde o campo de data para conta corrente
+// Ao carregar a página, já garante que os campos corretos estarão visíveis
+window.addEventListener("DOMContentLoaded", () => {
+    const tipo = document.getElementById("tipo").value;
+    
+    // Chama a lógica para definir a visibilidade dos campos com base no tipo de transação
+    if (tipo === "despesa") {
+        document.getElementById("campo-subcategoria").style.display = "block";
+        document.getElementById("campo-essencial").style.display = "block";
+        document.getElementById("campo-forma-pagamento").style.display = "block";
     } else {
-        document.getElementById("datas-cartao").style.display = "none"; // Esconde os campos para cartão
-        document.getElementById("data-saldo-conta").style.display = "block"; // Exibe o campo de data para conta corrente
+        document.getElementById("campo-subcategoria").style.display = "none";
+        document.getElementById("campo-essencial").style.display = "none";
+        document.getElementById("campo-forma-pagamento").style.display = "none";
     }
 });
 
