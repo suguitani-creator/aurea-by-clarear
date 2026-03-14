@@ -103,17 +103,7 @@
                 <option value="credito">Crédito</option>
             </select>
             
-            <div class="botoes-formulario">
-
-                <button id="btn-adicionar">
-                    Adicionar
-                </button>
-
-                <button id="btn-cancelar-edicao-transacao" class="btn-cancelar">
-                    Cancelar
-                </button>
-
-            </div>
+            <button id="btn-adicionar">Adicionar</button>
         </div>
 
         <h2>Fluxo Financeiro</h2>
@@ -123,7 +113,7 @@
         </div>
 
         <!-- Botão para Adicionar Conta ou Cartão -->
-            <button id="btn-abrir-form-conta" class="secondary-btn">Adicionar Conta ou Cartão</button>
+            <button id="btn-adicionar-conta" class="secondary-btn">Adicionar Conta ou Cartão</button>
             <!-- Botão para alternar a exibição das contas e cartões -->
             <button id="btn-exibir-contas" class="secondary-btn">Exibir Contas e Cartões</button>
 
@@ -146,24 +136,23 @@
             <input type="date" id="data-saldo-conta" placeholder="Data de atualização do saldo" style="display:none;" />
 
             <!-- Exibir campos de vencimento e fechamento para cartão -->
-            <div id="datas-cartao" style="display:none;">
-                <label for="vencimento-cartao">Vencimento</label>
-                <input type="date" id="vencimento-cartao" placeholder="Selecione o dia de vencimento" />
-                <label for="fechamento-cartao">Fechamento</label>
-                <input type="date" id="fechamento-cartao" placeholder="Selecione o dia de fechamento" />
-            </div>
-            <div class="botoes-formulario">
-                    <button id="btn-salvar-conta">Adicionar</button>
-                    <button id="btn-cancelar-edicao-conta" class="btn-cancelar">Cancelar</button>
-            </div>
-        </div>    
+        <div id="datas-cartao" style="display:none;">
+        <label for="vencimento-cartao">Vencimento</label>
+        <input type="date" id="vencimento-cartao" placeholder="Selecione o dia de vencimento" />
+        <label for="fechamento-cartao">Fechamento</label>
+        <input type="date" id="fechamento-cartao" placeholder="Selecione o dia de fechamento" />
+        </div>
+            <button id="btn-salvar-conta">Adicionar</button>
+        </div>
+
+
        <!-- Exibir Contas e Cartões Cadastrados (inicialmente escondido) -->
         <div id="contas-cartoes-container" style="display: none;">
 
-            <h3> 🏦 Contas Cadastradas</h3>
+            <h3>�� Contas Cadastradas</h3>
             <ul id="lista-contas"></ul>
 
-            <h3> 💳 Cartões Cadastrados</h3>
+            <h3>�� Cartões Cadastrados</h3>
             <ul id="lista-cartoes"></ul>
 
         </div>

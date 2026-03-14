@@ -217,7 +217,6 @@ async function adicionarTransacao() {
         const btn = document.getElementById("btn-adicionar");
         btn.textContent = "Adicionar";
         btn.classList.remove("modo-edicao");
-        document.getElementById("btn-cancelar-edicao-transacao").style.display = "none";
 
     } else {
         await addDoc(
@@ -554,8 +553,6 @@ window.editarTransacao = async function(id) {
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
 
-    document.getElementById("btn-cancelar-edicao-transacao").style.display = "inline-block";
-
     // Desliza suavemente até o formulário de edição
     document.querySelector(".form").scrollIntoView({
         behavior: "smooth",
@@ -658,13 +655,13 @@ function atualizarComparativo() {
 function getIconeFormaPagamento(formaPagamento) {
     switch (formaPagamento) {
         case "pix":
-            return "🏦";  // ícone mais discreto para Pix
+            return "��";  // ícone mais discreto para Pix
         case "debito":
-            return "🏦";  // ícone mais refinado para Débito
+            return "��";  // ícone mais refinado para Débito
         case "credito":
-            return "💳";  // ícone sutil para Crédito
+            return "��";  // ícone sutil para Crédito
         default:
-            return "💳";  // ícone padrão caso não tenha sido configurado
+            return "��";  // ícone padrão caso não tenha sido configurado
     }
 }
 
@@ -675,14 +672,9 @@ async function salvarEdicao() {
 }
 
 // Exibir formulário ao clicar no botão
-document
-.getElementById("btn-abrir-form-conta")
-.addEventListener("click", () => {
-
-    const form = document.getElementById("formulario-conta");
-
-    form.classList.toggle("aberto");
-
+document.getElementById("btn-adicionar-conta").addEventListener("click", () => {
+    const formulario = document.getElementById("formulario-conta");
+    formulario.style.display = formulario.style.display === "none" ? "block" : "none";  // Alterna a visibilidade
 });
 
     document.getElementById("tipo-conta").addEventListener("change", function() {
@@ -761,7 +753,7 @@ async function adicionarConta() {
         contaEmEdicao = null;
         document.getElementById("indicador-edicao-conta").style.display = "none";
 
-        const btn = document.getElementById("btn-abrir-form-conta");
+        const btn = document.getElementById("btn-adicionar-conta");
         btn.textContent = "Adicionar Conta ou Cartão";
         btn.classList.remove("modo-edicao");
 
@@ -822,7 +814,6 @@ async function adicionarConta() {
         console.log("Conta ou cartão adicionado com sucesso!");
         showToast("Conta ou cartão adicionado com sucesso!");
         limparFormularioConta();
-        document.getElementById("btn-cancelar-edicao-conta").style.display = "none";
         carregarContasECartoes(); // Atualiza a lista após a adição
 
     } catch (error) {
@@ -1006,8 +997,6 @@ window.editarConta = async function(id) {
     const btn = document.getElementById("btn-salvar-conta");
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
-
-    document.getElementById("btn-cancelar-edicao-conta").style.display = "inline-block";
 }
 
 window.editarCartao = async function(id) {
@@ -1044,8 +1033,6 @@ window.editarCartao = async function(id) {
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
 
-    document.getElementById("btn-cancelar-edicao-conta").style.display = "inline-block";
-
 }
 
 function limparFormularioConta() {
@@ -1068,39 +1055,10 @@ function limparFormularioConta() {
     btn.textContent = "Adicionar";
     btn.classList.remove("modo-edicao");
 
-    // 🔽 NOVO: fechar o formulário
+    // �� NOVO: fechar o formulário
     document.getElementById("formulario-conta").style.display = "none";
 
 }
 
-function cancelarEdicaoConta() {
 
-    contaEmEdicao = null;
-    cartaoEmEdicao = null;
-    limparFormularioConta();
-    document.getElementById("btn-cancelar-edicao-conta").style.display = "none";
-
-}
-
-document
-.getElementById("btn-cancelar-edicao-conta").addEventListener("click", cancelarEdicaoConta);
-
-function cancelarEdicaoTransacao() {
-
-    idEmEdicao = null;
-
-    limparFormulario();
-
-    document.getElementById("indicador-edicao").style.display = "none";
-
-    const btn = document.getElementById("btn-adicionar");
-    btn.textContent = "Adicionar";
-    btn.classList.remove("modo-edicao");
-
-    document.getElementById("btn-cancelar-edicao-transacao").style.display = "none";
-
-}
-
-document
-.getElementById("btn-cancelar-edicao-transacao").addEventListener("click", cancelarEdicaoTransacao);
 

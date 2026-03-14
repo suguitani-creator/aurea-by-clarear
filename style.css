@@ -732,14 +732,6 @@ button.modo-edicao:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-#formulario-conta {
-    display: none;
-}
-
-#formulario-conta.aberto {
-    display: block;
-}
-
 #formulario-conta input, #formulario-conta select {
     width: 100%;
     padding: 10px;
@@ -778,7 +770,7 @@ button.modo-edicao:hover {
 }
 
 /* Estilo comum para os botões "Adicionar" e "Exibir Contas e Cartões" */
-#btn-abrir-form-conta,
+#btn-adicionar-conta,
 #btn-exibir-contas {
     background: #F0E7DA; /* Cor de fundo igual ao comparativo */
     padding: 10px 20px;
@@ -795,7 +787,7 @@ button.modo-edicao:hover {
 }
 
 /* Efeito de hover - mudança de cor e fonte */
-#btn-abrir-form-conta:hover,
+#btn-adicionar-conta:hover,
 #btn-exibir-contas:hover {
     background: #C6A75E;  /* Altere para o tom desejado */
     color: white;  /* Texto fica branco */
@@ -805,7 +797,7 @@ button.modo-edicao:hover {
 
 
 /* Ajuste para dar um pouco de espaço ao botão */
-#btn-abrir-form-conta,
+#btn-adicionar-conta,
 #btn-exibir-contas {
     margin-top: 20px; /* Espaço entre o botão e outros elementos */
 }
@@ -867,26 +859,5 @@ button.modo-edicao:hover {
 
 .contas-lista h3 {
     font-size: 16px;
-}
-
-.botoes-formulario {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.btn-cancelar {
-    display: none;
-    background: transparent;
-    border: 1px solid #E8DFD4;
-    color: #7A5C42;
-    padding: 10px 14px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-cancelar:hover {
-    background: #F0E7DA;
 }
 
