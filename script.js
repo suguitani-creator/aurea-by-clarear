@@ -194,7 +194,7 @@ document.getElementById("tipo").addEventListener("change", (e) => {
         formaPagamento.style.display = "block";
     } else {
         campoEssencial.style.display = "none"; // Esconde se for "receita"
-        formaPagamento.style.display = "block";
+        formaPagamento.style.display = "none";
     }
 });
 
