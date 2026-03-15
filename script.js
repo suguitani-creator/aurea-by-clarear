@@ -229,26 +229,6 @@ document.getElementById("tipo").addEventListener("change", () => {
         contaBancariaDepositada.style.display = "block"; // Exibe a conta bancária de depósito para receita
     }
 });
-
-// Ao carregar a página, já verifica a seleção do tipo de transação
-window.addEventListener("DOMContentLoaded", () => {
-    const tipo = document.getElementById("tipo").value;
-    const essencial = document.getElementById("campo-essencial");
-    const subcategoria = document.getElementById("campo-subcategoria");
-    const formaPagamento = document.getElementById("campo-forma-pagamento");
-    const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
-    const cartao = document.getElementById("campo-cartao");
-    const parcelas = document.getElementById("campo-parcelas");
-    const mesFatura = document.getElementById("mes-fatura");
-
-    if (tipo === "despesa") {
-        essencial.style.display = "block";
-        subcategoria.style.display = "block";
-        formaPagamento.style.display = "block";
-    } else {
-        contaBancariaDepositada.style.display = "block"; // Exibe a conta bancária de depósito para receita
-    }
-});
 });
 
 // ================= FINANÇAS =================
