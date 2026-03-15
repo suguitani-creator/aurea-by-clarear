@@ -186,12 +186,15 @@ document.getElementById("tipo").addEventListener("change", (e) => {
     const tipo = e.target.value;
 
     const campoEssencial = document.getElementById("campo-essencial");
+    const formaPagamento = document.getElementById("forma-pagamento");
 
     // Se for "despesa", mostra o campo de essencial
     if (tipo === "despesa") {
         campoEssencial.style.display = "block";
+        formaPagamento.style.display = "block";
     } else {
         campoEssencial.style.display = "none"; // Esconde se for "receita"
+        formaPagamento.style.display = "block";
     }
 });
 
