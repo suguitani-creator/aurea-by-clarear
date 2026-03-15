@@ -76,6 +76,7 @@
             </div>
         </div>
 
+        <!-- Formulário de Transações -->
         <!-- Indicador de edição elegante -->
         <div id="indicador-edicao" class="indicador-edicao">
             <!--<svg width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
@@ -83,99 +84,37 @@
             </svg>-->
             Editando Transação
         </div>
-       <!-- Formulário de Transação -->
-<div id="form-transacao">
-    <h3>Adicionar Transação</h3>
+        <div class="form">
+            <select id="tipo">
+                <option value="receita">Receita</option>
+                <option value="despesa">Despesa</option>
+            </select>
 
-    <!-- Receita/Despesa -->
-    <select id="tipo">
-        <option value="receita">Receita</option>
-        <option value="despesa">Despesa</option>
-    </select>
+            <select id="categoria"></select>
 
-    <!-- Campos Comuns (Visíveis para Receita e Despesa) -->
-<div class="campo">
-    <input type="text" id="descricao-receita" class="input" placeholder="Descrição (opcional)" />
-    <input type="text" id="descricao-despesa" class="input" placeholder="Descrição (opcional)" style="display:none;" />
-</div>
+            <input type="text" id="descricao" placeholder="Descrição">
+            <input type="number" id="valor" placeholder="Valor">
+            <input type="date" id="data" placeholder="Data" inputmode="date">
 
-<div class="campo">
-    <input type="number" id="valor-receita" class="input" placeholder="Valor" />
-    <input type="number" id="valor-despesa" class="input" placeholder="Valor" style="display:none;" />
-</div>
+             <!-- Novo campo para forma de pagamento -->
+            <select id="forma-pagamento">
+                <option value="pix">Pix</option>
+                <option value="debito">Débito</option>
+                <option value="credito">Crédito</option>
+            </select>
+            
+            <div class="botoes-formulario">
 
-<div class="campo">
-    <input type="date" id="data-receita" class="input" placeholder="Data de recebimento" />
-    <input type="date" id="data-despesa" class="input" placeholder="Data da compra" style="display:none;" />
-</div>
+                <button id="btn-adicionar">
+                    Adicionar
+                </button>
 
-<!-- Campos específicos para **despesas** -->
-<div class="campo" id="campo-fonte" style="display:none;">
-    <select id="fonte" class="input">
-        <!-- Opções de fontes -->
-    </select>
-</div>
+                <button id="btn-cancelar-edicao-transacao" class="btn-cancelar">
+                    Cancelar
+                </button>
 
-<!-- Campos específicos para **despesas** -->
-<div class="campo" id="campo-essencial" style="display:none;">
-    <select id="essencial" class="input">
-        <option value="sim">Essencial</option>
-        <option value="nao">Não Essencial</option>
-    </select>
-</div>
-
-<div class="campo" id="campo-categoria" style="display:none;">
-    <select id="categoria" class="input">
-        <!-- Opções de categoria -->
-    </select>
-</div>
-
-<div class="campo" id="campo-subcategoria" style="display:none;">
-    <select id="subcategoria" class="input">
-        <!-- Opções de subcategoria -->
-    </select>
-</div>
-
-<!-- Forma de Pagamento -->
-<div class="campo" id="campo-forma-pagamento" style="display:none;">
-    <select id="forma-pagamento" class="input">
-        <option value="pix">Pix</option>
-        <option value="debito">Débito</option>
-        <option value="credito">Crédito</option>
-    </select>
-</div>
-
-<!-- Campos de Forma de Pagamento (Pix/Débito) -->
-<div id="campo-conta-bancaria-debitada" class="campo" style="display:none;">
-    <select id="conta-bancaria-debitada" class="input">
-        <!-- Conta bancária para Pix/Débito -->
-    </select>
-</div>
-
-<!-- Campos de Forma de Pagamento (Cartão) -->
-<div id="campo-cartao" class="campo" style="display:none;">
-    <select id="nome-cartao" class="input">
-        <!-- Cartões cadastrados -->
-    </select>
-</div>
-
-<div id="campo-parcelas" class="campo" style="display:none;">
-    <select id="parcelas" class="input">
-        <option value="1">1x</option>
-        <option value="2">2x</option>
-        <option value="3">3x</option>
-        <option value="4">4x</option>
-        <!-- Mais opções -->
-    </select>
-</div>
-
-<div id="campo-mes-fatura" class="campo" style="display:none;">
-    <input type="month" id="mes-fatura" class="input"/>
-</div>
-    <!-- Botões -->
-    <button id="btn-adicionar" class="btn">Adicionar</button>
-    <button id="btn-cancelar-edicao-transacao" class="btn-cancelar">Cancelar</button>
-</div>
+            </div>
+        </div>
 
         <h2>Fluxo Financeiro</h2>
         <ul id="lista-despesas"></ul>

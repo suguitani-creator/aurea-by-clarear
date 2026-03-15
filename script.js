@@ -142,6 +142,7 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
     }
 });
 
+
     document.getElementById("btn-logout").addEventListener("click", async () => {
     try {
         await signOut(auth);
@@ -156,8 +157,6 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         showToast("Erro ao fazer logout", "error");
     }
 });
-
-    document.getElementById("btn-cancelar-edicao-transacao").addEventListener("click", cancelarEdicaoTransacao);
 
     onAuthStateChanged(auth, (user) => {
     const authContainer = document.getElementById("auth-container-desktop");
@@ -181,74 +180,6 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         limparFormulario();
     }
 });
-/* Ao mudar o tipo de transação (receita/despesa), alteramos os campos */
-document.getElementById("tipo").addEventListener("change", () => {
-    const tipo = document.getElementById("tipo").value;
-
-    // Campos comuns
-    const descricaoReceita = document.getElementById("descricao-receita");
-    const descricaoDespesa = document.getElementById("descricao-despesa");
-    const valorReceita = document.getElementById("valor-receita");
-    const valorDespesa = document.getElementById("valor-despesa");
-    const dataReceita = document.getElementById("data-receita");
-    const dataDespesa = document.getElementById("data-despesa");
-
-    // Campos exclusivos para **receitas**
-    const campoFonte = document.getElementById("campo-fonte");
-    const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
-
-    // Campos exclusivos para **despesas**
-    const campoEssencial = document.getElementById("campo-essencial");
-    const campoCategoria = document.getElementById("campo-categoria");
-    const campoSubcategoria = document.getElementById("campo-subcategoria");
-    const campoFormaPagamento = document.getElementById("campo-forma-pagamento");
-    const contaBancariaDebitada = document.getElementById("campo-conta-bancaria-debitada");
-    const campoCartao = document.getElementById("campo-cartao");
-    const campoParcelas = document.getElementById("campo-parcelas");
-    const campoMesFatura = document.getElementById("campo-mes-fatura");
-
-    if (tipo === "despesa") {
-        // Exibe campos específicos para **despesa**
-        descricaoDespesa.style.display = "block";
-        valorDespesa.style.display = "block";
-        dataDespesa.style.display = "block";
-
-        campoEssencial.style.display = "block";
-        campoCategoria.style.display = "block";
-        campoSubcategoria.style.display = "block";
-        campoFormaPagamento.style.display = "block";
-        
-        if (document.getElementById("forma-pagamento").value === "pix" || document.getElementById("forma-pagamento").value === "debito") {
-            contaBancariaDebitada.style.display = "block";
-        }
-
-        if (document.getElementById("forma-pagamento").value === "credito") {
-            campoCartao.style.display = "block";
-            campoParcelas.style.display = "block";
-            campoMesFatura.style.display = "block";
-        }
-    } else {
-        // Exibe campos específicos para **receita**
-        descricaoReceita.style.display = "block";
-        valorReceita.style.display = "block";
-        dataReceita.style.display = "block";
-
-        campoFonte.style.display = "block";
-        contaBancariaDepositada.style.display = "block"; // Para receitas, mostra a conta bancária
-    }
-
-    // Esconde os campos exclusivos quando a transação não for do tipo correspondente
-    if (tipo !== "despesa") {
-        campoEssencial.style.display = "none";
-        campoCategoria.style.display = "none";
-        campoSubcategoria.style.display = "none";
-        campoFormaPagamento.style.display = "none";
-        contaBancariaDebitada.style.display = "none";
-        campoCartao.style.display = "none";
-        campoParcelas.style.display = "none";
-        campoMesFatura.style.display = "none";
-    }
-});
 });
 
 // ================= FINANÇAS =================
@@ -259,7 +190,7 @@ async function adicionarTransacao() {
 
     const tipo = document.getElementById("tipo").value;
     const categoria = document.getElementById("categoria").value;
-    const descricao = document.getElementById("descricao-despesa").value;
+    const descricao = document.getElementById("descricao").value;
     const valor = parseFloat(document.getElementById("valor").value);
     const data = document.getElementById("data").value;
     const formaPagamento = document.getElementById("forma-pagamento").value;  // Captura a forma de pagamento
@@ -475,7 +406,7 @@ async function carregarTransacoes() {
 }
 
 function limparFormulario() {
-    document.getElementById("descricao-despesa").value = "";
+    document.getElementById("descricao").value = "";
     document.getElementById("valor").value = "";
     document.getElementById("data").value = "";
 }
@@ -597,7 +528,7 @@ window.editarTransacao = async function(id) {
     atualizarCategorias();
 
     document.getElementById("categoria").value = transacao.categoria;
-    document.getElementById("descricao-despesa").value = transacao.descricao-despesa;
+    document.getElementById("descricao").value = transacao.descricao;
     document.getElementById("valor").value = transacao.valor;
     document.getElementById("data").value = transacao.data;
 
@@ -1172,6 +1103,6 @@ function cancelarEdicaoTransacao() {
 
 }
 
-
+document.getElementById("btn-cancelar-edicao-transacao").addEventListener("click", cancelarEdicaoTransacao);
 
 
