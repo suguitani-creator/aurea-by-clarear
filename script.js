@@ -214,10 +214,7 @@ document.getElementById("tipo").addEventListener("change", () => {
         dataDespesa.style.display = "block";
         campoFormaPagamento.style.display = "block";
         campoFonte.style.display = "none";
-        contaBancariaDepositada.style.display = "none";
-        descricaoReceita.style.display = "none";
-        valorReceita.style.display = "none";
-        dataReceita.style.display = "none";
+        
 
         if (document.getElementById("forma-pagamento").value === "pix" || document.getElementById("forma-pagamento").value === "debito") {
             contaBancariaDebitada.style.display = "block";
