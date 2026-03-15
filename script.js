@@ -142,7 +142,6 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
     }
 });
 
-
     document.getElementById("btn-logout").addEventListener("click", async () => {
     try {
         await signOut(auth);
@@ -180,32 +179,38 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         limparFormulario();
     }
 });
-
-document.getElementById("tipo").addEventListener("change", () => {
-    const tipo = document.getElementById("tipo").value;
+    document.getElementById("tipo").addEventListener("change", function() {
+    const tipo = this.value;
     
     // Campos comuns
-    const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
-    const categoria = document.getElementById("categoria");
     const descricao = document.getElementById("descricao");
     const valor = document.getElementById("valor");
     const data = document.getElementById("data");
 
     // Campos específicos para **despesas**
     const essencial = document.getElementById("campo-essencial");
+    const categoria = document.getElementById("campo-categoria");
     const subcategoria = document.getElementById("campo-subcategoria");
-    const formaPagamento = document.getElementById("campo-forma-pagamento");
+    const formaPagamento = document.getElementById("forma-pagamento");
     const contaBancariaDebitada = document.getElementById("campo-conta-bancaria-debitada");
     const cartao = document.getElementById("campo-cartao");
-    const parcelas = document.getElementById("campo-parcelas");
+    const parcelas = document.getElementById("parcelas");
     const mesFatura = document.getElementById("mes-fatura");
+
+    // Campos específicos para **receitas**
+    const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
+    const fonte = document.getElementById("campo-fonte");
 
     if (tipo === "despesa") {
         // Para despesa, exibe campos específicos
+        fonte.style.display = "none";  // Esconde fonte para despesas
+        contaBancariaDepositada.style.display = "none";  // Esconde conta bancária para receita
+
         essencial.style.display = "block";
+        categoria.style.display = "block";
         subcategoria.style.display = "block";
         formaPagamento.style.display = "block";
-        
+
         if (formaPagamento.value === "pix" || formaPagamento.value === "debito") {
             contaBancariaDebitada.style.display = "block";
         }
@@ -217,8 +222,9 @@ document.getElementById("tipo").addEventListener("change", () => {
         }
 
     } else {
-        // Para receita, esconde os campos específicos da despesa
+        // Para receita, esconde campos específicos da despesa
         essencial.style.display = "none";
+        categoria.style.display = "none";
         subcategoria.style.display = "none";
         formaPagamento.style.display = "none";
         contaBancariaDebitada.style.display = "none";
@@ -227,24 +233,9 @@ document.getElementById("tipo").addEventListener("change", () => {
         mesFatura.style.display = "none";
         
         contaBancariaDepositada.style.display = "block"; // Exibe a conta bancária de depósito para receita
+        fonte.style.display = "block";  // Exibe fonte para receitas
     }
 });
-    const tipo = document.getElementById("tipo").value;
-    const essencial = document.getElementById("campo-essencial");
-    const subcategoria = document.getElementById("campo-subcategoria");
-    const formaPagamento = document.getElementById("campo-forma-pagamento");
-    const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
-    const cartao = document.getElementById("campo-cartao");
-    const parcelas = document.getElementById("campo-parcelas");
-    const mesFatura = document.getElementById("mes-fatura");
-
-    if (tipo === "despesa") {
-        essencial.style.display = "block";
-        subcategoria.style.display = "block";
-        formaPagamento.style.display = "block";
-    } else {
-        contaBancariaDepositada.style.display = "block"; // Exibe a conta bancária de depósito para receita
-    }
 });
 
 // ================= FINANÇAS =================
@@ -255,38 +246,20 @@ async function adicionarTransacao() {
 
     const tipo = document.getElementById("tipo").value;
     const categoria = document.getElementById("categoria").value;
-    const subcategoria = document.getElementById("subcategoria").value;
-    const descricao = document.getElementById("descricao").value || null; // Campo opcional
+    const descricao = document.getElementById("descricao").value;
     const valor = parseFloat(document.getElementById("valor").value);
-    const dataCompra = document.getElementById("data-compra").value;
-    const formaPagamento = document.getElementById("forma-pagamento").value;
-    let cartao = null;
-    let parcelas = null;
-    let mesFatura = null;
-    let contaBancariaDes = null;
-    let contaBancariaRec = null;
+    const data = document.getElementById("data").value;
+    const formaPagamento = document.getElementById("forma-pagamento").value;  // Captura a forma de pagamento
 
-    if (tipo === "receita") {
-        contaBancariaRec = document.getElementById("conta-bancaria-rec").value;
-    } else if (tipo === "despesa") { 
-                if (formaPagamento === "credito") {
-                    cartao = document.getElementById("cartao").value;
-                    parcelas = document.getElementById("parcelas").value;
-                    mesFatura = document.getElementById("mes-fatura").value;
-    }           else if (formaPagamento === "pix" || formaPagamento === "debito") {
-                    contaBancariaDes = document.getElementById("conta-bancaria-des").value;
-                }
-    }
-
-    if (!valor || !dataCompra || !categoria) {
-        alert("Por favor, preencha todos os campos obrigatórios.");
+    if (!descricao || isNaN(valor) || !data) {
+        showToast("Preencha todos os campos corretamente", "error");
         return;
     }
 
     if (idEmEdicao) {
         await updateDoc(
             doc(db, "users", user.uid, "transacoes", idEmEdicao),
-            { tipo, categoria, subcategoria, descricao, valor, dataCompra, formaPagamento, cartao, parcelas,mesFatura, contaBancariaDes, contaBancariaRec }  // Inclui forma de pagamento
+            { tipo, categoria, descricao, valor, data, formaPagamento }  // Inclui forma de pagamento
         );
 
         showToast("Transação atualizada!");
@@ -304,7 +277,7 @@ async function adicionarTransacao() {
     } else {
         await addDoc(
             collection(db, "users", user.uid, "transacoes"),
-            { tipo, categoria, subcategoria, descricao, valor, dataCompra, formaPagamento, cartao, parcelas,mesFatura, contaBancariaDes, contaBancariaRec  }  // Inclui forma de pagamento
+            { tipo, categoria, descricao, valor, data, formaPagamento }  // Inclui forma de pagamento
         );
 
         showToast("Transação adicionada!");
