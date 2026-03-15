@@ -180,6 +180,21 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         limparFormulario();
     }
 });
+
+// Mostrar/Esconder o campo Essencial/Não Essencial dependendo da seleção de Receita/Despesa
+document.getElementById("tipo").addEventListener("change", (e) => {
+    const tipo = e.target.value;
+
+    const campoEssencial = document.getElementById("campo-essencial");
+
+    // Se for "despesa", mostra o campo de essencial
+    if (tipo === "despesa") {
+        campoEssencial.style.display = "block";
+    } else {
+        campoEssencial.style.display = "none"; // Esconde se for "receita"
+    }
+});
+
 // Ao escolher a forma de pagamento
 document.getElementById("forma-pagamento").addEventListener("change", (e) => {
     const formaPagamento = e.target.value;
