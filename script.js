@@ -191,11 +191,11 @@ document.getElementById("tipo").addEventListener("change", () => {
     const dataReceita = document.getElementById("data-receita");
     const dataDespesa = document.getElementById("data-despesa");
 
-    // Campos exclusivos para receitas
+    // Campos exclusivos para **receitas**
     const campoFonte = document.getElementById("campo-fonte");
     const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
 
-    // Campos exclusivos para despesas
+    // Campos exclusivos para **despesas**
     const campoEssencial = document.getElementById("campo-essencial");
     const campoCategoria = document.getElementById("campo-categoria");
     const campoSubcategoria = document.getElementById("campo-subcategoria");
@@ -206,7 +206,7 @@ document.getElementById("tipo").addEventListener("change", () => {
     const campoMesFatura = document.getElementById("campo-mes-fatura");
 
     if (tipo === "despesa") {
-        // Exibe campos específicos para despesa
+        // Exibe campos específicos para **despesa**
         descricaoDespesa.style.display = "block";
         valorDespesa.style.display = "block";
         dataDespesa.style.display = "block";
@@ -226,7 +226,7 @@ document.getElementById("tipo").addEventListener("change", () => {
             campoMesFatura.style.display = "block";
         }
     } else {
-        // Exibe campos específicos para receita
+        // Exibe campos específicos para **receita**
         descricaoReceita.style.display = "block";
         valorReceita.style.display = "block";
         dataReceita.style.display = "block";
