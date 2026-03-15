@@ -475,7 +475,7 @@ async function carregarTransacoes() {
 }
 
 function limparFormulario() {
-    document.getElementById("descricao").value = "";
+    document.getElementById("descricao-despesa").value = "";
     document.getElementById("valor").value = "";
     document.getElementById("data").value = "";
 }
@@ -597,7 +597,7 @@ window.editarTransacao = async function(id) {
     atualizarCategorias();
 
     document.getElementById("categoria").value = transacao.categoria;
-    document.getElementById("descricao").value = transacao.descricao;
+    document.getElementById("descricao-despesa").value = transacao.descricao-despesa;
     document.getElementById("valor").value = transacao.valor;
     document.getElementById("data").value = transacao.data;
 
