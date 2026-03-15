@@ -868,10 +868,11 @@ button.modo-edicao:hover {
 }
 
 /* Estilos para os campos */
-.input {
-    width: 100%;
+/* Ajuste para todos os campos (input e select) terem o mesmo tamanho */
+.input, select {
+    width: 100%;  /* Garante que todos os campos tenham a largura total do contêiner */
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;  /* Aumentar a margem inferior para garantir mais espaçamento */
     border-radius: 8px;
     border: 1px solid #e0e0e0;
     font-size: 14px;
