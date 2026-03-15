@@ -157,6 +157,8 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
     }
 });
 
+    document.getElementById("btn-cancelar-edicao-transacao").addEventListener("click", cancelarEdicaoTransacao);
+
     onAuthStateChanged(auth, (user) => {
     const authContainer = document.getElementById("auth-container-desktop");
     const appContainer = document.getElementById("app-container");
@@ -257,7 +259,7 @@ async function adicionarTransacao() {
 
     const tipo = document.getElementById("tipo").value;
     const categoria = document.getElementById("categoria").value;
-    const descricao = document.getElementById("descricao").value;
+    const descricao = document.getElementById("descricao-despesa").value;
     const valor = parseFloat(document.getElementById("valor").value);
     const data = document.getElementById("data").value;
     const formaPagamento = document.getElementById("forma-pagamento").value;  // Captura a forma de pagamento
@@ -1170,6 +1172,6 @@ function cancelarEdicaoTransacao() {
 
 }
 
-document.getElementById("btn-cancelar-edicao-transacao").addEventListener("click", cancelarEdicaoTransacao);
+
 
 
