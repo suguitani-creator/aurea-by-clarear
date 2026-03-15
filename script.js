@@ -179,8 +179,8 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         limparFormulario();
     }
 });
-    document.getElementById("tipo").addEventListener("change", function() {
-    const tipo = this.value;
+    document.getElementById("tipo").addEventListener("change", () => {
+    const tipo = document.getElementById("tipo").value;
     
     // Campos comuns
     const descricao = document.getElementById("descricao");
@@ -215,7 +215,7 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
             contaBancariaDebitada.style.display = "block";
         }
 
-        else if (formaPagamento.value === "credito") {
+        if (formaPagamento.value === "credito") {
             cartao.style.display = "block";
             parcelas.style.display = "block";
             mesFatura.style.display = "block";

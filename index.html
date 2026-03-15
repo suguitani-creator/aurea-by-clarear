@@ -94,9 +94,8 @@
     </select>
 
     <!-- Fonte (só exibe para Receita) -->
-    <div id="campo-fonte" style="display:none;">
-        <label for="fonte">Fonte</label>
-        <select id="fonte">
+    <div id="campo-fonte" class="campo" style="display:none;">
+        <select id="fonte" class="input">
             <option value="salario">Salário</option>
             <option value="bolsa">Bolsa</option>
             <option value="rendimentos">Rendimentos</option>
@@ -104,70 +103,65 @@
     </div>
 
     <!-- Descrição -->
-    <input type="text" id="descricao" placeholder="Descrição (opcional)">
+    <input type="text" id="descricao" class="input" placeholder="Descrição (opcional)" />
 
     <!-- Valor -->
-    <input type="number" id="valor" placeholder="Valor">
+    <input type="number" id="valor" class="input" placeholder="Valor" />
 
     <!-- Data -->
-    <input type="date" id="data">
+    <input type="date" id="data" class="input" />
 
     <!-- Conta Bancária Depositada (só para receita) -->
-    <div id="campo-conta-bancaria-depositada" style="display:none;">
-        <label for="conta-bancaria-depositada">Conta Bancária Depositada</label>
-        <select id="conta-bancaria-depositada">
+    <div id="campo-conta-bancaria-depositada" class="campo" style="display:none;">
+        <select id="conta-bancaria-depositada" class="input">
             <!-- Opções das contas bancárias cadastradas serão preenchidas dinamicamente -->
         </select>
     </div>
 
     <!-- Campos específicos para Despesas -->
-    <div id="campo-essencial" style="display:none;">
-        <label>Essencial</label>
-        <input type="radio" name="essencial" value="sim" checked> Sim
-        <input type="radio" name="essencial" value="nao"> Não
+    <div id="campo-essencial" class="campo" style="display:none;">
+        <select id="essencial" class="input">
+            <option value="sim">Essencial</option>
+            <option value="nao">Não Essencial</option>
+        </select>
     </div>
 
     <!-- Categoria (só para despesa) -->
-    <div id="campo-categoria" style="display:none;">
-        <label for="categoria">Categoria</label>
-        <select id="categoria">
+    <div id="campo-categoria" class="campo" style="display:none;">
+        <select id="categoria" class="input">
             <!-- Categoria dinâmica -->
         </select>
     </div>
 
     <!-- Subcategorias (só para despesa) -->
-    <div id="campo-subcategoria" style="display:none;">
-        <label for="subcategoria">Subcategoria</label>
-        <select id="subcategoria">
+    <div id="campo-subcategoria" class="campo" style="display:none;">
+        <select id="subcategoria" class="input">
             <!-- Subcategoria dinâmica -->
         </select>
     </div>
 
     <!-- Forma de pagamento -->
-    <select id="forma-pagamento">
+    <select id="forma-pagamento" class="input">
         <option value="pix">Pix</option>
         <option value="debito">Débito</option>
         <option value="credito">Crédito</option>
     </select>
 
     <!-- Conta Bancária Debitada (só para Pix/Débito) -->
-    <div id="campo-conta-bancaria-debitada" style="display:none;">
-        <label for="conta-bancaria-debitada">Conta Bancária Debitada</label>
-        <select id="conta-bancaria-debitada">
+    <div id="campo-conta-bancaria-debitada" class="campo" style="display:none;">
+        <select id="conta-bancaria-debitada" class="input">
             <!-- Opções das contas bancárias cadastradas serão preenchidas dinamicamente -->
         </select>
     </div>
 
     <!-- Cartão de Crédito (só para Cartão) -->
-    <div id="campo-cartao" style="display:none;">
-        <label for="nome-cartao">Nome do Cartão</label>
-        <select id="nome-cartao">
+    <div id="campo-cartao" class="campo" style="display:none;">
+        <select id="nome-cartao" class="input">
             <!-- Opções dos cartões cadastrados serão preenchidas dinamicamente -->
         </select>
 
         <!-- Parcelas -->
-        <label for="parcelas">Parcelas</label>
-        <select id="parcelas">
+        <select id="parcelas" class="input">
             <option value="1">1x</option>
             <option value="2">2x</option>
             <option value="3">3x</option>
@@ -176,13 +170,12 @@
         </select>
 
         <!-- Mês da Fatura -->
-        <label for="mes-fatura">Mês da Fatura</label>
-        <input type="month" id="mes-fatura" />
+        <input type="month" id="mes-fatura" class="input" />
     </div>
 
     <!-- Botões -->
-    <button id="btn-adicionar">Adicionar</button>
-    <button id="btn-cancelar-edicao">Cancelar</button>
+    <button id="btn-adicionar" class="btn">Adicionar</button>
+    <button id="btn-cancelar-edicao" class="btn-cancelar">Cancelar</button>
 </div>
 
         <h2>Fluxo Financeiro</h2>

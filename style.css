@@ -867,16 +867,53 @@ button.modo-edicao:hover {
     margin-top: 10px;
 }
 
-.btn-cancelar {
-    background: transparent;
-    border: 1px solid #E8DFD4;
-    color: #7A5C42;
-    padding: 10px 14px;
-    border-radius: 10px;
+/* Estilos para os campos */
+.input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    font-size: 14px;
+    background-color: #fafafa;
+}
+
+/* Estilos para os botões */
+.btn, .btn-cancelar {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    background-color: #3E2F23;
+    color: white;
+    border: none;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover, .btn-cancelar:hover {
+    background-color: #7A5C42;
+}
+
+.btn-cancelar {
+    background-color: #C6A75E;
 }
 
 .btn-cancelar:hover {
-    background: #F0E7DA;
+    background-color: #8C6A35;
+}
+
+/* Estilos para o campo de categorias e subcategorias */
+.campo {
+    display: none;
+    margin-bottom: 10px;
+}
+
+/* Ajustes de exibição */
+#form-transacao {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
