@@ -187,14 +187,17 @@ document.getElementById("tipo").addEventListener("change", (e) => {
 
     const campoEssencial = document.getElementById("campo-essencial");
     const formaPagamento = document.getElementById("forma-pagamento");
+    const contaBancariaRec = document.getElementById("conta-bancaria-receita");
 
     // Se for "despesa", mostra o campo de essencial
     if (tipo === "despesa") {
         campoEssencial.style.display = "block";
         formaPagamento.style.display = "block";
+        contaBancariaRec.style.display = "none";
     } else {
         campoEssencial.style.display = "none"; // Esconde se for "receita"
         formaPagamento.style.display = "none";
+        contaBancariaRec.style.display = "block";
     }
 });
 
@@ -205,13 +208,13 @@ document.getElementById("forma-pagamento").addEventListener("change", (e) => {
     // Mostrar/ocultar campos específicos dependendo da forma de pagamento
     if (formaPagamento === "credito") {
         document.getElementById("campo-cartao").style.display = "block";
-        document.getElementById("campo-conta-bancaria").style.display = "none";
+        document.getElementById("campo-conta-bancaria-despesa").style.display = "none";
     } else if (formaPagamento === "pix" || formaPagamento === "debito") {
         document.getElementById("campo-cartao").style.display = "none";
-        document.getElementById("campo-conta-bancaria").style.display = "block";
+        document.getElementById("campo-conta-bancaria-despesa").style.display = "block";
     } else {
         document.getElementById("campo-cartao").style.display = "none";
-        document.getElementById("campo-conta-bancaria").style.display = "none";
+        document.getElementById("campo-conta-bancaria-despesa").style.display = "none";
     }
 });
 
@@ -259,14 +262,17 @@ async function adicionarTransacao() {
     let cartao = null;
     let parcelas = null;
     let mesFatura = null;
-    let contaBancaria = null;
+    let contaBancariaDes = null;
+    let contaBancariaRec = null;
 
-    if (formaPagamento === "credito") {
+    if (tipo === "receita") {
+        contaBancariaRec = document.getElementById("conta-bancaria-rec").value;
+    } else if (formaPagamento === "credito") {
         cartao = document.getElementById("cartao").value;
         parcelas = document.getElementById("parcelas").value;
         mesFatura = document.getElementById("mes-fatura").value;
     } else if (formaPagamento === "pix" || formaPagamento === "debito") {
-        contaBancaria = document.getElementById("conta-bancaria").value;
+        contaBancariaDes = document.getElementById("conta-bancaria-des").value;
     }
 
     if (!valor || !dataCompra || !categoria) {
@@ -277,7 +283,7 @@ async function adicionarTransacao() {
     if (idEmEdicao) {
         await updateDoc(
             doc(db, "users", user.uid, "transacoes", idEmEdicao),
-            { tipo, categoria, subcategoria, descricao, valor, dataCompra, formaPagamento, cartao, parcelas,mesFatura, contaBancaria }  // Inclui forma de pagamento
+            { tipo, categoria, subcategoria, descricao, valor, dataCompra, formaPagamento, cartao, parcelas,mesFatura, contaBancariaDes, contaBancariaRec }  // Inclui forma de pagamento
         );
 
         showToast("Transação atualizada!");
@@ -295,7 +301,7 @@ async function adicionarTransacao() {
     } else {
         await addDoc(
             collection(db, "users", user.uid, "transacoes"),
-            { tipo, categoria, subcategoria, descricao, valor, dataCompra, formaPagamento, cartao, parcelas,mesFatura, contaBancaria  }  // Inclui forma de pagamento
+            { tipo, categoria, subcategoria, descricao, valor, dataCompra, formaPagamento, cartao, parcelas,mesFatura, contaBancariaDes, contaBancariaRec  }  // Inclui forma de pagamento
         );
 
         showToast("Transação adicionada!");
