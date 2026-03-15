@@ -267,12 +267,14 @@ async function adicionarTransacao() {
 
     if (tipo === "receita") {
         contaBancariaRec = document.getElementById("conta-bancaria-rec").value;
-    } else if (formaPagamento === "credito") {
-        cartao = document.getElementById("cartao").value;
-        parcelas = document.getElementById("parcelas").value;
-        mesFatura = document.getElementById("mes-fatura").value;
-    } else if (formaPagamento === "pix" || formaPagamento === "debito") {
-        contaBancariaDes = document.getElementById("conta-bancaria-des").value;
+    } else if (tipo === "despesa") { 
+                if (formaPagamento === "credito") {
+                    cartao = document.getElementById("cartao").value;
+                    parcelas = document.getElementById("parcelas").value;
+                    mesFatura = document.getElementById("mes-fatura").value;
+    }           else if (formaPagamento === "pix" || formaPagamento === "debito") {
+                    contaBancariaDes = document.getElementById("conta-bancaria-des").value;
+                }
     }
 
     if (!valor || !dataCompra || !categoria) {
