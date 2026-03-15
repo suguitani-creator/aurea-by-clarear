@@ -181,67 +181,72 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
     }
 });
 
-// Mostrar/Esconder o campo Essencial/Não Essencial dependendo da seleção de Receita/Despesa
-document.getElementById("tipo").addEventListener("change", (e) => {
-    const tipo = e.target.value;
+document.getElementById("tipo").addEventListener("change", () => {
+    const tipo = document.getElementById("tipo").value;
+    
+    // Campos comuns
+    const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
+    const categoria = document.getElementById("categoria");
+    const descricao = document.getElementById("descricao");
+    const valor = document.getElementById("valor");
+    const data = document.getElementById("data");
 
-    const campoEssencial = document.getElementById("campo-essencial");
-    const formaPagamento = document.getElementById("forma-pagamento");
-    const contaBancariaRec = document.getElementById("conta-bancaria-receita");
+    // Campos específicos para **despesas**
+    const essencial = document.getElementById("campo-essencial");
+    const subcategoria = document.getElementById("campo-subcategoria");
+    const formaPagamento = document.getElementById("campo-forma-pagamento");
+    const contaBancariaDebitada = document.getElementById("campo-conta-bancaria-debitada");
+    const cartao = document.getElementById("campo-cartao");
+    const parcelas = document.getElementById("campo-parcelas");
+    const mesFatura = document.getElementById("mes-fatura");
 
-    // Se for "despesa", mostra o campo de essencial
     if (tipo === "despesa") {
-        campoEssencial.style.display = "block";
+        // Para despesa, exibe campos específicos
+        essencial.style.display = "block";
+        subcategoria.style.display = "block";
         formaPagamento.style.display = "block";
-        contaBancariaRec.style.display = "none";
+        
+        if (formaPagamento.value === "pix" || formaPagamento.value === "debito") {
+            contaBancariaDebitada.style.display = "block";
+        }
+
+        if (formaPagamento.value === "credito") {
+            cartao.style.display = "block";
+            parcelas.style.display = "block";
+            mesFatura.style.display = "block";
+        }
+
     } else {
-        campoEssencial.style.display = "none"; // Esconde se for "receita"
+        // Para receita, esconde os campos específicos da despesa
+        essencial.style.display = "none";
+        subcategoria.style.display = "none";
         formaPagamento.style.display = "none";
-        contaBancariaRec.style.display = "block";
+        contaBancariaDebitada.style.display = "none";
+        cartao.style.display = "none";
+        parcelas.style.display = "none";
+        mesFatura.style.display = "none";
+        
+        contaBancariaDepositada.style.display = "block"; // Exibe a conta bancária de depósito para receita
     }
 });
 
-// Ao escolher a forma de pagamento
-document.getElementById("forma-pagamento").addEventListener("change", (e) => {
-    const formaPagamento = e.target.value;
+// Ao carregar a página, já verifica a seleção do tipo de transação
+window.addEventListener("DOMContentLoaded", () => {
+    const tipo = document.getElementById("tipo").value;
+    const essencial = document.getElementById("campo-essencial");
+    const subcategoria = document.getElementById("campo-subcategoria");
+    const formaPagamento = document.getElementById("campo-forma-pagamento");
+    const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
+    const cartao = document.getElementById("campo-cartao");
+    const parcelas = document.getElementById("campo-parcelas");
+    const mesFatura = document.getElementById("mes-fatura");
 
-    // Mostrar/ocultar campos específicos dependendo da forma de pagamento
-    if (formaPagamento === "credito") {
-        document.getElementById("campo-cartao").style.display = "block";
-        document.getElementById("campo-conta-bancaria-despesa").style.display = "none";
-    } else if (formaPagamento === "pix" || formaPagamento === "debito") {
-        document.getElementById("campo-cartao").style.display = "none";
-        document.getElementById("campo-conta-bancaria-despesa").style.display = "block";
+    if (tipo === "despesa") {
+        essencial.style.display = "block";
+        subcategoria.style.display = "block";
+        formaPagamento.style.display = "block";
     } else {
-        document.getElementById("campo-cartao").style.display = "none";
-        document.getElementById("campo-conta-bancaria-despesa").style.display = "none";
-    }
-});
-
-// Carregar subcategorias com base na categoria
-document.getElementById("categoria").addEventListener("change", () => {
-    const categoriaSelecionada = document.getElementById("categoria").value;
-
-    // Exemplo de categorias e subcategorias
-    const subcategorias = {
-        Alimentação: ["Supermercado", "Restaurante", "Lanches"],
-        Moradia: ["Aluguel", "Condomínio", "Luz"],
-        Transporte: ["Gasolina", "Manutenção", "Transporte Público"]
-    };
-
-    const subcategoriaSelect = document.getElementById("subcategoria");
-    subcategoriaSelect.innerHTML = ""; // Limpar subcategorias
-
-    if (subcategorias[categoriaSelecionada]) {
-        subcategorias[categoriaSelecionada].forEach(subcat => {
-            const option = document.createElement("option");
-            option.value = subcat;
-            option.textContent = subcat;
-            subcategoriaSelect.appendChild(option);
-        });
-        subcategoriaSelect.style.display = "block";
-    } else {
-        subcategoriaSelect.style.display = "none";
+        contaBancariaDepositada.style.display = "block"; // Exibe a conta bancária de depósito para receita
     }
 });
 });

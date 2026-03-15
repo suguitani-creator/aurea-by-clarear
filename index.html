@@ -84,62 +84,95 @@
             Editando Transação
         </div>
         <!-- Formulário de Transações -->
-        <div class="form">
-            <select id="tipo">
-                <option value="receita">Receita</option>
-                <option value="despesa">Despesa</option>
-            </select>
+<div class="form">
+    <!-- Tipo de Transação (Receita ou Despesa) -->
+    <select id="tipo">
+        <option value="receita">Receita</option>
+        <option value="despesa">Despesa</option>
+    </select>
 
-            <select id="campo-essencial" style="display:none;">
-                <option value="essencial">Essencial</option>
-                <option value="nao-essencial">Não Essencial</option>
-            </select>
+    <!-- Categoria (comum para receita e despesa) -->
+    <select id="categoria">
+        <option value="salario">Salário</option>
+        <option value="bolsa">Bolsa</option>
+        <option value="rendimentos">Rendimentos</option>
+        <!-- Outras categorias conforme necessário -->
+    </select>
 
-            <select id="categoria">
-            <!-- Categorias a serem carregadas dinamicamente -->
-            </select>
+    <!-- Descrição (opcional) -->
+    <input type="text" id="descricao" placeholder="Descrição (opcional)">
 
-            <select id="subcategoria" style="display:none;">
-            <!-- Subcategorias a serem carregadas dinamicamente -->
-            </select>
+    <!-- Valor -->
+    <input type="number" id="valor" placeholder="Valor">
 
-            <input type="text" id="descricao" placeholder="Descrição (opcional)" />
+    <!-- Data -->
+    <input type="date" id="data" placeholder="Data">
 
-            <input type="number" id="valor" placeholder="Valor" />
+    <!-- Conta Bancária (aparece apenas para Receita) -->
+    <div id="campo-conta-bancaria-depositada" style="display: none;">
+        <select id="conta-bancaria-depositada">
+            <option value="conta1">Conta 1</option>
+            <option value="conta2">Conta 2</option>
+            <!-- Liste as contas cadastradas aqui -->
+        </select>
+    </div>
 
-            <input type="date" id="data-compra" placeholder="Data da Compra" />
+    <!-- Campos para Despesa -->
+    <div id="campo-essencial" style="display: none;">
+        <select id="essencial">
+            <option value="sim">Essencial</option>
+            <option value="nao">Não Essencial</option>
+        </select>
+    </div>
 
-            <select id="forma-pagamento" style="display:none;">
-                <option value="pix">Pix</option>
-                <option value="debito">Débito</option>
-                <option value="credito">Crédito</option>
-            </select>
+    <div id="campo-subcategoria" style="display: none;">
+        <select id="subcategoria">
+            <option value="alimentacao">Alimentação</option>
+            <option value="moradia">Moradia</option>
+            <option value="transporte">Transporte</option>
+            <!-- Adicione outras subcategorias conforme necessário -->
+        </select>
+    </div>
 
-            <!-- Campo "Cartão" só aparece se a forma de pagamento for Cartão -->
-            <div id="campo-cartao" style="display:none;">
-                <input type="text" id="cartao" placeholder="Nome do Cartão" />
-                <select id="parcelas">
-                    <option value="1x">1x</option>
-                    <option value="2x">2x</option>
-                    <option value="3x">3x</option>
-                    <option value="4x">4x</option>
-                </select>
-                <input type="month" id="mes-fatura" placeholder="Mês da Fatura" />
-            </div>
+    <div id="campo-forma-pagamento" style="display: none;">
+        <select id="forma-pagamento">
+            <option value="pix">Pix</option>
+            <option value="debito">Débito</option>
+            <option value="credito">Crédito</option>
+        </select>
+    </div>
 
-            <!-- Campo "Nome da Conta Bancária" só aparece se a forma for Pix ou Débito -->
-            <div id="conta-bancaria-despesa" style="display:none;">
-                <input type="text" id="conta-bancaria-des" placeholder="Nome da Conta Bancária" />
-            </div>
+    <!-- Conta Bancária (aparece para Pix ou Débito) -->
+    <div id="campo-conta-bancaria-debitada" style="display: none;">
+        <select id="conta-bancaria-debitada">
+            <option value="conta1">Conta 1</option>
+            <option value="conta2">Conta 2</option>
+            <!-- Liste as contas cadastradas aqui -->
+        </select>
+    </div>
 
-            <!-- Campo "Nome da Conta Bancária" só aparece se a for Receita -->
-            <div id="conta-bancaria-receita" style="display:none;">
-                <input type="text" id="conta-bancaria-rec" placeholder="Nome da Conta Bancária" />
-            </div>
+    <!-- Cartão de Crédito (aparece para Cartão) -->
+    <div id="campo-cartao" style="display: none;">
+        <select id="nome-cartao">
+            <option value="cartao1">Cartão 1</option>
+            <option value="cartao2">Cartão 2</option>
+            <!-- Liste os cartões cadastrados aqui -->
+        </select>
+    </div>
 
-            <button id="btn-adicionar">Adicionar</button>
-            <button id="btn-cancelar-edicao">Cancelar</button>
-        </div>
+    <!-- Parcelas (aparece para Cartão) -->
+    <div id="campo-parcelas" style="display: none;">
+        <select id="parcelas">
+            <option value="1">1x</option>
+            <option value="2">2x</option>
+            <option value="3">3x</option>
+            <!-- Outras opções de parcelas -->
+        </select>
+    </div>
+
+    <!-- Mês da Fatura (aparece para Cartão) -->
+    <input type="month" id="mes-fatura" placeholder="Mês da fatura">
+</div>
 
         <h2>Fluxo Financeiro</h2>
         <ul id="lista-despesas"></ul>
