@@ -76,7 +76,6 @@
             </div>
         </div>
 
-        <!-- Formulário de Transações -->
         <!-- Indicador de edição elegante -->
         <div id="indicador-edicao" class="indicador-edicao">
             <!--<svg width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
@@ -84,36 +83,57 @@
             </svg>-->
             Editando Transação
         </div>
+        <!-- Formulário de Transações -->
         <div class="form">
+            <select id="essencial">
+                <option value="essencial">Essencial</option>
+                <option value="nao-essencial">Não Essencial</option>
+            </select>
+
             <select id="tipo">
                 <option value="receita">Receita</option>
                 <option value="despesa">Despesa</option>
             </select>
 
-            <select id="categoria"></select>
+            <select id="categoria">
+            <!-- Categorias a serem carregadas dinamicamente -->
+            </select>
 
-            <input type="text" id="descricao" placeholder="Descrição">
-            <input type="number" id="valor" placeholder="Valor">
-            <input type="date" id="data" placeholder="Data" inputmode="date">
+            <select id="subcategoria" style="display:none;">
+            <!-- Subcategorias a serem carregadas dinamicamente -->
+            </select>
 
-             <!-- Novo campo para forma de pagamento -->
+            <input type="text" id="descricao" placeholder="Descrição (opcional)" />
+
+            <input type="number" id="valor" placeholder="Valor" />
+
+            <input type="date" id="data-compra" placeholder="Data da Compra" />
+
             <select id="forma-pagamento">
                 <option value="pix">Pix</option>
                 <option value="debito">Débito</option>
                 <option value="credito">Crédito</option>
             </select>
-            
-            <div class="botoes-formulario">
 
-                <button id="btn-adicionar">
-                    Adicionar
-                </button>
-
-                <button id="btn-cancelar-edicao-transacao" class="btn-cancelar">
-                    Cancelar
-                </button>
-
+            <!-- Campo "Cartão" só aparece se a forma de pagamento for Cartão -->
+            <div id="campo-cartao" style="display:none;">
+                <input type="text" id="cartao" placeholder="Nome do Cartão" />
+                <select id="parcelas">
+                    <option value="1x">1x</option>
+                    <option value="2x">2x</option>
+                    <option value="3x">3x</option>
+                    <option value="4x">4x</option>
+                </select>
+                <input type="month" id="mes-fatura" placeholder="Mês da Fatura" />
             </div>
+
+            <!-- Campo "Nome da Conta Bancária" só aparece se a forma for Pix ou Débito -->
+            <div id="campo-conta-bancaria" style="display:none;">
+                <input type="text" id="conta-bancaria" placeholder="Nome da Conta Bancária" />
+            </div>
+
+            <button id="btn-adicionar">Adicionar</button>
+            <button id="btn-cancelar-edicao">Cancelar</button>
         </div>
 
         <h2>Fluxo Financeiro</h2>

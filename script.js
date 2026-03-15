@@ -180,6 +180,49 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         limparFormulario();
     }
 });
+// Ao escolher a forma de pagamento
+document.getElementById("forma-pagamento").addEventListener("change", (e) => {
+    const formaPagamento = e.target.value;
+
+    // Mostrar/ocultar campos específicos dependendo da forma de pagamento
+    if (formaPagamento === "credito") {
+        document.getElementById("campo-cartao").style.display = "block";
+        document.getElementById("campo-conta-bancaria").style.display = "none";
+    } else if (formaPagamento === "pix" || formaPagamento === "debito") {
+        document.getElementById("campo-cartao").style.display = "none";
+        document.getElementById("campo-conta-bancaria").style.display = "block";
+    } else {
+        document.getElementById("campo-cartao").style.display = "none";
+        document.getElementById("campo-conta-bancaria").style.display = "none";
+    }
+});
+
+// Carregar subcategorias com base na categoria
+document.getElementById("categoria").addEventListener("change", () => {
+    const categoriaSelecionada = document.getElementById("categoria").value;
+
+    // Exemplo de categorias e subcategorias
+    const subcategorias = {
+        Alimentação: ["Supermercado", "Restaurante", "Lanches"],
+        Moradia: ["Aluguel", "Condomínio", "Luz"],
+        Transporte: ["Gasolina", "Manutenção", "Transporte Público"]
+    };
+
+    const subcategoriaSelect = document.getElementById("subcategoria");
+    subcategoriaSelect.innerHTML = ""; // Limpar subcategorias
+
+    if (subcategorias[categoriaSelecionada]) {
+        subcategorias[categoriaSelecionada].forEach(subcat => {
+            const option = document.createElement("option");
+            option.value = subcat;
+            option.textContent = subcat;
+            subcategoriaSelect.appendChild(option);
+        });
+        subcategoriaSelect.style.display = "block";
+    } else {
+        subcategoriaSelect.style.display = "none";
+    }
+});
 });
 
 // ================= FINANÇAS =================
@@ -190,20 +233,33 @@ async function adicionarTransacao() {
 
     const tipo = document.getElementById("tipo").value;
     const categoria = document.getElementById("categoria").value;
-    const descricao = document.getElementById("descricao").value;
+    const subcategoria = document.getElementById("subcategoria").value;
+    const descricao = document.getElementById("descricao").value || null; // Campo opcional
     const valor = parseFloat(document.getElementById("valor").value);
-    const data = document.getElementById("data").value;
-    const formaPagamento = document.getElementById("forma-pagamento").value;  // Captura a forma de pagamento
+    const dataCompra = document.getElementById("data-compra").value;
+    const formaPagamento = document.getElementById("forma-pagamento").value;
+    let cartao = null;
+    let parcelas = null;
+    let mesFatura = null;
+    let contaBancaria = null;
 
-    if (!descricao || isNaN(valor) || !data) {
-        showToast("Preencha todos os campos corretamente", "error");
+    if (formaPagamento === "credito") {
+        cartao = document.getElementById("cartao").value;
+        parcelas = document.getElementById("parcelas").value;
+        mesFatura = document.getElementById("mes-fatura").value;
+    } else if (formaPagamento === "pix" || formaPagamento === "debito") {
+        contaBancaria = document.getElementById("conta-bancaria").value;
+    }
+
+    if (!valor || !dataCompra || !categoria) {
+        alert("Por favor, preencha todos os campos obrigatórios.");
         return;
     }
 
     if (idEmEdicao) {
         await updateDoc(
             doc(db, "users", user.uid, "transacoes", idEmEdicao),
-            { tipo, categoria, descricao, valor, data, formaPagamento }  // Inclui forma de pagamento
+            { tipo, categoria, subcategoria, descricao, valor, dataCompra, formaPagamento, cartao, parcelas,mesFatura, contaBancaria }  // Inclui forma de pagamento
         );
 
         showToast("Transação atualizada!");
@@ -221,7 +277,7 @@ async function adicionarTransacao() {
     } else {
         await addDoc(
             collection(db, "users", user.uid, "transacoes"),
-            { tipo, categoria, descricao, valor, data, formaPagamento }  // Inclui forma de pagamento
+            { tipo, categoria, subcategoria, descricao, valor, dataCompra, formaPagamento, cartao, parcelas,mesFatura, contaBancaria  }  // Inclui forma de pagamento
         );
 
         showToast("Transação adicionada!");
