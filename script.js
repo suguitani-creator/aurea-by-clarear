@@ -179,7 +179,6 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         limparFormulario();
     }
 });
-    /* Ao mudar o tipo de transação (receita/despesa), alteramos os campos */
 /* Ao mudar o tipo de transação (receita/despesa), alteramos os campos */
 document.getElementById("tipo").addEventListener("change", () => {
     const tipo = document.getElementById("tipo").value;
@@ -187,8 +186,10 @@ document.getElementById("tipo").addEventListener("change", () => {
     // Campos comuns
     const descricaoReceita = document.getElementById("descricao-receita");
     const descricaoDespesa = document.getElementById("descricao-despesa");
-    const valor = document.getElementById("valor");
-    const data = document.getElementById("data");
+    const valorReceita = document.getElementById("valor-receita");
+    const valorDespesa = document.getElementById("valor-despesa");
+    const dataReceita = document.getElementById("data-receita");
+    const dataDespesa = document.getElementById("data-despesa");
 
     // Campos exclusivos para receitas
     const campoFonte = document.getElementById("campo-fonte");
@@ -206,11 +207,15 @@ document.getElementById("tipo").addEventListener("change", () => {
 
     if (tipo === "despesa") {
         // Exibe campos específicos para despesa
+        descricaoDespesa.style.display = "block";
+        valorDespesa.style.display = "block";
+        dataDespesa.style.display = "block";
+
         campoEssencial.style.display = "block";
         campoCategoria.style.display = "block";
         campoSubcategoria.style.display = "block";
         campoFormaPagamento.style.display = "block";
-
+        
         if (document.getElementById("forma-pagamento").value === "pix" || document.getElementById("forma-pagamento").value === "debito") {
             contaBancariaDebitada.style.display = "block";
         }
@@ -222,6 +227,10 @@ document.getElementById("tipo").addEventListener("change", () => {
         }
     } else {
         // Exibe campos específicos para receita
+        descricaoReceita.style.display = "block";
+        valorReceita.style.display = "block";
+        dataReceita.style.display = "block";
+
         campoFonte.style.display = "block";
         contaBancariaDepositada.style.display = "block"; // Para receitas, mostra a conta bancária
     }
