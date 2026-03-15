@@ -215,7 +215,7 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
             contaBancariaDebitada.style.display = "block";
         }
 
-        if (formaPagamento.value === "credito") {
+        else if (formaPagamento.value === "credito") {
             cartao.style.display = "block";
             parcelas.style.display = "block";
             mesFatura.style.display = "block";
