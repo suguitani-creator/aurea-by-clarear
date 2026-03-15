@@ -93,95 +93,93 @@
         <option value="despesa">Despesa</option>
     </select>
 
-    <!-- Fonte (só exibe para Receita) -->
-    <div id="campo-fonte" class="campo" style="display:none;">
-        <select id="fonte" class="input">
-            <option value="salario">Salário</option>
-            <option value="bolsa">Bolsa</option>
-            <option value="rendimentos">Rendimentos</option>
-        </select>
-    </div>
+    <!-- Campos Comuns (Visíveis para Receita e Despesa) -->
+<div id="campo-descricao" class="campo">
+    <input type="text" id="descricao-receita" class="input" placeholder="Descrição (opcional)" style="display:none;"/>
+    <input type="text" id="descricao-despesa" class="input" placeholder="Descrição (opcional)" style="display:none;"/>
+</div>
 
-    <!-- Descrição -->
-    <input type="text" id="descricao" class="input" placeholder="Descrição (opcional)" />
+<div id="campo-valor" class="campo">
+    <input type="number" id="valor-receita" class="input" placeholder="Valor" style="display:none;"/>
+    <input type="number" id="valor-despesa" class="input" placeholder="Valor" style="display:none;"/>
+</div>
 
-    <!-- Valor -->
-    <input type="number" id="valor" class="input" placeholder="Valor" />
+<div id="campo-data" class="campo">
+    <input type="date" id="data-receita" class="input" placeholder="Data de recebimento" style="display:none;"/>
+    <input type="date" id="data-despesa" class="input" placeholder="Data da compra" style="display:none;"/>
+</div>
 
-    <!-- Data -->
-    <input type="date" id="data" class="input" />
+<!-- Campos para Receita -->
+<div id="campo-fonte" class="campo" style="display:none;">
+    <select id="fonte" class="input">
+        <option value="salario">Salário</option>
+        <option value="bolsa">Bolsa</option>
+        <option value="rendimentos">Rendimentos</option>
+    </select>
+</div>
 
-    <!-- Conta Bancária Depositada (só para receita) -->
-    <div id="campo-conta-bancaria-depositada" class="campo" style="display:none;">
-        <select id="conta-bancaria-depositada" class="input">
-            <!-- Opções das contas bancárias cadastradas serão preenchidas dinamicamente -->
-        </select>
-    </div>
+<div id="campo-conta-bancaria-depositada" class="campo" style="display:none;">
+    <select id="conta-bancaria-depositada" class="input">
+        <!-- Opções das contas bancárias cadastradas serão preenchidas dinamicamente -->
+    </select>
+</div>
 
-    <!-- Campos específicos para Despesas -->
-    <div id="campo-essencial" class="campo" style="display:none;">
-        <select id="essencial" class="input">
-            <option value="sim">Essencial</option>
-            <option value="nao">Não Essencial</option>
-        </select>
-    </div>
+<!-- Campos para Despesa -->
+<div id="campo-essencial" class="campo" style="display:none;">
+    <select id="essencial" class="input">
+        <option value="sim">Essencial</option>
+        <option value="nao">Não Essencial</option>
+    </select>
+</div>
 
-    <!-- Categoria (só para despesa) -->
-    <div id="campo-categoria" class="campo" style="display:none;">
-        <select id="categoria" class="input">
-            <!-- Categoria dinâmica -->
-        </select>
-    </div>
+<div id="campo-categoria" class="campo" style="display:none;">
+    <select id="categoria" class="input">
+        <!-- Categorias de despesa -->
+    </select>
+</div>
 
-    <!-- Subcategorias (só para despesa) -->
-    <div id="campo-subcategoria" class="campo" style="display:none;">
-        <select id="subcategoria" class="input">
-            <!-- Subcategoria dinâmica -->
-        </select>
-    </div>
+<div id="campo-subcategoria" class="campo" style="display:none;">
+    <select id="subcategoria" class="input">
+        <!-- Subcategorias de despesa -->
+    </select>
+</div>
 
-    <!-- Descrição -->
-<input type="text" id="descricao" class="input" placeholder="Descrição (opcional)" />
-
-<!-- Valor -->
-<input type="number" id="valor" class="input" placeholder="Valor" />
-
-<!-- Data da Compra -->
-<input type="date" id="data" class="input" placeholder="Data da Compra" />
-
-
-    <!-- Forma de pagamento -->
+<!-- Forma de Pagamento -->
+<div id="campo-forma-pagamento" class="campo" style="display:none;">
     <select id="forma-pagamento" class="input">
         <option value="pix">Pix</option>
         <option value="debito">Débito</option>
         <option value="credito">Crédito</option>
     </select>
+</div>
 
-    <!-- Conta Bancária Debitada (só para Pix/Débito) -->
-    <div id="campo-conta-bancaria-debitada" class="campo" style="display:none;">
-        <select id="conta-bancaria-debitada" class="input">
-            <!-- Opções das contas bancárias cadastradas serão preenchidas dinamicamente -->
-        </select>
-    </div>
+<!-- Campos de Forma de Pagamento (Pix/Débito) -->
+<div id="campo-conta-bancaria-debitada" class="campo" style="display:none;">
+    <select id="conta-bancaria-debitada" class="input">
+        <!-- Conta bancária para Pix/Débito -->
+    </select>
+</div>
 
-    <!-- Cartão de Crédito (só para Cartão) -->
-    <div id="campo-cartao" class="campo" style="display:none;">
-        <select id="nome-cartao" class="input">
-            <!-- Opções dos cartões cadastrados serão preenchidas dinamicamente -->
-        </select>
+<!-- Campos de Forma de Pagamento (Cartão) -->
+<div id="campo-cartao" class="campo" style="display:none;">
+    <select id="nome-cartao" class="input">
+        <!-- Cartões cadastrados -->
+    </select>
+</div>
 
-        <!-- Parcelas -->
-        <select id="parcelas" class="input">
-            <option value="1">1x</option>
-            <option value="2">2x</option>
-            <option value="3">3x</option>
-            <option value="4">4x</option>
-            <!-- Mais opções -->
-        </select>
+<div id="campo-parcelas" class="campo" style="display:none;">
+    <select id="parcelas" class="input">
+        <option value="1">1x</option>
+        <option value="2">2x</option>
+        <option value="3">3x</option>
+        <option value="4">4x</option>
+        <!-- Mais opções -->
+    </select>
+</div>
 
-        <!-- Mês da Fatura -->
-        <input type="month" id="mes-fatura" class="input" />
-    </div>
+<div id="campo-mes-fatura" class="campo" style="display:none;">
+    <input type="month" id="mes-fatura" class="input"/>
+</div>
 
     <!-- Botões -->
     <button id="btn-adicionar" class="btn">Adicionar</button>

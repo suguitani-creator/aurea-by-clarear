@@ -179,61 +179,62 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         limparFormulario();
     }
 });
-    document.getElementById("tipo").addEventListener("change", () => {
+    /* Ao mudar o tipo de transação (receita/despesa), alteramos os campos */
+document.getElementById("tipo").addEventListener("change", () => {
     const tipo = document.getElementById("tipo").value;
-    
+
     // Campos comuns
-    const descricao = document.getElementById("descricao");
+    const descricaoReceita = document.getElementById("descricao-receita");
+    const descricaoDespesa = document.getElementById("descricao-despesa");
     const valor = document.getElementById("valor");
     const data = document.getElementById("data");
 
-    // Campos específicos para **despesas**
-    const essencial = document.getElementById("campo-essencial");
-    const categoria = document.getElementById("campo-categoria");
-    const subcategoria = document.getElementById("campo-subcategoria");
-    const formaPagamento = document.getElementById("forma-pagamento");
-    const contaBancariaDebitada = document.getElementById("campo-conta-bancaria-debitada");
-    const cartao = document.getElementById("campo-cartao");
-    const parcelas = document.getElementById("parcelas");
-    const mesFatura = document.getElementById("mes-fatura");
-
-    // Campos específicos para **receitas**
+    // Campos exclusivos para receitas
+    const campoFonte = document.getElementById("campo-fonte");
     const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
-    const fonte = document.getElementById("campo-fonte");
+
+    // Campos exclusivos para despesas
+    const campoEssencial = document.getElementById("campo-essencial");
+    const campoCategoria = document.getElementById("campo-categoria");
+    const campoSubcategoria = document.getElementById("campo-subcategoria");
+    const campoFormaPagamento = document.getElementById("campo-forma-pagamento");
+    const contaBancariaDebitada = document.getElementById("campo-conta-bancaria-debitada");
+    const campoCartao = document.getElementById("campo-cartao");
+    const campoParcelas = document.getElementById("campo-parcelas");
+    const campoMesFatura = document.getElementById("campo-mes-fatura");
 
     if (tipo === "despesa") {
-        // Para despesa, exibe campos específicos
-        fonte.style.display = "none";  // Esconde fonte para despesas
-        contaBancariaDepositada.style.display = "none";  // Esconde conta bancária para receita
+        // Exibe campos específicos para despesa
+        campoEssencial.style.display = "block";
+        campoCategoria.style.display = "block";
+        campoSubcategoria.style.display = "block";
+        campoFormaPagamento.style.display = "block";
 
-        essencial.style.display = "block";
-        categoria.style.display = "block";
-        subcategoria.style.display = "block";
-        formaPagamento.style.display = "block";
-
-        if (formaPagamento.value === "pix" || formaPagamento.value === "debito") {
+        if (document.getElementById("forma-pagamento").value === "pix" || document.getElementById("forma-pagamento").value === "debito") {
             contaBancariaDebitada.style.display = "block";
         }
 
-        if (formaPagamento.value === "credito") {
-            cartao.style.display = "block";
-            parcelas.style.display = "block";
-            mesFatura.style.display = "block";
+        if (document.getElementById("forma-pagamento").value === "credito") {
+            campoCartao.style.display = "block";
+            campoParcelas.style.display = "block";
+            campoMesFatura.style.display = "block";
         }
-
     } else {
-        // Para receita, esconde campos específicos da despesa
-        essencial.style.display = "none";
-        categoria.style.display = "none";
-        subcategoria.style.display = "none";
-        formaPagamento.style.display = "none";
+        // Exibe campos específicos para receita
+        campoFonte.style.display = "block";
+        contaBancariaDepositada.style.display = "block"; // Para receitas, mostra a conta bancária
+    }
+
+    // Esconde os campos exclusivos quando a transação não for do tipo correspondente
+    if (tipo !== "despesa") {
+        campoEssencial.style.display = "none";
+        campoCategoria.style.display = "none";
+        campoSubcategoria.style.display = "none";
+        campoFormaPagamento.style.display = "none";
         contaBancariaDebitada.style.display = "none";
-        cartao.style.display = "none";
-        parcelas.style.display = "none";
-        mesFatura.style.display = "none";
-        
-        contaBancariaDepositada.style.display = "block"; // Exibe a conta bancária de depósito para receita
-        fonte.style.display = "block";  // Exibe fonte para receitas
+        campoCartao.style.display = "none";
+        campoParcelas.style.display = "none";
+        campoMesFatura.style.display = "none";
     }
 });
 });
