@@ -180,6 +180,73 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         limparFormulario();
     }
 });
+document.getElementById("tipo").addEventListener("change", () => {
+    const tipo = document.getElementById("tipo").value;
+
+    // Campos comuns
+    const descricaoReceita = document.getElementById("descricao-receita");
+    const descricaoDespesa = document.getElementById("descricao-despesa");
+    const valorReceita = document.getElementById("valor-receita");
+    const valorDespesa = document.getElementById("valor-despesa");
+    const dataReceita = document.getElementById("data-receita");
+    const dataDespesa = document.getElementById("data-despesa");
+
+    // Campos exclusivos para receitas
+    const campoFonte = document.getElementById("campo-fonte");
+    const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada");
+
+    // Campos exclusivos para despesas
+    const campoEssencial = document.getElementById("campo-essencial");
+    const campoCategoria = document.getElementById("campo-categoria");
+    const campoSubcategoria = document.getElementById("campo-subcategoria");
+    const campoFormaPagamento = document.getElementById("campo-forma-pagamento");
+    const contaBancariaDebitada = document.getElementById("campo-conta-bancaria-debitada");
+    const campoCartao = document.getElementById("campo-cartao");
+    const campoParcelas = document.getElementById("campo-parcelas");
+    const campoMesFatura = document.getElementById("campo-mes-fatura");
+
+    if (tipo === "despesa") {
+        // Exibe campos específicos para despesa
+        descricaoDespesa.style.display = "block";
+        valorDespesa.style.display = "block";
+        dataDespesa.style.display = "block";
+
+        campoEssencial.style.display = "block";
+        campoCategoria.style.display = "block";
+        campoSubcategoria.style.display = "block";
+        campoFormaPagamento.style.display = "block";
+        
+        if (document.getElementById("forma-pagamento").value === "pix" || document.getElementById("forma-pagamento").value === "debito") {
+            contaBancariaDebitada.style.display = "block";
+        }
+
+        if (document.getElementById("forma-pagamento").value === "credito") {
+            campoCartao.style.display = "block";
+            campoParcelas.style.display = "block";
+            campoMesFatura.style.display = "block";
+        }
+    } else {
+        // Exibe campos específicos para receita
+        descricaoReceita.style.display = "block";
+        valorReceita.style.display = "block";
+        dataReceita.style.display = "block";
+
+        campoFonte.style.display = "block";
+        contaBancariaDepositada.style.display = "block"; // Para receitas, mostra a conta bancária
+    }
+
+    // Esconde os campos exclusivos quando a transação não for do tipo correspondente
+    if (tipo !== "despesa") {
+        campoEssencial.style.display = "none";
+        campoCategoria.style.display = "none";
+        campoSubcategoria.style.display = "none";
+        campoFormaPagamento.style.display = "none";
+        contaBancariaDebitada.style.display = "none";
+        campoCartao.style.display = "none";
+        campoParcelas.style.display = "none";
+        campoMesFatura.style.display = "none";
+    }
+});
 });
 
 // ================= FINANÇAS =================
@@ -188,47 +255,116 @@ async function adicionarTransacao() {
     const user = auth.currentUser;
     if (!user) return;
 
+    // Captura os valores do formulário de acordo com o tipo de transação
     const tipo = document.getElementById("tipo").value;
-    const categoria = document.getElementById("categoria").value;
-    const descricao = document.getElementById("descricao").value;
-    const valor = parseFloat(document.getElementById("valor").value);
-    const data = document.getElementById("data").value;
-    const formaPagamento = document.getElementById("forma-pagamento").value;  // Captura a forma de pagamento
 
+    // Campos comuns para todas as transações
+    const descricaoReceita = document.getElementById("descricao-receita").value;
+    const descricaoDespesa = document.getElementById("descricao-despesa").value;
+    const valorReceita = parseFloat(document.getElementById("valor-receita").value);
+    const valorDespesa = parseFloat(document.getElementById("valor-despesa").value);
+    const dataReceita = document.getElementById("data-receita").value;
+    const dataDespesa = document.getElementById("data-despesa").value;
+
+    // Campos específicos para receita
+    const fonte = document.getElementById("campo-fonte").style.display === "block" ? document.getElementById("fonte").value : null;
+    const contaBancariaDepositada = document.getElementById("campo-conta-bancaria-depositada").style.display === "block" ? document.getElementById("conta-bancaria-depositada").value : null;
+
+    // Campos específicos para despesa
+    const essencial = document.getElementById("campo-essencial").style.display === "block" ? document.getElementById("essencial").value : null;
+    const categoria = document.getElementById("campo-categoria").style.display === "block" ? document.getElementById("categoria").value : null;
+    const subcategoria = document.getElementById("campo-subcategoria").style.display === "block" ? document.getElementById("subcategoria").value : null;
+    const formaPagamento = document.getElementById("campo-forma-pagamento").style.display === "block" ? document.getElementById("forma-pagamento").value : null;
+    const contaBancariaDebitada = document.getElementById("campo-conta-bancaria-debitada").style.display === "block" ? document.getElementById("conta-bancaria-debitada").value : null;
+    const cartao = document.getElementById("campo-cartao").style.display === "block" ? document.getElementById("nome-cartao").value : null;
+    const parcelas = document.getElementById("campo-parcelas").style.display === "block" ? document.getElementById("parcelas").value : null;
+    const mesFatura = document.getElementById("campo-mes-fatura").style.display === "block" ? document.getElementById("mes-fatura").value : null;
+
+    let descricao, valor, data;
+
+    // Definir valores dependendo do tipo de transação (receita ou despesa)
+    if (tipo === "despesa") {
+        descricao = descricaoDespesa;
+        valor = valorDespesa;
+        data = dataDespesa;
+    } else {
+        descricao = descricaoReceita;
+        valor = valorReceita;
+        data = dataReceita;
+    }
+
+    // Valida se os campos obrigatórios foram preenchidos
     if (!descricao || isNaN(valor) || !data) {
         showToast("Preencha todos os campos corretamente", "error");
         return;
     }
 
-    if (idEmEdicao) {
-        await updateDoc(
-            doc(db, "users", user.uid, "transacoes", idEmEdicao),
-            { tipo, categoria, descricao, valor, data, formaPagamento }  // Inclui forma de pagamento
-        );
+    try {
+        if (idEmEdicao) {
+            // Atualiza transação
+            await updateDoc(
+                doc(db, "users", user.uid, "transacoes", idEmEdicao),
+                {
+                    tipo,
+                    categoria,
+                    descricao,
+                    valor,
+                    data,
+                    formaPagamento,
+                    essencial,
+                    subcategoria,
+                    contaBancariaDebitada,
+                    cartao,
+                    parcelas,
+                    mesFatura,
+                    contaBancariaDepositada,
+                    fonte
+                }
+            );
 
-        showToast("Transação atualizada!");
-        idEmEdicao = null;
+            showToast("Transação atualizada!");
+            idEmEdicao = null;
+            document.getElementById("indicador-edicao").style.display = "none";
+            document.querySelectorAll("li").forEach(li => {
+                li.classList.remove("linha-editando");
+            });
+            const btn = document.getElementById("btn-adicionar");
+            btn.textContent = "Adicionar";
+            btn.classList.remove("modo-edicao");
 
-        document.getElementById("indicador-edicao").style.display = "none";
-        document.querySelectorAll("li").forEach(li => {
-            li.classList.remove("linha-editando");
-        });
+        } else {
+            // Adiciona nova transação
+            await addDoc(
+                collection(db, "users", user.uid, "transacoes"),
+                {
+                    tipo,
+                    categoria,
+                    descricao,
+                    valor,
+                    data,
+                    formaPagamento,
+                    essencial,
+                    subcategoria,
+                    contaBancariaDebitada,
+                    cartao,
+                    parcelas,
+                    mesFatura,
+                    contaBancariaDepositada,
+                    fonte
+                }
+            );
 
-        const btn = document.getElementById("btn-adicionar");
-        btn.textContent = "Adicionar";
-        btn.classList.remove("modo-edicao");
+            showToast("Transação adicionada!");
+        }
 
-    } else {
-        await addDoc(
-            collection(db, "users", user.uid, "transacoes"),
-            { tipo, categoria, descricao, valor, data, formaPagamento }  // Inclui forma de pagamento
-        );
+        // Limpa o formulário após a adição/edição
+        limparFormulario();
+        carregarTransacoes(); // Atualiza a lista de transações
 
-        showToast("Transação adicionada!");
+    } catch (error) {
+        console.log("Erro ao adicionar/atualizar transação: ", error);
+        showToast("Erro ao adicionar/atualizar transação", "error");
     }
-
-    limparFormulario();
-    carregarTransacoes();
 }
 
 function atualizarCategorias() {
@@ -236,12 +372,15 @@ function atualizarCategorias() {
     const selectCategoria = document.getElementById("categoria");
     selectCategoria.innerHTML = "";
 
-    categorias[tipo].forEach(cat => {
-        const option = document.createElement("option");
-        option.value = cat;
-        option.textContent = cat;
-        selectCategoria.appendChild(option);
-    });
+    if (tipo === "despesa") {
+        // Exibe categorias somente para despesas
+        categorias[tipo].forEach(cat => {
+            const option = document.createElement("option");
+            option.value = cat;
+            option.textContent = cat;
+            selectCategoria.appendChild(option);
+        });
+    }
 }
 
 function aplicarFiltro() {
@@ -249,9 +388,10 @@ function aplicarFiltro() {
     let filtradas = transacoes;
 
     if (mesSelecionado) {
-        filtradas = transacoes.filter(t =>
-            t.data.startsWith(mesSelecionado)
-        );
+        filtradas = transacoes.filter(t => {
+            // Comparando mês no formato YYYY-MM
+            return t.data.startsWith(mesSelecionado);
+        });
     }
 
     atualizarTela(filtradas);
@@ -312,7 +452,7 @@ function calcularSaldo(listaTransacoes) {
     listaTransacoes.forEach(t => {
         if (t.tipo === "receita") {
             totalReceitas += t.valor;
-        } else {
+        } else if (t.tipo === "despesa") {
             totalDespesas += t.valor;
         }
     });
@@ -343,7 +483,7 @@ async function removerTransacao(id) {
 
     setTimeout(async () => {
         await deleteDoc(doc(db, "users", user.uid, "transacoes", id));
-        carregarTransacoes();
+        carregarTransacoes(); // Recarrega as transações
         showToast("Transação removida", "delete");
     }, 300);
 }
@@ -365,7 +505,7 @@ function atualizarGrafico(listaTransacoes) {
     const valores = Object.values(categoriasAgrupadas);
     const ctx = document.getElementById("graficoCategorias");
 
-    if (grafico) grafico.destroy();
+    if (grafico) grafico.destroy(); // Caso já exista, destrói o gráfico anterior
 
     grafico = new Chart(ctx, {
         type: "doughnut",
@@ -374,8 +514,8 @@ function atualizarGrafico(listaTransacoes) {
             datasets: [{
                 data: valores,
                 backgroundColor: [
-                    "#C6A75E","#7A5C42","#A94442",
-                    "#4A7C59","#E8DFD4","#8B6F4E"
+                    "#C6A75E", "#7A5C42", "#A94442",
+                    "#4A7C59", "#E8DFD4", "#8B6F4E"
                 ]
             }]
         },
@@ -402,13 +542,23 @@ async function carregarTransacoes() {
         });
     });
 
-    aplicarFiltro();
+    aplicarFiltro(); // Aplica o filtro nas transações carregadas
 }
 
 function limparFormulario() {
-    document.getElementById("descricao").value = "";
-    document.getElementById("valor").value = "";
-    document.getElementById("data").value = "";
+    document.getElementById("descricao-receita").value = "";
+    document.getElementById("descricao-despesa").value = "";
+    document.getElementById("valor-receita").value = "";
+    document.getElementById("valor-despesa").value = "";
+    document.getElementById("data-receita").value = "";
+    document.getElementById("data-despesa").value = "";
+    document.getElementById("categoria").value = "";
+    document.getElementById("subcategoria").value = "";
+    document.getElementById("forma-pagamento").value = "";
+    document.getElementById("conta-bancaria-debitada").value = "";
+    document.getElementById("nome-cartao").value = "";
+    document.getElementById("parcelas").value = "1";
+    document.getElementById("mes-fatura").value = "";
 }
 
 function showToast(message, type = "success") {
@@ -524,36 +674,78 @@ window.editarTransacao = async function(id) {
     const transacao = transacoes.find(t => t.id === id);
     if (!transacao) return;
 
-    document.getElementById("tipo").value = transacao.tipo;
-    atualizarCategorias();
+    // Preenchendo os campos comuns para receita e despesa
+    const tipo = transacao.tipo;
+    const descricaoReceita = document.getElementById("descricao-receita");
+    const descricaoDespesa = document.getElementById("descricao-despesa");
+    const valorReceita = document.getElementById("valor-receita");
+    const valorDespesa = document.getElementById("valor-despesa");
+    const dataReceita = document.getElementById("data-receita");
+    const dataDespesa = document.getElementById("data-despesa");
 
-    document.getElementById("categoria").value = transacao.categoria;
-    document.getElementById("descricao").value = transacao.descricao;
-    document.getElementById("valor").value = transacao.valor;
-    document.getElementById("data").value = transacao.data;
+    // Exibe o campo comum conforme o tipo
+    if (tipo === "receita") {
+        descricaoReceita.value = transacao.descricao;
+        valorReceita.value = transacao.valor;
+        dataReceita.value = transacao.data;
 
-    // Mostrar o indicador de edição apenas quando o usuário clicar em editar
-    document.getElementById("indicador-edicao").style.display = "flex";  // Mostrar indicador de edição
+        // Esconde os campos específicos de despesa
+        descricaoDespesa.style.display = "none";
+        valorDespesa.style.display = "none";
+        dataDespesa.style.display = "none";
+    } else {
+        descricaoDespesa.value = transacao.descricao;
+        valorDespesa.value = transacao.valor;
+        dataDespesa.value = transacao.data;
 
-    idEmEdicao = id;
-
-    document.querySelectorAll("li").forEach(li => {
-        li.classList.remove("linha-editando");
-    });
-
-    const linha = document
-        .querySelector(`button[onclick*="${id}"]`)
-        .closest("li");
-
-    if (linha) {
-        linha.classList.add("linha-editando");
+        // Exibe os campos específicos de despesa
+        descricaoReceita.style.display = "none";
+        valorReceita.style.display = "none";
+        dataReceita.style.display = "none";
     }
 
+    // Para as **despesas**, mostramos campos extras como essencial, categorias, subcategorias, etc.
+    const campoEssencial = document.getElementById("campo-essencial");
+    const campoCategoria = document.getElementById("campo-categoria");
+    const campoSubcategoria = document.getElementById("campo-subcategoria");
+    const campoFormaPagamento = document.getElementById("campo-forma-pagamento");
+    const campoContaBancariaDebitada = document.getElementById("campo-conta-bancaria-debitada");
+    const campoCartao = document.getElementById("campo-cartao");
+    const campoParcelas = document.getElementById("campo-parcelas");
+    const campoMesFatura = document.getElementById("campo-mes-fatura");
+
+    if (tipo === "despesa") {
+        // Exibe os campos específicos de despesa
+        campoEssencial.style.display = "block";
+        campoCategoria.style.display = "block";
+        campoSubcategoria.style.display = "block";
+        campoFormaPagamento.style.display = "block";
+
+        // Exibe os campos baseados na forma de pagamento
+        if (transacao.formaPagamento === "pix" || transacao.formaPagamento === "debito") {
+            campoContaBancariaDebitada.style.display = "block";
+        }
+
+        if (transacao.formaPagamento === "credito") {
+            campoCartao.style.display = "block";
+            campoParcelas.style.display = "block";
+            campoMesFatura.style.display = "block";
+        }
+    }
+
+    // Ajusta o botão de ação para salvar as alterações
     const btn = document.getElementById("btn-adicionar");
-    btn.textContent = "Salvar alteração";
+    btn.textContent = "Salvar Alterações";
     btn.classList.add("modo-edicao");
 
-    // Desliza suavemente até o formulário de edição
+    // Mostrar o indicador de edição
+    document.getElementById("indicador-edicao").style.display = "flex";
+    document.getElementById("indicador-edicao").textContent = `Editando ${transacao.tipo.charAt(0).toUpperCase() + transacao.tipo.slice(1)}: ${transacao.descricao}`;
+
+    // Armazena o id da transação para edição
+    idEmEdicao = id;
+
+    // Desliza até o formulário de edição
     document.querySelector(".form").scrollIntoView({
         behavior: "smooth",
         block: "center"
@@ -593,6 +785,8 @@ function calcularTotaisPorMes(mes, ano) {
 
     return { totalReceitas, totalDespesas };
 }
+
+///////////////////////////////////////////////////////////////////////////
 
 function atualizarComparativo() {
     const mesFiltro = document.getElementById("mes-filtro").value;
@@ -671,8 +865,8 @@ async function salvarEdicao() {
     // Lógica de salvar a transação...
 }
 
-// Exibir formulário ao clicar no botão
-document.getElementById("btn-abrir-form-conta").addEventListener("click", () => {
+    // Exibir formulário ao clicar no botão
+    document.getElementById("btn-abrir-form-conta").addEventListener("click", () => {
     const formularioConta = document.getElementById("formulario-conta");
 
     // Exibe o formulário
