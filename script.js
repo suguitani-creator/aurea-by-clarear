@@ -1254,27 +1254,27 @@ async function carregarContasTeste(){
 
 }
 
-async function carregarContasTeste(){
+async function carregarCartoesTeste(){
 
     const user = auth.currentUser;
     if (!user) return;
 
     const snapshot = await getDocs(
-        collection(db, "users", user.uid, "contas")
+        collection(db, "users", user.uid, "cartoes")
     );
 
-    const select = document.getElementById("conta-bancaria-debitada");
+    const select = document.getElementById("nome-cartao");
 
     if (!select) return;
 
     select.innerHTML = "";
 
     snapshot.forEach(doc => {
-        const conta = doc.data();
+        const cartao = doc.data();
 
         const option = document.createElement("option");
-        option.value = conta.nome;
-        option.textContent = conta.nome;
+        option.value = cartao.nome;
+        option.textContent = cartao.nome;
 
         select.appendChild(option);
     });
