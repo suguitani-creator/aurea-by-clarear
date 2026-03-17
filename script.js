@@ -1,3 +1,4 @@
+const MODO_TESTE_FORM = true;
 let idEmEdicao = null;
 let contaEmEdicao = null;
 let cartaoEmEdicao = null;
@@ -185,6 +186,13 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
 // ================= FINANÇAS =================
 
 async function adicionarTransacao() {
+
+    if (MODO_TESTE_FORM) {
+    const dados = capturarDadosFormulario();
+    console.log("TESTE FORMULÁRIO:", dados);
+    return;
+}
+
     const user = auth.currentUser;
     if (!user) return;
 
@@ -1105,4 +1113,67 @@ function cancelarEdicaoTransacao() {
 
 document.getElementById("btn-cancelar-edicao-transacao").addEventListener("click", cancelarEdicaoTransacao);
 
+function capturarDadosFormulario(){
 
+    const tipo = document.getElementById("tipo").value;
+
+    let dados = { tipo };
+
+    if(tipo === "receita"){
+
+        dados.descricao =
+        document.getElementById("descricao-receita")?.value || "";
+
+        dados.valor =
+        parseFloat(document.getElementById("valor-receita")?.value || 0);
+
+        dados.data =
+        document.getElementById("data-receita")?.value || "";
+
+        dados.fonte =
+        document.getElementById("fonte")?.value || "";
+
+        dados.conta =
+        document.getElementById("conta-bancaria-depositada")?.value || "";
+
+    }
+
+    if(tipo === "despesa"){
+
+        dados.descricao =
+        document.getElementById("descricao-despesa")?.value || "";
+
+        dados.valor =
+        parseFloat(document.getElementById("valor-despesa")?.value || 0);
+
+        dados.data =
+        document.getElementById("data-despesa")?.value || "";
+
+        dados.essencial =
+        document.getElementById("essencial")?.value || "";
+
+        dados.categoria =
+        document.getElementById("categoria")?.value || "";
+
+        dados.subcategoria =
+        document.getElementById("subcategoria")?.value || "";
+
+        dados.formaPagamento =
+        document.getElementById("forma-pagamento")?.value || "";
+
+        dados.contaDebitada =
+        document.getElementById("conta-bancaria-debitada")?.value || "";
+
+        dados.cartao =
+        document.getElementById("nome-cartao")?.value || "";
+
+        dados.parcelas =
+        document.getElementById("parcelas")?.value || "";
+
+        dados.mesFatura =
+        document.getElementById("mes-fatura")?.value || "";
+
+    }
+
+    return dados;
+}
