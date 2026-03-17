@@ -116,106 +116,96 @@
             </div>
         </div>
         <!--FORMULÁRIO TESTE-->
-        <div id="form-teste" style="margin-top:20px; padding:15px; border:1px solid #ccc;">
+        <div id="form-teste" style="margin-top:30px; padding:20px; border:1px solid #ccc; border-radius:10px;">
 
-            <h3>TESTE NOVO FORMULÁRIO</h3>
+    <h3>TESTE NOVO FORMULÁRIO</h3>
 
-            <select id="tipo-teste">
-                <option value="receita">Receita</option>
-                <option value="despesa">Despesa</option>
+    <!-- Tipo -->
+    <select id="tipo-teste">
+        <option value="receita">Receita</option>
+        <option value="despesa">Despesa</option>
+    </select>
+
+    <!-- RECEITA -->
+    <div id="bloco-receita">
+
+        <select id="fonte">
+            <option value="salario">Salário</option>
+            <option value="bolsa">Bolsa</option>
+            <option value="rendimentos">Rendimentos</option>
+        </select>
+
+        <input id="descricao-receita" placeholder="Descrição (opcional)">
+        <input id="valor-receita" type="number" placeholder="Valor">
+        <input id="data-receita" type="date">
+
+        <select id="conta-bancaria-depositada">
+            <option value="nubank">Nubank</option>
+            <option value="itau">Itaú</option>
+        </select>
+
+    </div>
+
+    <!-- DESPESA -->
+    <div id="bloco-despesa" style="display:none;">
+
+        <select id="essencial">
+            <option value="sim">Essencial</option>
+            <option value="nao">Não essencial</option>
+        </select>
+
+        <select id="categoria">
+            <option value="alimentacao">Alimentação</option>
+            <option value="transporte">Transporte</option>
+        </select>
+
+        <select id="subcategoria">
+            <option value="supermercado">Supermercado</option>
+            <option value="restaurante">Restaurante</option>
+        </select>
+
+        <input id="descricao-despesa" placeholder="Descrição (opcional)">
+        <input id="valor-despesa" type="number" placeholder="Valor">
+        <input id="data-despesa" type="date">
+
+        <select id="forma-pagamento">
+            <option value="pix">Pix</option>
+            <option value="debito">Débito</option>
+            <option value="credito">Crédito</option>
+        </select>
+
+        <!-- PIX / DÉBITO -->
+        <div id="bloco-conta-debito">
+            <select id="conta-bancaria-debitada">
+                <option value="nubank">Nubank</option>
+                <option value="itau">Itaú</option>
+            </select>
+        </div>
+
+        <!-- CARTÃO -->
+        <div id="bloco-cartao" style="display:none;">
+
+            <select id="nome-cartao">
+                <option value="visa">Visa</option>
+                <option value="master">Mastercard</option>
             </select>
 
-            <!-- Campos Comuns (Visíveis para Receita e Despesa) -->
-<div id="campo-descricao" class="campo">
-    <input type="text" id="descricao-receita" class="input" placeholder="Descrição (opcional)" style="display:none;"/>
-    <input type="text" id="descricao-despesa" class="input" placeholder="Descrição (opcional)" style="display:none;"/>
-</div>
+            <select id="parcelas">
+                <option value="1">1x</option>
+                <option value="2">2x</option>
+                <option value="3">3x</option>
+                <option value="4">4x</option>
+            </select>
 
-<div id="campo-valor" class="campo">
-    <input type="number" id="valor-receita" class="input" placeholder="Valor" style="display:none;"/>
-    <input type="number" id="valor-despesa" class="input" placeholder="Valor" style="display:none;"/>
-</div>
-
-<div id="campo-data" class="campo">
-    <input type="date" id="data-receita" class="input" placeholder="Data de recebimento" style="display:none;"/>
-    <input type="date" id="data-despesa" class="input" placeholder="Data da compra" style="display:none;"/>
-</div>
-
-<!-- Campos para Receita -->
-<div id="campo-fonte" class="campo" style="display:none;">
-    <select id="fonte" class="input">
-        <option value="salario">Salário</option>
-        <option value="bolsa">Bolsa</option>
-        <option value="rendimentos">Rendimentos</option>
-    </select>
-</div>
-
-<div id="campo-conta-bancaria-depositada" class="campo" style="display:none;">
-    <select id="conta-bancaria-depositada" class="input">
-        <!-- Opções das contas bancárias cadastradas serão preenchidas dinamicamente -->
-    </select>
-</div>
-
-<!-- Campos para Despesa -->
-<div id="campo-essencial" class="campo" style="display:none;">
-    <select id="essencial" class="input">
-        <option value="sim">Essencial</option>
-        <option value="nao">Não Essencial</option>
-    </select>
-</div>
-
-<div id="campo-categoria" class="campo" style="display:none;">
-    <select id="categoria" class="input">
-        <!-- Categorias de despesa -->
-    </select>
-</div>
-
-<div id="campo-subcategoria" class="campo" style="display:none;">
-    <select id="subcategoria" class="input">
-        <!-- Subcategorias de despesa -->
-    </select>
-</div>
-
-<!-- Forma de Pagamento -->
-<div id="campo-forma-pagamento" class="campo" style="display:none;">
-    <select id="forma-pagamento" class="input">
-        <option value="pix">Pix</option>
-        <option value="debito">Débito</option>
-        <option value="credito">Crédito</option>
-    </select>
-</div>
-
-<!-- Campos de Forma de Pagamento (Pix/Débito) -->
-<div id="campo-conta-bancaria-debitada" class="campo" style="display:none;">
-    <select id="conta-bancaria-debitada" class="input">
-        <!-- Conta bancária para Pix/Débito -->
-    </select>
-</div>
-
-<!-- Campos de Forma de Pagamento (Cartão) -->
-<div id="campo-cartao" class="campo" style="display:none;">
-    <select id="nome-cartao" class="input">
-        <!-- Cartões cadastrados -->
-    </select>
-</div>
-
-<div id="campo-parcelas" class="campo" style="display:none;">
-    <select id="parcelas" class="input">
-        <option value="1">1x</option>
-        <option value="2">2x</option>
-        <option value="3">3x</option>
-        <option value="4">4x</option>
-        <!-- Mais opções -->
-    </select>
-</div>
-
-<div id="campo-mes-fatura" class="campo" style="display:none;">
-    <input type="month" id="mes-fatura" class="input"/>
-</div>
-
-            <button id="btn-testar-form">Testar</button>
+            <input type="month" id="mes-fatura">
 
         </div>
+
+    </div>
+
+    <button id="btn-testar-form">Testar</button>
+
+</div>
 
         <h2>Fluxo Financeiro</h2>
         <ul id="lista-despesas"></ul>

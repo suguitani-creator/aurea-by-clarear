@@ -1123,7 +1123,44 @@ document
 
 });
 
-function capturarDadosFormulario(){
+
+
+// Alternar entre receita e despesa
+document.getElementById("tipo-teste").addEventListener("change", () => {
+
+    const tipo = document.getElementById("tipo-teste").value;
+
+    document.getElementById("bloco-receita").style.display =
+        tipo === "receita" ? "block" : "none";
+
+    document.getElementById("bloco-despesa").style.display =
+        tipo === "despesa" ? "block" : "none";
+
+});
+
+// Alternar entre receita e despesa
+document.getElementById("tipo-teste").addEventListener("change", () => {
+
+    const tipo = document.getElementById("tipo-teste").value;
+
+    document.getElementById("bloco-receita").style.display =
+        tipo === "receita" ? "block" : "none";
+
+    document.getElementById("bloco-despesa").style.display =
+        tipo === "despesa" ? "block" : "none";
+
+});
+
+document.getElementById("btn-testar-form")
+.addEventListener("click", () => {
+
+    const dados = capturarDadosFormularioTeste();
+
+    console.log("TESTE COMPLETO:", dados);
+
+});
+
+function capturarDadosFormularioTeste(){
 
     const tipo = document.getElementById("tipo-teste").value;
 
@@ -1131,58 +1168,36 @@ function capturarDadosFormulario(){
 
     if(tipo === "receita"){
 
-        dados.descricao =
-        document.getElementById("descricao-receita")?.value || "";
-
-        dados.valor =
-        parseFloat(document.getElementById("valor-receita")?.value || 0);
-
-        dados.data =
-        document.getElementById("data-receita")?.value || "";
-
-        dados.fonte =
-        document.getElementById("fonte")?.value || "";
-
-        dados.conta =
-        document.getElementById("conta-bancaria-depositada")?.value || "";
+        dados.fonte = document.getElementById("fonte").value;
+        dados.descricao = document.getElementById("descricao-receita").value;
+        dados.valor = parseFloat(document.getElementById("valor-receita").value);
+        dados.data = document.getElementById("data-receita").value;
+        dados.conta = document.getElementById("conta-bancaria-depositada").value;
 
     }
 
     if(tipo === "despesa"){
 
-        dados.descricao =
-        document.getElementById("descricao-despesa")?.value || "";
+        dados.essencial = document.getElementById("essencial").value;
+        dados.categoria = document.getElementById("categoria").value;
+        dados.subcategoria = document.getElementById("subcategoria").value;
+        dados.descricao = document.getElementById("descricao-despesa").value;
+        dados.valor = parseFloat(document.getElementById("valor-despesa").value);
+        dados.data = document.getElementById("data-despesa").value;
 
-        dados.valor =
-        parseFloat(document.getElementById("valor-despesa")?.value || 0);
+        const forma = document.getElementById("forma-pagamento").value;
+        dados.formaPagamento = forma;
 
-        dados.data =
-        document.getElementById("data-despesa")?.value || "";
+        if(forma === "pix" || forma === "debito"){
+            dados.contaDebitada =
+            document.getElementById("conta-bancaria-debitada").value;
+        }
 
-        dados.essencial =
-        document.getElementById("essencial")?.value || "";
-
-        dados.categoria =
-        document.getElementById("categoria")?.value || "";
-
-        dados.subcategoria =
-        document.getElementById("subcategoria")?.value || "";
-
-        dados.formaPagamento =
-        document.getElementById("forma-pagamento")?.value || "";
-
-        dados.contaDebitada =
-        document.getElementById("conta-bancaria-debitada")?.value || "";
-
-        dados.cartao =
-        document.getElementById("nome-cartao")?.value || "";
-
-        dados.parcelas =
-        document.getElementById("parcelas")?.value || "";
-
-        dados.mesFatura =
-        document.getElementById("mes-fatura")?.value || "";
-
+        if(forma === "credito"){
+            dados.cartao = document.getElementById("nome-cartao").value;
+            dados.parcelas = document.getElementById("parcelas").value;
+            dados.mesFatura = document.getElementById("mes-fatura").value;
+        }
     }
 
     return dados;
