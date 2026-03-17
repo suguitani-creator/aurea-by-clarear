@@ -188,7 +188,7 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
 async function adicionarTransacao() {
 
     if (MODO_TESTE_FORM) {
-    const dados = capturarDadosFormulario();
+    const dados = capturarDadosFormularioTeste();
     console.log("TESTE FORMULÁRIO:", dados);
     return;
 }
