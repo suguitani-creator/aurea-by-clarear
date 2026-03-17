@@ -1126,16 +1126,15 @@ document.getElementById("tipo-teste").addEventListener("change", () => {
 
 });
 
-// Alternar entre receita e despesa
-document.getElementById("tipo-teste").addEventListener("change", () => {
+document.getElementById("forma-pagamento").addEventListener("change", () => {
 
-    const tipo = document.getElementById("tipo-teste").value;
+    const forma = document.getElementById("forma-pagamento").value;
 
-    document.getElementById("bloco-receita").style.display =
-        tipo === "receita" ? "block" : "none";
+    document.getElementById("bloco-cartao").style.display =
+        forma === "credito" ? "block" : "none";
 
-    document.getElementById("bloco-despesa").style.display =
-        tipo === "despesa" ? "block" : "none";
+    document.getElementById("bloco-conta-debito").style.display =
+        (forma === "pix" || forma === "debito") ? "block" : "none";
 
 });
 
@@ -1167,8 +1166,8 @@ function capturarDadosFormularioTeste(){
     if(tipo === "despesa"){
 
         dados.essencial = document.getElementById("essencial").value;
-        dados.categoria = document.getElementById("categoria").value;
-        dados.subcategoria = document.getElementById("subcategoria").value;
+        dados.categoria = document.getElementById("categoria-teste").value;
+        dados.subcategoria = document.getElementById("subcategoria-teste").value;
         dados.descricao = document.getElementById("descricao-despesa").value;
         dados.valor = parseFloat(document.getElementById("valor-despesa").value);
         dados.data = document.getElementById("data-despesa").value;
