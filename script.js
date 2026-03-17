@@ -174,6 +174,8 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
 
         carregarTransacoes();  // Carregar transações após o login
         carregarContasECartoes();  // Carregar contas e cartões após o login
+        carregarContasTeste();
+        carregarCartoesTeste();
 
     } else {
         authContainer.style.display = "block";
@@ -1223,4 +1225,58 @@ function capturarDadosFormularioTeste(){
     }
 
     return dados;
+}
+
+async function carregarContasTeste(){
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const snapshot = await getDocs(
+        collection(db, "users", user.uid, "contas")
+    );
+
+    const select = document.getElementById("conta-bancaria-debitada");
+
+    if (!select) return;
+
+    select.innerHTML = "";
+
+    snapshot.forEach(doc => {
+        const conta = doc.data();
+
+        const option = document.createElement("option");
+        option.value = conta.nome;
+        option.textContent = conta.nome;
+
+        select.appendChild(option);
+    });
+
+}
+
+async function carregarContasTeste(){
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const snapshot = await getDocs(
+        collection(db, "users", user.uid, "contas")
+    );
+
+    const select = document.getElementById("conta-bancaria-debitada");
+
+    if (!select) return;
+
+    select.innerHTML = "";
+
+    snapshot.forEach(doc => {
+        const conta = doc.data();
+
+        const option = document.createElement("option");
+        option.value = conta.nome;
+        option.textContent = conta.nome;
+
+        select.appendChild(option);
+    });
+
 }
