@@ -1126,15 +1126,23 @@ document.getElementById("tipo-teste").addEventListener("change", () => {
 
 });
 
-document.getElementById("forma-pagamento").addEventListener("change", () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-    const forma = document.getElementById("forma-pagamento").value;
+    const formaPagamento = document.getElementById("forma-pagamento");
 
-    document.getElementById("bloco-cartao").style.display =
-        forma === "credito" ? "block" : "none";
+    if (formaPagamento) {
+        formaPagamento.addEventListener("change", () => {
 
-    document.getElementById("bloco-conta-debito").style.display =
-        (forma === "pix" || forma === "debito") ? "block" : "none";
+            const forma = formaPagamento.value;
+
+            document.getElementById("bloco-cartao").style.display =
+                forma === "credito" ? "block" : "none";
+
+            document.getElementById("bloco-conta-debito").style.display =
+                (forma === "pix" || forma === "debito") ? "block" : "none";
+
+        });
+    }
 
 });
 
