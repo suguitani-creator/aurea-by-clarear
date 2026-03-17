@@ -1113,18 +1113,6 @@ function cancelarEdicaoTransacao() {
 
 document.getElementById("btn-cancelar-edicao-transacao").addEventListener("click", cancelarEdicaoTransacao);
 
-document
-.getElementById("btn-testar-form")
-.addEventListener("click", () => {
-
-    const dados = capturarDadosFormulario();
-
-    console.log("TESTE:", dados);
-
-});
-
-
-
 // Alternar entre receita e despesa
 document.getElementById("tipo-teste").addEventListener("change", () => {
 
