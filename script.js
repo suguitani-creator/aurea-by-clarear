@@ -1113,9 +1113,19 @@ function cancelarEdicaoTransacao() {
 
 document.getElementById("btn-cancelar-edicao-transacao").addEventListener("click", cancelarEdicaoTransacao);
 
+document
+.getElementById("btn-testar-form")
+.addEventListener("click", () => {
+
+    const dados = capturarDadosFormulario();
+
+    console.log("TESTE:", dados);
+
+});
+
 function capturarDadosFormulario(){
 
-    const tipo = document.getElementById("tipo").value;
+    const tipo = document.getElementById("tipo-teste").value;
 
     let dados = { tipo };
 
