@@ -1128,7 +1128,7 @@ document.getElementById("tipo-teste").addEventListener("change", () => {
 
 document.getElementById("forma-pagamento-teste").addEventListener("change", () => {
 
-    const forma = document.getElementById("forma-pagamento").value;
+    const forma = document.getElementById("forma-pagamento-teste").value;
 
     document.getElementById("bloco-cartao").style.display =
         forma === "credito" ? "block" : "none";
