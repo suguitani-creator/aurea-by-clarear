@@ -1128,7 +1128,7 @@ document.getElementById("tipo-teste").addEventListener("change", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const formaPagamento = document.getElementById("forma-pagamento");
+    const formaPagamento = document.getElementById("forma-pagamento-teste");
 
     if (formaPagamento) {
         formaPagamento.addEventListener("change", () => {
@@ -1180,7 +1180,7 @@ function capturarDadosFormularioTeste(){
         dados.valor = parseFloat(document.getElementById("valor-despesa").value);
         dados.data = document.getElementById("data-despesa").value;
 
-        const forma = document.getElementById("forma-pagamento").value;
+        const forma = document.getElementById("forma-pagamento-teste").value;
         dados.formaPagamento = forma;
 
         if(forma === "pix" || forma === "debito"){
