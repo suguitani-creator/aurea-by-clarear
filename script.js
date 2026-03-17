@@ -1115,6 +1115,9 @@ function cancelarEdicaoTransacao() {
 
 document.getElementById("btn-cancelar-edicao-transacao").addEventListener("click", cancelarEdicaoTransacao);
 
+//////////////////////// Formulário Teste //////////////////////////////////
+
+
 // Alternar entre receita e despesa
 document.getElementById("tipo-teste").addEventListener("change", () => {
 
@@ -1149,91 +1152,7 @@ document.getElementById("btn-testar-form")
 
 });
 
-const CATEGORIAS = {
-    alimentacao: ["Supermercado", "Restaurante", "Delivery"],
-    transporte: ["Uber", "Combustível", "Ônibus"],
-    lazer: ["Cinema", "Viagem", "Streaming"],
-    moradia: ["Aluguel", "Condomínio", "Energia"],
-    saude: ["Farmácia", "Plano de saúde"],
-};
 
-function carregarCategoriasTeste(){
-
-    const selectCategoria = document.getElementById("categoria-teste");
-
-    if (!selectCategoria) return;
-
-    selectCategoria.innerHTML = "";
-
-    Object.keys(CATEGORIAS).forEach(cat => {
-
-        const option = document.createElement("option");
-        option.value = cat;
-        option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
-
-        selectCategoria.appendChild(option);
-
-    });
-
-}
-
-function atualizarSubcategoriasTeste(){
-
-    const categoria = document.getElementById("categoria-teste").value;
-    const subcategoria = document.getElementById("subcategoria-teste");
-
-    subcategoria.innerHTML = "";
-
-    CATEGORIAS[categoria]?.forEach(sub => {
-
-        const option = document.createElement("option");
-        option.value = sub.toLowerCase();
-        option.textContent = sub;
-
-        subcategoria.appendChild(option);
-
-    });
-
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    carregarCategoriasTeste();
-    atualizarSubcategoriasTeste();
-
-    document.getElementById("categoria-teste")
-        .addEventListener("change", atualizarSubcategoriasTeste);
-
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const categoria = document.getElementById("categoria-teste");
-    const subcategoria = document.getElementById("subcategoria-teste");
-
-    if (categoria && subcategoria) {
-
-        categoria.addEventListener("change", () => {
-
-            const selecionada = categoria.value;
-
-            subcategoria.innerHTML = "";
-
-            SUBCATEGORIAS[selecionada]?.forEach(sub => {
-
-                const option = document.createElement("option");
-                option.value = sub.toLowerCase();
-                option.textContent = sub;
-
-                subcategoria.appendChild(option);
-
-            });
-
-        });
-
-    }
-
-});
 
 function capturarDadosFormularioTeste(){
 
@@ -1331,3 +1250,71 @@ async function carregarCartoesTeste(){
     });
 
 }
+
+// ================= CATEGORIAS E SUBCATEGORIAS (TESTE) =================
+
+const CATEGORIAS = {
+    alimentacao: ["Supermercado", "Restaurante", "Delivery"],
+    transporte: ["Uber", "Combustível", "Ônibus"],
+    lazer: ["Cinema", "Viagem", "Streaming"],
+    moradia: ["Aluguel", "Condomínio", "Energia"],
+    saude: ["Farmácia", "Plano de saúde"]
+};
+
+function carregarCategoriasTeste(){
+
+    const selectCategoria = document.getElementById("categoria-teste");
+
+    if (!selectCategoria) return;
+
+    selectCategoria.innerHTML = "";
+
+    Object.keys(CATEGORIAS).forEach(cat => {
+
+        const option = document.createElement("option");
+        option.value = cat;
+        option.textContent =
+            cat.charAt(0).toUpperCase() + cat.slice(1);
+
+        selectCategoria.appendChild(option);
+
+    });
+
+}
+
+function atualizarSubcategoriasTeste(){
+
+    const categoria = document.getElementById("categoria-teste");
+    const subcategoria = document.getElementById("subcategoria-teste");
+
+    if (!categoria || !subcategoria) return;
+
+    const selecionada = categoria.value;
+
+    subcategoria.innerHTML = "";
+
+    CATEGORIAS[selecionada]?.forEach(sub => {
+
+        const option = document.createElement("option");
+        option.value = sub.toLowerCase();
+        option.textContent = sub;
+
+        subcategoria.appendChild(option);
+
+    });
+
+}
+
+// Inicialização correta
+document.addEventListener("DOMContentLoaded", () => {
+
+    carregarCategoriasTeste();
+    atualizarSubcategoriasTeste();
+
+    const categoria = document.getElementById("categoria-teste");
+
+    if (categoria) {
+        categoria.addEventListener("change", atualizarSubcategoriasTeste);
+    }
+
+});
