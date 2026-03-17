@@ -1147,6 +1147,41 @@ document.getElementById("btn-testar-form")
 
 });
 
+const SUBCATEGORIAS = {
+    alimentacao: ["Supermercado", "Restaurante", "Delivery"],
+    transporte: ["Uber", "Combustível", "Ônibus"],
+    lazer: ["Cinema", "Viagem", "Streaming"]
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const categoria = document.getElementById("categoria-teste");
+    const subcategoria = document.getElementById("subcategoria-teste");
+
+    if (categoria && subcategoria) {
+
+        categoria.addEventListener("change", () => {
+
+            const selecionada = categoria.value;
+
+            subcategoria.innerHTML = "";
+
+            SUBCATEGORIAS[selecionada]?.forEach(sub => {
+
+                const option = document.createElement("option");
+                option.value = sub.toLowerCase();
+                option.textContent = sub;
+
+                subcategoria.appendChild(option);
+
+            });
+
+        });
+
+    }
+
+});
+
 function capturarDadosFormularioTeste(){
 
     const tipo = document.getElementById("tipo-teste").value;
