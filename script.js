@@ -1275,6 +1275,12 @@ function carregarCategoriasTeste(){
 
     selectCategoria.innerHTML = "";
 
+    // opção vazia padrão
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Selecione...";
+    selectCategoria.appendChild(defaultOption);
+
     Object.keys(CATEGORIAS).forEach(cat => {
 
         const option = document.createElement("option");
@@ -1298,6 +1304,14 @@ function atualizarSubcategoriasTeste(){
     const selecionada = categoria.value;
 
     subcategoria.innerHTML = "";
+
+    // opção vazia
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Selecione...";
+    subcategoria.appendChild(defaultOption);
+
+    if (!selecionada) return;
 
     CATEGORIAS[selecionada]?.forEach(sub => {
 
@@ -1381,3 +1395,31 @@ function validarFormularioTeste(dados){
 
     return null;
 }
+
+document.getElementById("essencial").addEventListener("change", () => {
+
+    const tipo = document.getElementById("essencial").value;
+
+    const categoria = document.getElementById("categoria-teste");
+    const subcategoria = document.getElementById("subcategoria-teste");
+
+    if (!categoria || !subcategoria) return;
+
+    if (tipo === "investimento" || tipo === "financeiro") {
+
+        categoria.value = "";
+        subcategoria.innerHTML = '<option value="">Selecione...</option>';
+
+        categoria.disabled = true;
+        subcategoria.disabled = true;
+
+    } else {
+
+        categoria.disabled = false;
+        subcategoria.disabled = false;
+
+        atualizarSubcategoriasTeste();
+
+    }
+
+});
