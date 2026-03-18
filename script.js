@@ -1148,10 +1148,16 @@ document.getElementById("btn-testar-form")
 
     const dados = capturarDadosFormularioTeste();
 
-    console.log("TESTE COMPLETO:", dados);
+    const erro = validarFormularioTeste(dados);
+
+    if (erro) {
+        alert(erro);
+        return;
+    }
+
+    console.log("VALIDADO:", JSON.stringify(dados, null, 2));
 
 });
-
 
 
 function capturarDadosFormularioTeste(){
@@ -1318,3 +1324,60 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+
+function validarFormularioTeste(dados){
+
+    // CAMPOS OBRIGATÓRIOS BASE
+    if (!dados.valor || !dados.data) {
+        return "Preencha valor e data";
+    }
+
+    // RECEITA → tudo obrigatório
+    if (dados.tipo === "receita") {
+        if (!dados.fonte || !dados.conta) {
+            return "Preencha todos os campos da receita";
+        }
+    }
+
+    // DESPESA
+    if (dados.tipo === "despesa") {
+
+        if (!dados.essencial) {
+            return "Selecione o tipo da despesa";
+        }
+
+        // INVESTIMENTO OU FINANCEIRO
+        if (
+            dados.essencial === "investimento" ||
+            dados.essencial === "financeiro"
+        ) {
+            // NÃO exige categoria/subcategoria
+            return null;
+        }
+
+        // ESSENCIAL OU NÃO ESSENCIAL
+        if (!dados.categoria || !dados.subcategoria) {
+            return "Preencha categoria e subcategoria";
+        }
+
+        if (!dados.formaPagamento) {
+            return "Selecione forma de pagamento";
+        }
+
+        if (
+            (dados.formaPagamento === "pix" || dados.formaPagamento === "debito")
+            && !dados.contaDebitada
+        ) {
+            return "Selecione a conta";
+        }
+
+        if (
+            dados.formaPagamento === "credito" &&
+            (!dados.cartao || !dados.parcelas)
+        ) {
+            return "Preencha dados do cartão";
+        }
+    }
+
+    return null;
+}
