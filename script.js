@@ -1384,14 +1384,36 @@ function validarFormularioTeste(dados){
 
         // INVESTIMENTO / FINANCEIRO
         if (
-            dados.essencial === "investimento" ||
-            dados.essencial === "financeiro"
-        ) {
-            if (!dados.formaPagamento) {
-                return "Selecione a forma de pagamento";
-            }
-            return null;
+    dados.essencial === "investimento" ||
+    dados.essencial === "financeiro"
+) {
+
+    if (!dados.formaPagamento) {
+        return "Selecione a forma de pagamento";
+    }
+
+    // PIX ou DÉBITO → precisa conta
+    if (
+        (dados.formaPagamento === "pix" || dados.formaPagamento === "debito") &&
+        !dados.contaDebitada
+    ) {
+        return "Selecione a conta para débito";
+    }
+
+    // CRÉDITO → precisa cartão
+    if (dados.formaPagamento === "credito") {
+
+        if (!dados.cartao) {
+            return "Selecione o cartão";
         }
+
+        if (!dados.parcelas) {
+            return "Informe as parcelas";
+        }
+    }
+
+    return null;
+}
 
         // ESSENCIAL / NÃO ESSENCIAL
         if (!dados.categoria) {
