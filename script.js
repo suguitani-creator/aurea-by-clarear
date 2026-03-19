@@ -1214,20 +1214,29 @@ async function carregarContasTeste(){
         collection(db, "users", user.uid, "contas")
     );
 
-    const select = document.getElementById("conta-bancaria-debitada");
+    // SELECTS (receita + despesa)
+    const selectReceita = document.getElementById("conta-bancaria-depositada");
+    const selectDespesa = document.getElementById("conta-bancaria-debitada");
 
-    if (!select) return;
+    if (selectReceita) {
+        selectReceita.innerHTML = '<option value="">Selecione...</option>';
+    }
 
-    select.innerHTML = "";
+    if (selectDespesa) {
+        selectDespesa.innerHTML = '<option value="">Selecione...</option>';
+    }
 
     snapshot.forEach(doc => {
         const conta = doc.data();
 
-        const option = document.createElement("option");
-        option.value = conta.nome;
-        option.textContent = conta.nome;
+        const option1 = document.createElement("option");
+        option1.value = conta.nome;
+        option1.textContent = conta.nome;
 
-        select.appendChild(option);
+        const option2 = option1.cloneNode(true);
+
+        if (selectReceita) selectReceita.appendChild(option1);
+        if (selectDespesa) selectDespesa.appendChild(option2);
     });
 
 }
