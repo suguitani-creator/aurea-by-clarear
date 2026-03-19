@@ -1494,6 +1494,10 @@ async function salvarTransacaoTeste(){
 
         console.log("SALVO NO FIRESTORE:", dados);
 
+        console.log("UID:", user.uid);
+
+        console.log("SALVANDO EM:", `users/${user.uid}/transacoes`);
+
     } catch (error) {
         console.error(error);
         showToast("Erro ao salvar transação", "error");
