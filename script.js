@@ -1151,9 +1151,11 @@ document.getElementById("btn-testar-form")
     const erro = validarFormularioTeste(dados);
 
     if (erro) {
-        alert(erro);
+        showToast(erro, "error");
         return;
     }
+
+    showToast("Dados válidos!", "success");
 
     console.log("VALIDADO:", JSON.stringify(dados, null, 2));
 
@@ -1341,16 +1343,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function validarFormularioTeste(dados){
 
-    // CAMPOS OBRIGATÓRIOS BASE
-    if (!dados.valor || !dados.data) {
-        return "Preencha valor e data";
+    // VALOR E DATA
+    if (!dados.valor || dados.valor <= 0) {
+        return "Informe um valor válido";
     }
 
-    // RECEITA → tudo obrigatório
+    if (!dados.data) {
+        return "Informe a data";
+    }
+
+    // RECEITA
     if (dados.tipo === "receita") {
-        if (!dados.fonte || !dados.conta) {
-            return "Preencha todos os campos da receita";
+
+        if (!dados.fonte) {
+            return "Selecione a fonte da receita";
         }
+
+        if (!dados.conta) {
+            return "Selecione a conta de destino";
+        }
+
+        return null;
     }
 
     // DESPESA
@@ -1360,36 +1373,49 @@ function validarFormularioTeste(dados){
             return "Selecione o tipo da despesa";
         }
 
-        // INVESTIMENTO OU FINANCEIRO
+        // INVESTIMENTO / FINANCEIRO
         if (
             dados.essencial === "investimento" ||
             dados.essencial === "financeiro"
         ) {
-            // NÃO exige categoria/subcategoria
+            if (!dados.formaPagamento) {
+                return "Selecione a forma de pagamento";
+            }
             return null;
         }
 
-        // ESSENCIAL OU NÃO ESSENCIAL
-        if (!dados.categoria || !dados.subcategoria) {
-            return "Preencha categoria e subcategoria";
+        // ESSENCIAL / NÃO ESSENCIAL
+        if (!dados.categoria) {
+            return "Selecione a categoria";
+        }
+
+        if (!dados.subcategoria) {
+            return "Selecione a subcategoria";
         }
 
         if (!dados.formaPagamento) {
-            return "Selecione forma de pagamento";
+            return "Selecione a forma de pagamento";
         }
 
+        // PIX / DÉBITO
         if (
-            (dados.formaPagamento === "pix" || dados.formaPagamento === "debito")
-            && !dados.contaDebitada
+            (dados.formaPagamento === "pix" || dados.formaPagamento === "debito") &&
+            !dados.contaDebitada
         ) {
             return "Selecione a conta";
         }
 
-        if (
-            dados.formaPagamento === "credito" &&
-            (!dados.cartao || !dados.parcelas)
-        ) {
-            return "Preencha dados do cartão";
+        // CARTÃO
+        if (dados.formaPagamento === "credito") {
+
+            if (!dados.cartao) {
+                return "Selecione o cartão";
+            }
+
+            if (!dados.parcelas) {
+                return "Informe as parcelas";
+            }
+
         }
     }
 
