@@ -1144,22 +1144,7 @@ document.getElementById("forma-pagamento-teste").addEventListener("change", () =
 });
 
 document.getElementById("btn-testar-form")
-.addEventListener("click", () => {
-
-    const dados = capturarDadosFormularioTeste();
-
-    const erro = validarFormularioTeste(dados);
-
-    if (erro) {
-        showToast(erro, "error");
-        return;
-    }
-
-    showToast("Dados válidos!", "success");
-
-    console.log("VALIDADO:", JSON.stringify(dados, null, 2));
-
-});
+.addEventListener("click", salvarTransacaoTeste);
 
 
 function capturarDadosFormularioTeste(){
@@ -1480,3 +1465,37 @@ document.getElementById("essencial").addEventListener("change", () => {
     }
 
 });
+
+async function salvarTransacaoTeste(){
+
+    const user = auth.currentUser;
+    if (!user) {
+        showToast("Usuário não autenticado", "error");
+        return;
+    }
+
+    const dados = capturarDadosFormularioTeste();
+
+    const erro = validarFormularioTeste(dados);
+
+    if (erro) {
+        showToast(erro, "error");
+        return;
+    }
+
+    try {
+
+        await addDoc(
+            collection(db, "users", user.uid, "transacoes"),
+            dados
+        );
+
+        showToast("Transação salva com sucesso!", "success");
+
+        console.log("SALVO NO FIRESTORE:", dados);
+
+    } catch (error) {
+        console.error(error);
+        showToast("Erro ao salvar transação", "error");
+    }
+}
