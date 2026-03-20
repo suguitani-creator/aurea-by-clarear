@@ -388,6 +388,13 @@ function atualizarTela(listaTransacoes) {
 
         // 🔥 clique no item (mas não nos botões)
         item.addEventListener("click", (e) => {
+            if (e.target.closest("button")) return;
+
+            const detalhes = item.querySelector(".detalhes-expandido");
+
+            detalhes.style.display =
+                detalhes.style.display === "none" ? "block" : "none";
+            
             const seta = item.querySelector(".setinha");
 
 detalhes.style.display =
@@ -395,12 +402,6 @@ detalhes.style.display =
 
 seta.style.transform =
     detalhes.style.display === "block" ? "rotate(180deg)" : "rotate(0deg)";
-            if (e.target.closest("button")) return;
-
-            const detalhes = item.querySelector(".detalhes-expandido");
-
-            detalhes.style.display =
-                detalhes.style.display === "none" ? "block" : "none";
         });
 
         lista.appendChild(item);
