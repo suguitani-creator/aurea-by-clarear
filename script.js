@@ -327,41 +327,49 @@ function aplicarFiltro() {
 
 function atualizarTela(listaTransacoes) {
     const lista = document.getElementById("lista-despesas");
-    lista.innerHTML = ""; // Limpa a lista antes de preencher
+    lista.innerHTML = "";
 
-    listaTransacoes.forEach((transacao) => {
+    listaTransacoes.forEach((t) => {
         const item = document.createElement("li");
-        item.classList.add(transacao.tipo);
-        item.classList.add("item-novo");
+        item.classList.add(t.tipo);
 
-        // Verifica se é uma despesa e adiciona o ícone da forma de pagamento antes do valor
-        let formaPagamentoDisplay = "";
-        if (transacao.tipo === "despesa") {
-            formaPagamentoDisplay = `<span class="forma-pagamento">${getIconeFormaPagamento(transacao.formaPagamento)}</span>`;
+        let info = "";
+        let detalhe = "";
+
+        // ================= RECEITA =================
+        if (t.tipo === "receita") {
+            info = `<strong>${t.descricao || "(sem descrição)"}</strong>`;
+            detalhe = `
+                <small>${t.fonte || ""}</small>
+                <small>${t.conta || ""}</small>
+            `;
         }
 
-        // Alteração para colocar ícone antes do valor
+        // ================= DESPESA =================
+        if (t.tipo === "despesa") {
+            info = `<strong>${t.descricao || "(sem descrição)"}</strong>`;
+
+            detalhe = `
+                <small>${t.categoria || ""} ${t.subcategoria ? "• " + t.subcategoria : ""}</small>
+                <small>${t.formaPagamento || ""}</small>
+            `;
+        }
+
         item.innerHTML = `
             <div class="item-info">
-                <strong>${transacao.descricao}</strong>
-                <small>${transacao.categoria}</small>
+                ${info}
+                ${detalhe}
             </div>
 
             <div class="item-actions">
-                ${formaPagamentoDisplay} <!-- Exibe o ícone da forma de pagamento antes do valor -->
+                <span class="valor">R$ ${t.valor?.toFixed(2) || "0.00"}</span>
 
-                <span class="valor">R$ ${transacao.valor.toFixed(2)}</span>
-
-                <button class="btn-edit" onclick="editarTransacao('${transacao.id}')">
-                    <svg viewBox="0 0 24 24" width="16" height="16">
-                    <path fill="currentColor" d="M3 17.25V21h3.75L19.81 7.94l-3.75-3.75L3 17.25zM20.71 6.04c.39-.39.39-1.02 0-1.41l-1.34-1.34c-.39-.39-1.02-.39-1.41 0l-1.13 1.13 3.75 3.75 1.13-1.13z"/>
-                    </svg>
+                <button class="btn-edit" onclick="editarTransacao('${t.id}')">
+                    ✏️
                 </button>
 
-                <button class="btn-delete" onclick="confirmarExclusao('${transacao.id}')">
-                    <svg viewBox="0 0 24 24" width="16" height="16">
-                        <path fill="currentColor" d="M6 7h12l-1 14H7L6 7zm3-4h6l1 2h4v2H4V5h4l1-2z"/>
-                    </svg>
+                <button class="btn-delete" onclick="confirmarExclusao('${t.id}')">
+                    🗑️
                 </button>
             </div>
         `;
