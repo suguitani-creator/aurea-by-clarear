@@ -331,47 +331,55 @@ function atualizarTela(listaTransacoes) {
 
     listaTransacoes.forEach((t) => {
         const item = document.createElement("li");
-        item.classList.add("item-transacao");
+        item.classList.add(t.tipo); // mantém receita/despesa (cores)
 
-        let titulo = "";
-        let subtitulo = "";
+        let principal = "";
+        let secundario = "";
 
         // ================= RECEITA =================
         if (t.tipo === "receita") {
-            titulo = t.fonte || "Receita";
-            subtitulo = t.data || "";
+            principal = t.fonte || "Receita";
+            secundario = t.data || "";
         }
 
         // ================= DESPESA =================
         if (t.tipo === "despesa") {
             if (t.essencial === "sim" || t.essencial === "nao") {
-                titulo = t.categoria || "Despesa";
+                principal = t.categoria || "Despesa";
             } else {
-                titulo = t.essencial || "Despesa";
+                principal = t.essencial || "Despesa";
             }
-            subtitulo = t.data || "";
+            secundario = t.data || "";
         }
 
         item.innerHTML = `
-            <div class="linha-resumo">
-                <div>
-                    <strong>${titulo}</strong>
-                    <small>${subtitulo}</small>
-                </div>
-
-                <div class="lado-direito">
-                    <span class="valor">R$ ${t.valor?.toFixed(2) || "0.00"}</span>
-                </div>
+            <div class="item-info">
+                <strong>${principal}</strong>
+                <small>${secundario}</small>
             </div>
 
-            <div class="detalhes" style="display:none;">
-                ${gerarDetalhes(t)}
+            <div class="item-actions">
+                <span class="valor">R$ ${t.valor?.toFixed(2) || "0.00"}</span>
+
+                <button class="btn-edit" onclick="editarTransacao('${t.id}')">
+                    ✏️
+                </button>
+
+                <button class="btn-delete" onclick="confirmarExclusao('${t.id}')">
+                    🗑️
+                </button>
+            </div>
+
+            <div class="detalhes-expandido" style="display:none;">
+                ${gerarDetalhesClean(t)}
             </div>
         `;
 
-        // 👉 clique para expandir
-        item.querySelector(".linha-resumo").addEventListener("click", () => {
-            const detalhes = item.querySelector(".detalhes");
+        // 🔥 clique no item (mas não nos botões)
+        item.addEventListener("click", (e) => {
+            if (e.target.closest("button")) return;
+
+            const detalhes = item.querySelector(".detalhes-expandido");
 
             detalhes.style.display =
                 detalhes.style.display === "none" ? "block" : "none";
@@ -381,33 +389,32 @@ function atualizarTela(listaTransacoes) {
     });
 }
 
-function gerarDetalhes(t) {
+function gerarDetalhesClean(t) {
 
     if (t.tipo === "receita") {
         return `
-            <small>Conta: ${t.conta || "-"}</small><br>
-            <small>Descrição: ${t.descricao || "-"}</small>
+            <div>${t.conta || "-"}</div>
+            <div>${t.descricao || "-"}</div>
         `;
     }
 
     if (t.tipo === "despesa") {
 
         let detalhes = `
-            <small>Categoria: ${t.categoria || "-"}</small><br>
-            <small>Subcategoria: ${t.subcategoria || "-"}</small><br>
-            <small>Forma: ${t.formaPagamento || "-"}</small><br>
+            <div>${t.subcategoria || "-"}</div>
+            <div>${t.formaPagamento || "-"}</div>
         `;
 
         if (t.formaPagamento === "credito") {
             detalhes += `
-                <small>Cartão: ${t.cartao || "-"}</small><br>
-                <small>Parcelas: ${t.parcelas || "-"}</small><br>
-                <small>Fatura: ${t.mesFatura || "-"}</small>
+                <div>${t.cartao || "-"}</div>
+                <div>${t.parcelas || "-"}x</div>
+                <div>${t.mesFatura || "-"}</div>
             `;
         }
 
         if (t.formaPagamento === "pix" || t.formaPagamento === "debito") {
-            detalhes += `<small>Conta: ${t.conta || "-"}</small>`;
+            detalhes += `<div>${t.conta || "-"}</div>`;
         }
 
         return detalhes;

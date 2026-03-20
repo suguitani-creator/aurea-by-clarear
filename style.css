@@ -910,3 +910,14 @@ button.modo-edicao:hover {
     font-size: 13px;
     color: #6B5E4B;
 }
+
+.detalhes-expandido {
+    margin-top: 8px;
+    padding-left: 2px;
+    font-size: 13px;
+    color: #6B5E4B;
+}
+
+.detalhes-expandido div {
+    margin-top: 2px;
+}
