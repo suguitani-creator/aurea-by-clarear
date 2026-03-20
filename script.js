@@ -279,10 +279,18 @@ async function adicionarTransacao() {
     }
 
     try {
-        await addDoc(
-            collection(db, "users", user.uid, "transacoes"),
-            dados
-        );
+        const docRef = await addDoc(
+    collection(db, "users", user.uid, "transacoes"),
+    dados
+);
+
+    // Atualiza localmente sem esperar reload
+transacoes.push({
+    id: docRef.id,
+    ...dados
+});
+
+aplicarFiltro();
 
         console.log("SALVO NO FIRESTORE:", dados);
         showToast("Transação adicionada!");
@@ -339,7 +347,7 @@ function atualizarTela(listaTransacoes) {
         // ================= RECEITA =================
         if (t.tipo === "receita") {
             principal = t.fonte || "Receita";
-            secundario = t.data || "";
+            secundario = t.data ? formatarData(t.data) : "";
         }
 
         // ================= DESPESA =================
@@ -349,12 +357,15 @@ function atualizarTela(listaTransacoes) {
             } else {
                 principal = t.essencial || "Despesa";
             }
-            secundario = t.data || "";
+            secundario = t.data ? formatarData(t.data) : "";
         }
 
         item.innerHTML = `
             <div class="item-info">
-                <strong>${principal}</strong>
+                <div class="linha-titulo">
+                    <strong>${principal}</strong>
+                    <span class="setinha">▼</span>
+                </div>
                 <small>${secundario}</small>
             </div>
 
@@ -377,6 +388,13 @@ function atualizarTela(listaTransacoes) {
 
         // 🔥 clique no item (mas não nos botões)
         item.addEventListener("click", (e) => {
+            const seta = item.querySelector(".setinha");
+
+detalhes.style.display =
+    detalhes.style.display === "none" ? "block" : "none";
+
+seta.style.transform =
+    detalhes.style.display === "block" ? "rotate(180deg)" : "rotate(0deg)";
             if (e.target.closest("button")) return;
 
             const detalhes = item.querySelector(".detalhes-expandido");
