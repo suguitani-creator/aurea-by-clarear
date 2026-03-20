@@ -188,57 +188,112 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
 // ================= FINANÇAS =================
 
 async function adicionarTransacao() {
-
-    if (MODO_TESTE_FORM) {
-    const dados = capturarDadosFormularioTeste();
-    console.log("TESTE FORMULÁRIO:", dados);
-    return;
-}
-
     const user = auth.currentUser;
     if (!user) return;
 
     const tipo = document.getElementById("tipo").value;
-    const categoria = document.getElementById("categoria").value;
-    const descricao = document.getElementById("descricao").value;
-    const valor = parseFloat(document.getElementById("valor").value);
-    const data = document.getElementById("data").value;
-    const formaPagamento = document.getElementById("forma-pagamento").value;  // Captura a forma de pagamento
 
-    if (!descricao || isNaN(valor) || !data) {
-        showToast("Preencha todos os campos corretamente", "error");
-        return;
+    let dados = {
+        tipo: tipo
+    };
+
+    // ================= RECEITA =================
+    if (tipo === "receita") {
+
+        const fonte = document.getElementById("fonte")?.value || "";
+        const descricao = document.getElementById("descricao-receita")?.value || "";
+        const valor = parseFloat(document.getElementById("valor-receita")?.value);
+        const data = document.getElementById("data-receita")?.value || "";
+        const conta = document.getElementById("conta-bancaria-depositada")?.value || "";
+
+        if (isNaN(valor) || !data || !conta) {
+            showToast("Preencha os campos obrigatórios", "error");
+            return;
+        }
+
+        dados = {
+            ...dados,
+            fonte,
+            descricao,
+            valor,
+            data,
+            conta
+        };
     }
 
-    if (idEmEdicao) {
-        await updateDoc(
-            doc(db, "users", user.uid, "transacoes", idEmEdicao),
-            { tipo, categoria, descricao, valor, data, formaPagamento }  // Inclui forma de pagamento
-        );
+    // ================= DESPESA =================
+    if (tipo === "despesa") {
 
-        showToast("Transação atualizada!");
-        idEmEdicao = null;
+        const essencial = document.getElementById("essencial")?.value || "";
+        const categoria = document.getElementById("categoria")?.value || "";
+        const subcategoria = document.getElementById("subcategoria")?.value || "";
+        const descricao = document.getElementById("descricao-despesa")?.value || "";
+        const valor = parseFloat(document.getElementById("valor-despesa")?.value);
+        const data = document.getElementById("data-despesa")?.value || "";
+        const formaPagamento = document.getElementById("forma-pagamento")?.value || "";
 
-        document.getElementById("indicador-edicao").style.display = "none";
-        document.querySelectorAll("li").forEach(li => {
-            li.classList.remove("linha-editando");
-        });
+        let conta = "";
+        let cartao = "";
+        let parcelas = "";
+        let mesFatura = "";
 
-        const btn = document.getElementById("btn-adicionar");
-        btn.textContent = "Adicionar";
-        btn.classList.remove("modo-edicao");
+        if (formaPagamento === "pix" || formaPagamento === "debito") {
+            conta = document.getElementById("conta-bancaria-debitada")?.value || "";
 
-    } else {
+            if (!conta) {
+                showToast("Selecione a conta", "error");
+                return;
+            }
+        }
+
+        if (formaPagamento === "credito") {
+            cartao = document.getElementById("nome-cartao")?.value || "";
+            parcelas = document.getElementById("parcelas")?.value || "";
+            mesFatura = document.getElementById("mes-fatura")?.value || "";
+
+            if (!cartao || !parcelas) {
+                showToast("Preencha os dados do cartão", "error");
+                return;
+            }
+        }
+
+        if (isNaN(valor) || !data || !formaPagamento) {
+            showToast("Preencha os campos obrigatórios", "error");
+            return;
+        }
+
+        dados = {
+            ...dados,
+            essencial,
+            categoria,
+            subcategoria,
+            descricao,
+            valor,
+            data,
+            formaPagamento,
+            conta,
+            cartao,
+            parcelas,
+            mesFatura
+        };
+    }
+
+    try {
         await addDoc(
             collection(db, "users", user.uid, "transacoes"),
-            { tipo, categoria, descricao, valor, data, formaPagamento }  // Inclui forma de pagamento
+            dados
         );
 
+        console.log("SALVO NO FIRESTORE:", dados);
         showToast("Transação adicionada!");
-    }
 
-    limparFormulario();
-    carregarTransacoes();
+        limparFormulario();
+        carregarTransacoes();
+
+    } catch (error) {
+        console.error("Erro ao salvar:", error);
+        showToast("Erro ao salvar transação", "error");
+    }
 }
 
 function atualizarCategorias() {
