@@ -394,14 +394,6 @@ function atualizarTela(listaTransacoes) {
 
             detalhes.style.display =
                 detalhes.style.display === "none" ? "block" : "none";
-            
-            const seta = item.querySelector(".setinha");
-
-detalhes.style.display =
-    detalhes.style.display === "none" ? "block" : "none";
-
-seta.style.transform =
-    detalhes.style.display === "block" ? "rotate(180deg)" : "rotate(0deg)";
         });
 
         lista.appendChild(item);
