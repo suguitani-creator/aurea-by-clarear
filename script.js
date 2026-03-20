@@ -288,7 +288,7 @@ async function adicionarTransacao() {
         showToast("Transação adicionada!");
 
         limparFormulario();
-        carregarTransacoes();
+        await carregarTransacoes();
 
     } catch (error) {
         console.error("Erro ao salvar:", error);
@@ -331,51 +331,89 @@ function atualizarTela(listaTransacoes) {
 
     listaTransacoes.forEach((t) => {
         const item = document.createElement("li");
-        item.classList.add(t.tipo);
+        item.classList.add("item-transacao");
 
-        let info = "";
-        let detalhe = "";
+        let titulo = "";
+        let subtitulo = "";
 
         // ================= RECEITA =================
         if (t.tipo === "receita") {
-            info = `<strong>${t.descricao || "(sem descrição)"}</strong>`;
-            detalhe = `
-                <small>${t.fonte || ""}</small>
-                <small>${t.conta || ""}</small>
-            `;
+            titulo = t.fonte || "Receita";
+            subtitulo = t.data || "";
         }
 
         // ================= DESPESA =================
         if (t.tipo === "despesa") {
-            info = `<strong>${t.descricao || "(sem descrição)"}</strong>`;
-
-            detalhe = `
-                <small>${t.categoria || ""} ${t.subcategoria ? "• " + t.subcategoria : ""}</small>
-                <small>${t.formaPagamento || ""}</small>
-            `;
+            if (t.essencial === "sim" || t.essencial === "nao") {
+                titulo = t.categoria || "Despesa";
+            } else {
+                titulo = t.essencial || "Despesa";
+            }
+            subtitulo = t.data || "";
         }
 
         item.innerHTML = `
-            <div class="item-info">
-                ${info}
-                ${detalhe}
+            <div class="linha-resumo">
+                <div>
+                    <strong>${titulo}</strong>
+                    <small>${subtitulo}</small>
+                </div>
+
+                <div class="lado-direito">
+                    <span class="valor">R$ ${t.valor?.toFixed(2) || "0.00"}</span>
+                </div>
             </div>
 
-            <div class="item-actions">
-                <span class="valor">R$ ${t.valor?.toFixed(2) || "0.00"}</span>
-
-                <button class="btn-edit" onclick="editarTransacao('${t.id}')">
-                    ✏️
-                </button>
-
-                <button class="btn-delete" onclick="confirmarExclusao('${t.id}')">
-                    🗑️
-                </button>
+            <div class="detalhes" style="display:none;">
+                ${gerarDetalhes(t)}
             </div>
         `;
 
+        // 👉 clique para expandir
+        item.querySelector(".linha-resumo").addEventListener("click", () => {
+            const detalhes = item.querySelector(".detalhes");
+
+            detalhes.style.display =
+                detalhes.style.display === "none" ? "block" : "none";
+        });
+
         lista.appendChild(item);
     });
+}
+
+function gerarDetalhes(t) {
+
+    if (t.tipo === "receita") {
+        return `
+            <small>Conta: ${t.conta || "-"}</small><br>
+            <small>Descrição: ${t.descricao || "-"}</small>
+        `;
+    }
+
+    if (t.tipo === "despesa") {
+
+        let detalhes = `
+            <small>Categoria: ${t.categoria || "-"}</small><br>
+            <small>Subcategoria: ${t.subcategoria || "-"}</small><br>
+            <small>Forma: ${t.formaPagamento || "-"}</small><br>
+        `;
+
+        if (t.formaPagamento === "credito") {
+            detalhes += `
+                <small>Cartão: ${t.cartao || "-"}</small><br>
+                <small>Parcelas: ${t.parcelas || "-"}</small><br>
+                <small>Fatura: ${t.mesFatura || "-"}</small>
+            `;
+        }
+
+        if (t.formaPagamento === "pix" || t.formaPagamento === "debito") {
+            detalhes += `<small>Conta: ${t.conta || "-"}</small>`;
+        }
+
+        return detalhes;
+    }
+
+    return "";
 }
 
 function calcularSaldo(listaTransacoes) {
