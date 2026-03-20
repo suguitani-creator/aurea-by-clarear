@@ -1502,4 +1502,22 @@ async function salvarTransacaoTeste(){
         console.error(error);
         showToast("Erro ao salvar transação", "error");
     }
+    await testarLeituraTransacoes();
+}
+
+async function testarLeituraTransacoes() {
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const snapshot = await getDocs(
+        collection(db, "users", user.uid, "transacoes")
+    );
+
+    console.log("QUANTIDADE:", snapshot.size);
+
+    snapshot.forEach(doc => {
+        console.log("DOC:", doc.id, doc.data());
+    });
+
 }
