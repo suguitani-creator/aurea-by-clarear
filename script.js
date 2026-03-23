@@ -284,12 +284,11 @@ async function adicionarTransacao() {
     dados
 );
 
-    await carregarTransacoes();
-
         console.log("SALVO NO FIRESTORE:", dados);
         showToast("Transação adicionada!");
 
         limparFormulario();
+        await carregarTransacoes();
 
     } catch (error) {
         console.error("Erro ao salvar:", error);
