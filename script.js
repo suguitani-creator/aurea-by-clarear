@@ -284,21 +284,7 @@ async function adicionarTransacao() {
     dados
 );
 
-    // Atualiza localmente sem esperar reload
-transacoes.push({
-    id: docRef.id,
-    ...dados
-});
-
-const mesSelecionado = document.getElementById("mes-filtro").value;
-
-if (mesSelecionado && dados.data && !dados.data.startsWith(mesSelecionado)) {
-    // Se não pertence ao filtro → atualiza tudo sem filtro
-    atualizarTela(transacoes);
-    calcularSaldo(transacoes);
-} else {
-    aplicarFiltro();
-}
+    await carregarTransacoes();
 
         console.log("SALVO NO FIRESTORE:", dados);
         showToast("Transação adicionada!");
