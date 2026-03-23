@@ -883,6 +883,15 @@ button.modo-edicao:hover {
 
 .item-transacao {
     cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.item-transacao:hover {
+    background: #F3EFEA; /* ajuste para seu tema */
+}
+
+.item-transacao:active {
+    transform: scale(0.99);
 }
 
 .linha-titulo {
