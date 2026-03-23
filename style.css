@@ -882,56 +882,23 @@ button.modo-edicao:hover {
 }
 
 .item-transacao {
-    background: #FAF8F5;
-    border-radius: 10px;
-    padding: 12px;
-    margin-bottom: 10px;
     cursor: pointer;
-}
-
-.linha-resumo {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.linha-resumo small {
-    display: block;
-    color: #8B6F4E;
-    font-size: 12px;
-}
-
-.valor {
-    font-weight: 600;
-}
-
-.detalhes {
-    margin-top: 10px;
-    font-size: 13px;
-    color: #6B5E4B;
-}
-
-.detalhes-expandido {
-    margin-top: 8px;
-    padding-left: 2px;
-    font-size: 13px;
-    color: #6B5E4B;
-}
-
-.detalhes-expandido div {
-    margin-top: 2px;
 }
 
 .linha-titulo {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
 }
 
 .setinha {
     font-size: 12px;
-    transition: transform 0.2s ease;
     color: #8B6F4E;
+    transition: transform 0.25s ease;
+}
+
+.linha-clicavel {
+    width: 100%;
 }
 
 .detalhes-expandido {

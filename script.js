@@ -296,7 +296,6 @@ aplicarFiltro();
         showToast("Transação adicionada!");
 
         limparFormulario();
-        await carregarTransacoes();
 
     } catch (error) {
         console.error("Erro ao salvar:", error);
@@ -339,7 +338,10 @@ function atualizarTela(listaTransacoes) {
 
     listaTransacoes.forEach((t) => {
         const item = document.createElement("li");
-        item.classList.add(t.tipo); // mantém receita/despesa (cores)
+
+        // 🔥 IMPORTANTE (cursor + estilo)
+        item.classList.add(t.tipo);
+        item.classList.add("item-transacao");
 
         let principal = "";
         let secundario = "";
@@ -361,7 +363,7 @@ function atualizarTela(listaTransacoes) {
         }
 
         item.innerHTML = `
-            <div class="item-info">
+            <div class="item-info linha-clicavel">
                 <div class="linha-titulo">
                     <strong>${principal}</strong>
                     <span class="setinha">▼</span>
@@ -386,18 +388,21 @@ function atualizarTela(listaTransacoes) {
             </div>
         `;
 
-        // 🔥 clique no item (mas não nos botões)
-        item.addEventListener("click", (e) => {
-    if (e.target.closest("button")) return;
+        // 🔥 clique só na parte esquerda (melhor UX)
+        const areaClicavel = item.querySelector(".linha-clicavel");
 
-    const detalhes = item.querySelector(".detalhes-expandido");
-    const seta = item.querySelector(".setinha");
+        areaClicavel.addEventListener("click", () => {
+            const detalhes = item.querySelector(".detalhes-expandido");
+            const seta = item.querySelector(".setinha");
 
-    const aberto = detalhes.style.display === "block";
+            const aberto = detalhes.style.display === "block";
 
-    detalhes.style.display = aberto ? "none" : "block";
-    seta.style.transform = aberto ? "rotate(0deg)" : "rotate(180deg)";
-});
+            detalhes.style.display = aberto ? "none" : "block";
+
+            if (seta) {
+                seta.style.transform = aberto ? "rotate(0deg)" : "rotate(180deg)";
+            }
+        });
 
         lista.appendChild(item);
     });
