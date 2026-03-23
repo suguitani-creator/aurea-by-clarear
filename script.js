@@ -290,7 +290,15 @@ transacoes.push({
     ...dados
 });
 
-aplicarFiltro();
+const mesSelecionado = document.getElementById("mes-filtro").value;
+
+if (mesSelecionado && dados.data && !dados.data.startsWith(mesSelecionado)) {
+    // Se não pertence ao filtro → atualiza tudo sem filtro
+    atualizarTela(transacoes);
+    calcularSaldo(transacoes);
+} else {
+    aplicarFiltro();
+}
 
         console.log("SALVO NO FIRESTORE:", dados);
         showToast("Transação adicionada!");
