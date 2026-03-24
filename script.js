@@ -10,6 +10,7 @@ import {
   addDoc,
   getDocs,
   getDoc,
+  onSnapshot,
   deleteDoc,
   doc,
   query,
@@ -172,7 +173,7 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         authContainer.style.display = "none";
         appContainer.style.display = "block";
 
-        carregarTransacoes();  // Carregar transações após o login
+        carregarTransacoesTempoReal();  // Carregar transações após o login
         carregarContasECartoes();  // Carregar contas e cartões após o login
         carregarContasTeste();
         carregarCartoesTeste();
@@ -288,7 +289,6 @@ async function adicionarTransacao() {
         showToast("Transação adicionada!");
 
         limparFormulario();
-        await carregarTransacoes();
 
     } catch (error) {
         console.error("Erro ao salvar:", error);
@@ -515,24 +515,25 @@ function atualizarGrafico(listaTransacoes) {
     });
 }
 
-async function carregarTransacoes() {
+function carregarTransacoesTempoReal() {
     const user = auth.currentUser;
     if (!user) return;
 
-    const querySnapshot = await getDocs(
-        collection(db, "users", user.uid, "transacoes")
-    );
+    const ref = collection(db, "users", user.uid, "transacoes");
 
-    transacoes = [];
+    onSnapshot(ref, (snapshot) => {
 
-    querySnapshot.forEach(documento => {
-        transacoes.push({
-            id: documento.id,
-            ...documento.data()
+        transacoes = [];
+
+        snapshot.forEach(doc => {
+            transacoes.push({
+                id: doc.id,
+                ...doc.data()
+            });
         });
-    });
 
-    aplicarFiltro();
+        aplicarFiltro();
+    });
 }
 
 function limparFormulario() {
