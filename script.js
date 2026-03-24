@@ -421,7 +421,7 @@ function gerarDetalhesClean(t) {
             detalhes += `
                 <div>${t.cartao || "-"}</div>
                 <div>${t.parcelas || "-"}x</div>
-                <div>${t.mesFatura || "-"}</div>
+                <div>${t.mesFatura ? formatarMesFatura(t.mesFatura) : "-"}</div>
             `;
         }
 
@@ -703,6 +703,14 @@ function formatarData(data) {
     const mesFormatado = (dataFormatada.getMonth() + 1).toString().padStart(2, '0');
     const anoFormatado = dataFormatada.getFullYear();
     return `${diaFormatado}/${mesFormatado}/${anoFormatado}`;  // Retorna a data formatada como DD/MM/YYYY
+}
+
+function formatarMesFatura(mes) {
+    if (!mes) return "";
+
+    const [ano, mesNumero] = mes.split("-");
+
+    return `${mesNumero}/${ano}`;
 }
 
 function calcularTotaisPorMes(mes, ano) {
