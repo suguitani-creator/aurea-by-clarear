@@ -1443,28 +1443,20 @@ function atualizarSelectContas(contas) {
     });
 }
 
-function atualizarSelectContas(contas) {
+function atualizarSelectCartoes(cartoes) {
 
-    const selectReceita = document.getElementById("conta-bancaria-depositada");
-    const selectDespesa = document.getElementById("conta-bancaria-debitada");
+    const selectCartao = document.getElementById("nome-cartao");
 
-    if (selectReceita) {
-        selectReceita.innerHTML = '<option value="">Selecione...</option>';
-    }
+    if (!selectCartao) return;
 
-    if (selectDespesa) {
-        selectDespesa.innerHTML = '<option value="">Selecione...</option>';
-    }
+    selectCartao.innerHTML = '<option value="">Selecione...</option>';
 
-    contas.forEach(conta => {
-        const option1 = document.createElement("option");
-        option1.value = conta.nome;
-        option1.textContent = conta.nome;
+    cartoes.forEach(cartao => {
+        const option = document.createElement("option");
+        option.value = cartao.nome;
+        option.textContent = cartao.nome;
 
-        const option2 = option1.cloneNode(true);
-
-        if (selectReceita) selectReceita.appendChild(option1);
-        if (selectDespesa) selectDespesa.appendChild(option2);
+        selectCartao.appendChild(option);
     });
 }
 
