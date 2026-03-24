@@ -175,8 +175,8 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
 
         carregarTransacoesTempoReal();  // Carregar transações após o login
         carregarContasECartoes();  // Carregar contas e cartões após o login
-        carregarContasTeste();
-        carregarCartoesTeste();
+        escutarContasTempoReal();
+        escutarCartoesTempoReal();
 
     } else {
         authContainer.style.display = "block";
@@ -1380,6 +1380,92 @@ async function carregarCartoesTeste(){
         select.appendChild(option);
     });
 
+}
+
+function escutarContasTempoReal() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const ref = collection(db, "users", user.uid, "contas");
+
+    onSnapshot(ref, (snapshot) => {
+
+        const contas = [];
+
+        snapshot.forEach(doc => {
+            contas.push(doc.data());
+        });
+
+        atualizarSelectContas(contas);
+    });
+}
+
+function escutarCartoesTempoReal() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const ref = collection(db, "users", user.uid, "cartoes");
+
+    onSnapshot(ref, (snapshot) => {
+
+        const cartoes = [];
+
+        snapshot.forEach(doc => {
+            cartoes.push(doc.data());
+        });
+
+        atualizarSelectCartoes(cartoes);
+    });
+}
+
+function atualizarSelectContas(contas) {
+
+    const selectReceita = document.getElementById("conta-bancaria-depositada");
+    const selectDespesa = document.getElementById("conta-bancaria-debitada");
+
+    if (selectReceita) {
+        selectReceita.innerHTML = '<option value="">Selecione...</option>';
+    }
+
+    if (selectDespesa) {
+        selectDespesa.innerHTML = '<option value="">Selecione...</option>';
+    }
+
+    contas.forEach(conta => {
+        const option1 = document.createElement("option");
+        option1.value = conta.nome;
+        option1.textContent = conta.nome;
+
+        const option2 = option1.cloneNode(true);
+
+        if (selectReceita) selectReceita.appendChild(option1);
+        if (selectDespesa) selectDespesa.appendChild(option2);
+    });
+}
+
+function atualizarSelectContas(contas) {
+
+    const selectReceita = document.getElementById("conta-bancaria-depositada");
+    const selectDespesa = document.getElementById("conta-bancaria-debitada");
+
+    if (selectReceita) {
+        selectReceita.innerHTML = '<option value="">Selecione...</option>';
+    }
+
+    if (selectDespesa) {
+        selectDespesa.innerHTML = '<option value="">Selecione...</option>';
+    }
+
+    contas.forEach(conta => {
+        const option1 = document.createElement("option");
+        option1.value = conta.nome;
+        option1.textContent = conta.nome;
+
+        const option2 = option1.cloneNode(true);
+
+        if (selectReceita) selectReceita.appendChild(option1);
+        if (selectDespesa) selectDespesa.appendChild(option2);
+    });
 }
 
 // ================= CATEGORIAS E SUBCATEGORIAS (TESTE) =================
