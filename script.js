@@ -189,6 +189,24 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
 // ================= FINANÇAS =================
 
 async function adicionarTransacao() {
+    if (idEmEdicao) {
+    await updateDoc(
+        doc(db, "users", user.uid, "transacoes", idEmEdicao),
+        dados
+    );
+
+    showToast("Transação atualizada!");
+
+    idEmEdicao = null;
+
+    document.getElementById("indicador-edicao").style.display = "none";
+
+    const btn = document.getElementById("btn-adicionar");
+    btn.textContent = "Adicionar";
+    btn.classList.remove("modo-edicao");
+
+    return;
+}
     const user = auth.currentUser;
     if (!user) return;
 
@@ -648,23 +666,62 @@ document.getElementById("confirmar-exclusao").addEventListener("click", async ()
 
 window.confirmarExclusao = confirmarExclusao;
 
-window.editarTransacao = async function(id) {
+window.editarTransacao = function(id) {
     const user = auth.currentUser;
     if (!user) return;
 
     const transacao = transacoes.find(t => t.id === id);
     if (!transacao) return;
 
+    // ================= TIPO =================
     document.getElementById("tipo").value = transacao.tipo;
-    atualizarCategorias();
 
-    document.getElementById("categoria").value = transacao.categoria;
-    document.getElementById("descricao").value = transacao.descricao;
-    document.getElementById("valor").value = transacao.valor;
-    document.getElementById("data").value = transacao.data;
+    // 🔥 dispara lógica de exibição dos campos
+    document.getElementById("tipo").dispatchEvent(new Event("change"));
 
-    // Mostrar o indicador de edição apenas quando o usuário clicar em editar
-    document.getElementById("indicador-edicao").style.display = "flex";  // Mostrar indicador de edição
+    // ================= RECEITA =================
+    if (transacao.tipo === "receita") {
+
+        document.getElementById("fonte").value = transacao.fonte || "";
+        document.getElementById("descricao-receita").value = transacao.descricao || "";
+        document.getElementById("valor-receita").value = transacao.valor || "";
+        document.getElementById("data-receita").value = transacao.data || "";
+        document.getElementById("conta-bancaria-depositada").value = transacao.conta || "";
+    }
+
+    // ================= DESPESA =================
+    if (transacao.tipo === "despesa") {
+
+        document.getElementById("essencial").value = transacao.essencial || "";
+        document.getElementById("categoria").value = transacao.categoria || "";
+
+        // 🔥 atualiza subcategorias antes de setar valor
+        atualizarSubcategorias?.();
+
+        document.getElementById("subcategoria").value = transacao.subcategoria || "";
+        document.getElementById("descricao-despesa").value = transacao.descricao || "";
+        document.getElementById("valor-despesa").value = transacao.valor || "";
+        document.getElementById("data-despesa").value = transacao.data || "";
+        document.getElementById("forma-pagamento").value = transacao.formaPagamento || "";
+
+        // 🔥 dispara lógica da forma de pagamento
+        document.getElementById("forma-pagamento")
+            .dispatchEvent(new Event("change"));
+
+        if (transacao.formaPagamento === "pix" || transacao.formaPagamento === "debito") {
+            document.getElementById("conta-bancaria-debitada").value = transacao.conta || "";
+        }
+
+        if (transacao.formaPagamento === "credito") {
+            document.getElementById("nome-cartao").value = transacao.cartao || "";
+            document.getElementById("parcelas").value = transacao.parcelas || "";
+            document.getElementById("mes-fatura").value = transacao.mesFatura || "";
+        }
+    }
+
+    // ================= UI (igual antes) =================
+
+    document.getElementById("indicador-edicao").style.display = "flex";
 
     idEmEdicao = id;
 
@@ -674,7 +731,7 @@ window.editarTransacao = async function(id) {
 
     const linha = document
         .querySelector(`button[onclick*="${id}"]`)
-        .closest("li");
+        ?.closest("li");
 
     if (linha) {
         linha.classList.add("linha-editando");
@@ -684,7 +741,7 @@ window.editarTransacao = async function(id) {
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
 
-    // Desliza suavemente até o formulário de edição
+    // Scroll suave
     document.querySelector(".form").scrollIntoView({
         behavior: "smooth",
         block: "center"
