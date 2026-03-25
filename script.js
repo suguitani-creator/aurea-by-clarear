@@ -1356,7 +1356,7 @@ document.getElementById("forma-pagamento-teste").addEventListener("change", () =
 
 });
 
-document.getElementById("btn-adicionar")
+document.getElementById("btn-testar-form")
 .addEventListener("click", salvarTransacaoTeste);
 
 
