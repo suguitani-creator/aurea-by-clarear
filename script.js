@@ -682,7 +682,7 @@ window.editarTransacao = function(id) {
 // 🔥 força repaint (CRÍTICO PRA DESPESA)
 setTimeout(() => {
     if (transacao.tipo === "despesa") {
-        document.getElementById("forma-pagamento")
+        document.getElementById("forma-pagamento-teste")
             ?.dispatchEvent(new Event("change"));
     }
 }, 0);
@@ -705,22 +705,22 @@ setTimeout(() => {
         // 🔥 mantém padrão antigo
         atualizarCategorias();
 
-        const categoria = document.getElementById("categoria");
+        const categoria = document.getElementById("categoria-teste");
         categoria.value = transacao.categoria || "";
 
         // 🔥 ESSENCIAL: atualizar subcategorias
         categoria.dispatchEvent(new Event("change"));
 
         setTimeout(() => {
-    document.getElementById("subcategoria").value = transacao.subcategoria || "";
+    document.getElementById("subcategoria-teste").value = transacao.subcategoria || "";
 }, 0);
 
-        document.getElementById("subcategoria").value = transacao.subcategoria || "";
+        document.getElementById("subcategoria-teste").value = transacao.subcategoria || "";
         document.getElementById("descricao-despesa").value = transacao.descricao || "";
         document.getElementById("valor-despesa").value = transacao.valor || "";
         document.getElementById("data-despesa").value = transacao.data || "";
 
-        const forma = document.getElementById("forma-pagamento");
+        const forma = document.getElementById("forma-pagamento-teste");
         forma.value = transacao.formaPagamento || "";
 
         // 🔥 ESSENCIAL: mostrar campos corretos
