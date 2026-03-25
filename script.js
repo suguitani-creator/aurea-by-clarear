@@ -1467,7 +1467,8 @@ const CATEGORIAS = {
     transporte: ["Uber", "Combustível", "Ônibus"],
     lazer: ["Cinema", "Viagem", "Streaming"],
     moradia: ["Aluguel", "Condomínio", "Energia"],
-    saude: ["Farmácia", "Plano de saúde"]
+    saude: ["Farmácia", "Plano de saúde"],
+    servicos_financeiros: ["Taxas Bancárias", "IOF", "Anuidade"]
 };
 
 function carregarCategoriasTeste(){
