@@ -666,69 +666,6 @@ document.getElementById("confirmar-exclusao").addEventListener("click", async ()
 
 window.confirmarExclusao = confirmarExclusao;
 
-function controlarCampos(tipo, formaPagamento = null) {
-
-    // RECEITA
-    const camposReceita = [
-        "campo-fonte",
-        "campo-conta-bancaria-depositada",
-        "descricao-receita",
-        "valor-receita",
-        "data-receita"
-    ];
-
-    // DESPESA
-    const camposDespesa = [
-        "campo-essencial",
-        "campo-categoria",
-        "campo-subcategoria",
-        "campo-forma-pagamento",
-        "descricao-despesa",
-        "valor-despesa",
-        "data-despesa"
-    ];
-
-    const camposPix = ["campo-conta-bancaria-debitada"];
-    const camposCartao = ["campo-cartao", "campo-parcelas", "campo-mes-fatura"];
-
-    // 🔥 reset geral
-    [...camposReceita, ...camposDespesa, ...camposPix, ...camposCartao]
-        .forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.style.display = "none";
-        });
-
-    // ================= RECEITA =================
-    if (tipo === "receita") {
-        camposReceita.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.style.display = "block";
-        });
-    }
-
-    // ================= DESPESA =================
-    if (tipo === "despesa") {
-        camposDespesa.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.style.display = "block";
-        });
-
-        if (formaPagamento === "pix" || formaPagamento === "debito") {
-            camposPix.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.style.display = "block";
-            });
-        }
-
-        if (formaPagamento === "credito") {
-            camposCartao.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.style.display = "block";
-            });
-        }
-    }
-}
-
 window.editarTransacao = function(id) {
     const user = auth.currentUser;
     if (!user) return;
@@ -737,11 +674,11 @@ window.editarTransacao = function(id) {
     if (!transacao) return;
 
     // ================= TIPO =================
-    const tipoSelect = document.getElementById("tipo");
-    tipoSelect.value = transacao.tipo;
+    const tipo = document.getElementById("tipo");
+    tipo.value = transacao.tipo;
 
-    // 🔥 força o formulário a mudar (CRÍTICO)
-    controlarCampos(transacao.tipo);
+    // 🔥 mantém padrão antigo (IMPORTANTE)
+    tipo.dispatchEvent(new Event("change"));
 
     // ================= RECEITA =================
     if (transacao.tipo === "receita") {
@@ -758,10 +695,13 @@ window.editarTransacao = function(id) {
 
         document.getElementById("essencial").value = transacao.essencial || "";
 
+        // 🔥 mantém padrão antigo
+        atualizarCategorias();
+
         const categoria = document.getElementById("categoria");
         categoria.value = transacao.categoria || "";
 
-        // 🔥 atualiza subcategorias corretamente
+        // 🔥 ESSENCIAL: atualizar subcategorias
         categoria.dispatchEvent(new Event("change"));
 
         document.getElementById("subcategoria").value = transacao.subcategoria || "";
@@ -772,10 +712,8 @@ window.editarTransacao = function(id) {
         const forma = document.getElementById("forma-pagamento");
         forma.value = transacao.formaPagamento || "";
 
-        // 🔥 MOSTRA campos corretos (CRÍTICO)
-        controlarCampos("despesa", transacao.formaPagamento);
-
-        // 🔥 AGORA sim preencher dependentes
+        // 🔥 ESSENCIAL: mostrar campos corretos
+        forma.dispatchEvent(new Event("change"));
 
         if (transacao.formaPagamento === "pix" || transacao.formaPagamento === "debito") {
             document.getElementById("conta-bancaria-debitada").value = transacao.conta || "";
@@ -788,7 +726,7 @@ window.editarTransacao = function(id) {
         }
     }
 
-    // ================= UI =================
+    // ================= UI (IGUAL AO ORIGINAL) =================
 
     document.getElementById("indicador-edicao").style.display = "flex";
 
@@ -810,17 +748,15 @@ window.editarTransacao = function(id) {
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
 
-    // ================= SCROLL (CORRIGIDO) =================
+    // ================= SCROLL =================
 
     const form = document.getElementById("form-transacao");
 
     if (form) {
-        setTimeout(() => {
-            form.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-        }, 100); // 🔥 espera renderizar campos
+        form.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
     }
 };
 
