@@ -692,32 +692,52 @@ window.editarTransacao = function(id) {
     // ================= DESPESA =================
     if (transacao.tipo === "despesa") {
 
-        document.getElementById("essencial").value = transacao.essencial || "";
-        document.getElementById("categoria").value = transacao.categoria || "";
+    const essencial = document.getElementById("essencial");
+    if (essencial) essencial.value = transacao.essencial || "";
 
-        // 🔥 atualiza subcategorias antes de setar valor
-        atualizarSubcategorias?.();
+    const categoria = document.getElementById("categoria");
+    if (categoria) {
+        categoria.value = transacao.categoria || "";
 
-        document.getElementById("subcategoria").value = transacao.subcategoria || "";
-        document.getElementById("descricao-despesa").value = transacao.descricao || "";
-        document.getElementById("valor-despesa").value = transacao.valor || "";
-        document.getElementById("data-despesa").value = transacao.data || "";
-        document.getElementById("forma-pagamento").value = transacao.formaPagamento || "";
-
-        // 🔥 dispara lógica da forma de pagamento
-        document.getElementById("forma-pagamento")
-            .dispatchEvent(new Event("change"));
-
-        if (transacao.formaPagamento === "pix" || transacao.formaPagamento === "debito") {
-            document.getElementById("conta-bancaria-debitada").value = transacao.conta || "";
-        }
-
-        if (transacao.formaPagamento === "credito") {
-            document.getElementById("nome-cartao").value = transacao.cartao || "";
-            document.getElementById("parcelas").value = transacao.parcelas || "";
-            document.getElementById("mes-fatura").value = transacao.mesFatura || "";
-        }
+        // 🔥 atualiza subcategorias baseado na categoria
+        categoria.dispatchEvent(new Event("change"));
     }
+
+    const subcategoria = document.getElementById("subcategoria");
+    if (subcategoria) subcategoria.value = transacao.subcategoria || "";
+
+    const descricao = document.getElementById("descricao-despesa");
+    if (descricao) descricao.value = transacao.descricao || "";
+
+    const valor = document.getElementById("valor-despesa");
+    if (valor) valor.value = transacao.valor || "";
+
+    const data = document.getElementById("data-despesa");
+    if (data) data.value = transacao.data || "";
+
+    const forma = document.getElementById("forma-pagamento");
+    if (forma) {
+        forma.value = transacao.formaPagamento || "";
+
+        // 🔥 dispara lógica (mostrar campos)
+        forma.dispatchEvent(new Event("change"));
+    }
+
+    if (transacao.formaPagamento === "pix" || transacao.formaPagamento === "debito") {
+        const conta = document.getElementById("conta-bancaria-debitada");
+        if (conta) conta.value = transacao.conta || "";
+    }
+
+    if (transacao.formaPagamento === "credito") {
+        const cartao = document.getElementById("nome-cartao");
+        const parcelas = document.getElementById("parcelas");
+        const mes = document.getElementById("mes-fatura");
+
+        if (cartao) cartao.value = transacao.cartao || "";
+        if (parcelas) parcelas.value = transacao.parcelas || "";
+        if (mes) mes.value = transacao.mesFatura || "";
+    }
+}
 
     // ================= UI (igual antes) =================
 
@@ -742,7 +762,7 @@ window.editarTransacao = function(id) {
     btn.classList.add("modo-edicao");
 
     // Scroll suave
-    document.querySelector(".form").scrollIntoView({
+    document.querySelector(".form-teste").scrollIntoView({
         behavior: "smooth",
         block: "center"
     });
