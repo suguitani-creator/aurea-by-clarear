@@ -677,8 +677,15 @@ window.editarTransacao = function(id) {
     const tipo = document.getElementById("tipo");
     tipo.value = transacao.tipo;
 
-    // 🔥 mantém padrão antigo (IMPORTANTE)
     tipo.dispatchEvent(new Event("change"));
+
+// 🔥 força repaint (CRÍTICO PRA DESPESA)
+setTimeout(() => {
+    if (transacao.tipo === "despesa") {
+        document.getElementById("forma-pagamento")
+            ?.dispatchEvent(new Event("change"));
+    }
+}, 0);
 
     // ================= RECEITA =================
     if (transacao.tipo === "receita") {
@@ -703,6 +710,10 @@ window.editarTransacao = function(id) {
 
         // 🔥 ESSENCIAL: atualizar subcategorias
         categoria.dispatchEvent(new Event("change"));
+
+        setTimeout(() => {
+    document.getElementById("subcategoria").value = transacao.subcategoria || "";
+}, 0);
 
         document.getElementById("subcategoria").value = transacao.subcategoria || "";
         document.getElementById("descricao-despesa").value = transacao.descricao || "";
@@ -753,10 +764,12 @@ window.editarTransacao = function(id) {
     const form = document.getElementById("form-transacao");
 
     if (form) {
-        form.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
+        setTimeout(() => {
+    form.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+}, 100);
     }
 };
 
