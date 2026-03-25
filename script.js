@@ -674,7 +674,7 @@ window.editarTransacao = function(id) {
     if (!transacao) return;
 
     // ================= TIPO =================
-    const tipo = document.getElementById("tipo");
+    const tipo = document.getElementById("tipo-teste");
     tipo.value = transacao.tipo;
 
     tipo.dispatchEvent(new Event("change"));
