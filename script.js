@@ -666,6 +666,69 @@ document.getElementById("confirmar-exclusao").addEventListener("click", async ()
 
 window.confirmarExclusao = confirmarExclusao;
 
+function controlarCampos(tipo, formaPagamento = null) {
+
+    // RECEITA
+    const camposReceita = [
+        "campo-fonte",
+        "campo-conta-bancaria-depositada",
+        "descricao-receita",
+        "valor-receita",
+        "data-receita"
+    ];
+
+    // DESPESA
+    const camposDespesa = [
+        "campo-essencial",
+        "campo-categoria",
+        "campo-subcategoria",
+        "campo-forma-pagamento",
+        "descricao-despesa",
+        "valor-despesa",
+        "data-despesa"
+    ];
+
+    const camposPix = ["campo-conta-bancaria-debitada"];
+    const camposCartao = ["campo-cartao", "campo-parcelas", "campo-mes-fatura"];
+
+    // 🔥 reset geral
+    [...camposReceita, ...camposDespesa, ...camposPix, ...camposCartao]
+        .forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = "none";
+        });
+
+    // ================= RECEITA =================
+    if (tipo === "receita") {
+        camposReceita.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = "block";
+        });
+    }
+
+    // ================= DESPESA =================
+    if (tipo === "despesa") {
+        camposDespesa.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = "block";
+        });
+
+        if (formaPagamento === "pix" || formaPagamento === "debito") {
+            camposPix.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = "block";
+            });
+        }
+
+        if (formaPagamento === "credito") {
+            camposCartao.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = "block";
+            });
+        }
+    }
+}
+
 window.editarTransacao = function(id) {
     const user = auth.currentUser;
     if (!user) return;
@@ -678,7 +741,7 @@ window.editarTransacao = function(id) {
     tipoSelect.value = transacao.tipo;
 
     // 🔥 força o formulário a mudar (CRÍTICO)
-    tipoSelect.dispatchEvent(new Event("change"));
+    controlarCampos(transacao.tipo);
 
     // ================= RECEITA =================
     if (transacao.tipo === "receita") {
@@ -710,7 +773,7 @@ window.editarTransacao = function(id) {
         forma.value = transacao.formaPagamento || "";
 
         // 🔥 MOSTRA campos corretos (CRÍTICO)
-        forma.dispatchEvent(new Event("change"));
+        controlarCampos("despesa", transacao.formaPagamento);
 
         // 🔥 AGORA sim preencher dependentes
 
@@ -760,6 +823,8 @@ window.editarTransacao = function(id) {
         }, 100); // 🔥 espera renderizar campos
     }
 };
+
+
 
 function converterDataFirestore(dataFirestore) {
     const [ano, mes, dia] = dataFirestore.split("-"); // formato YYYY-MM-DD
