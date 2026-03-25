@@ -762,7 +762,7 @@ window.editarTransacao = function(id) {
     btn.classList.add("modo-edicao");
 
     // Scroll suave
-    document.querySelector(".form-teste").scrollIntoView({
+    document.querySelector("form-transacao").scrollIntoView({
         behavior: "smooth",
         block: "center"
     });
