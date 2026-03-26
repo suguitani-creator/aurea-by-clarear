@@ -244,12 +244,12 @@ async function adicionarTransacao() {
     if (tipo === "despesa") {
 
         const essencial = document.getElementById("essencial")?.value || "";
-        const categoria = document.getElementById("categoria")?.value || "";
-        const subcategoria = document.getElementById("subcategoria")?.value || "";
+        const categoria = document.getElementById("categoria-teste")?.value || "";
+        const subcategoria = document.getElementById("subcategoria-teste")?.value || "";
         const descricao = document.getElementById("descricao-despesa")?.value || "";
         const valor = parseFloat(document.getElementById("valor-despesa")?.value);
         const data = document.getElementById("data-despesa")?.value || "";
-        const formaPagamento = document.getElementById("forma-pagamento")?.value || "";
+        const formaPagamento = document.getElementById("forma-pagamento-teste")?.value || "";
 
         let conta = "";
         let cartao = "";
