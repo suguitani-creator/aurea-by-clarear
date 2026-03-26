@@ -555,9 +555,12 @@ function carregarTransacoesTempoReal() {
 }
 
 function limparFormulario() {
-    document.getElementById("descricao").value = "";
-    document.getElementById("valor").value = "";
-    document.getElementById("data").value = "";
+    document.getElementById("descricao-receita").value = "";
+    document.getElementById("valor-receita").value = "";
+    document.getElementById("data-receita").value = "";
+    document.getElementById("descricao-despesa").value = "";
+    document.getElementById("valor-despesa").value = "";
+    document.getElementById("data-despesa").value = "";
 }
 
 function showToast(message, type = "success") {
