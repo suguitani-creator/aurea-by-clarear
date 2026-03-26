@@ -54,7 +54,7 @@ const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
     document.getElementById("mes-filtro")
         .addEventListener("change", aplicarFiltro);
 
-    document.getElementById("tipo")
+    document.getElementById("tipo-teste")
         .addEventListener("change", atualizarCategorias);
 
     document.getElementById("btn-adicionar")
@@ -210,7 +210,7 @@ async function adicionarTransacao() {
     const user = auth.currentUser;
     if (!user) return;
 
-    const tipo = document.getElementById("tipo").value;
+    const tipo = document.getElementById("tipo-teste").value;
 
     let dados = {
         tipo: tipo
