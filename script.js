@@ -272,25 +272,29 @@ async function adicionarTransacao() {
     try {
 
         // 🔥 EDIÇÃO
-        if (idEmEdicao) {
-            await updateDoc(
-                doc(db, "users", user.uid, "transacoes", idEmEdicao),
-                dados
-            );
+        if (idEmEdicao !== null) {
 
-            showToast("Transação atualizada!");
+    console.log("ATUALIZANDO:", idEmEdicao);
 
-            idEmEdicao = null;
+    await updateDoc(
+        doc(db, "users", user.uid, "transacoes", idEmEdicao),
+        dados
+    );
 
-            document.getElementById("indicador-edicao").style.display = "none";
+    idEmEdicao = null;
 
-            const btn = document.getElementById("btn-adicionar");
-            btn.textContent = "Adicionar";
-            btn.classList.remove("modo-edicao");
+    showToast("Transação atualizada!");
 
-            limparFormulario();
-            return;
-        }
+    document.getElementById("indicador-edicao").style.display = "none";
+
+    const btn = document.getElementById("btn-adicionar");
+    btn.textContent = "Adicionar";
+    btn.classList.remove("modo-edicao");
+
+    limparFormulario();
+
+    return;
+}
 
         // 🔥 NOVA
         await addDoc(
@@ -694,7 +698,11 @@ window.editarTransacao = function(id) {
         // 🔥 atualiza subcategorias corretamente
         atualizarSubcategoriasTeste();
 
-        document.getElementById("subcategoria-teste").value = transacao.subcategoria || "";
+        const sub = document.getElementById("subcategoria-teste");
+
+    setTimeout(() => {
+        sub.value = (transacao.subcategoria || "").toLowerCase();
+    }, 0);
 
         document.getElementById("descricao-despesa").value = transacao.descricao || "";
         document.getElementById("valor-despesa").value = transacao.valor || "";
@@ -1554,8 +1562,10 @@ function atualizarSubcategoriasTeste() {
 
     CATEGORIAS[selecionada].forEach(sub => {
 
+        const valor = sub.toLowerCase();
+
         const option = document.createElement("option");
-        option.value = sub.toLowerCase();
+        option.value = valor;
         option.textContent = sub;
 
         subcategoria.appendChild(option);
