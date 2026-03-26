@@ -1540,6 +1540,9 @@ function carregarCategoriasTeste() {
 function atualizarSubcategoriasTeste() {
 
     const categoria = document.getElementById("categoria-teste").value;
+
+    console.log(document.getElementById("categoria-teste").value);
+    
     const subcategoria = document.getElementById("subcategoria-teste");
 
     subcategoria.innerHTML = '<option value="">Selecione...</option>';
