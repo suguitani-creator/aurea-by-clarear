@@ -83,38 +83,7 @@
             </svg>-->
             Editando Transação
         </div>
-        <!-- Formulário de Transações -->
-        <div class="form-antigo">
-            <select id="tipo">
-                <option value="receita">Receita</option>
-                <option value="despesa">Despesa</option>
-            </select>
-
-            <select id="categoria"></select>
-
-            <input type="text" id="descricao" placeholder="Descrição">
-            <input type="number" id="valor" placeholder="Valor">
-            <input type="date" id="data" placeholder="Data" inputmode="date">
-
-             <!-- Novo campo para forma de pagamento -->
-            <select id="forma-pagamento">
-                <option value="pix">Pix</option>
-                <option value="debito">Débito</option>
-                <option value="credito">Crédito</option>
-            </select>
-            
-            <div class="botoes-formulario">
-
-                <button id="btn-adicionar">
-                    Adicionar
-                </button>
-
-                <button id="btn-cancelar-edicao-transacao" class="btn-cancelar">
-                    Cancelar
-                </button>
-
-            </div>
-        </div>
+        
 
         <!--FORMULÁRIO TESTE-->
         <div id="form-transacao" style="margin-top:30px; padding:20px; border:1px solid #ccc; border-radius:10px;">
@@ -201,7 +170,17 @@
 
     </div>
 
-    <button id="btn-testar-form">Testar</button>
+    <div class="botoes-formulario">
+
+                <button id="btn-adicionar">
+                    Adicionar
+                </button>
+
+                <button id="btn-cancelar-edicao-transacao" class="btn-cancelar">
+                    Cancelar
+                </button>
+
+    </div>
 
 </div>
 
