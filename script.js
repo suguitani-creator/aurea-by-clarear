@@ -191,31 +191,10 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
 async function adicionarTransacao() {
     const user = auth.currentUser;
     if (!user) return;
-    
-    if (idEmEdicao) {
-    await updateDoc(
-        doc(db, "users", user.uid, "transacoes", idEmEdicao),
-        dados
-    );
-
-    showToast("Transação atualizada!");
-
-    idEmEdicao = null;
-
-    document.getElementById("indicador-edicao").style.display = "none";
-
-    const btn = document.getElementById("btn-adicionar");
-    btn.textContent = "Adicionar";
-    btn.classList.remove("modo-edicao");
-
-    return;
-}
 
     const tipo = document.getElementById("tipo-teste").value;
 
-    let dados = {
-        tipo: tipo
-    };
+    let dados = { tipo };
 
     // ================= RECEITA =================
     if (tipo === "receita") {
@@ -231,14 +210,7 @@ async function adicionarTransacao() {
             return;
         }
 
-        dados = {
-            ...dados,
-            fonte,
-            descricao,
-            valor,
-            data,
-            conta
-        };
+        dados = { ...dados, fonte, descricao, valor, data, conta };
     }
 
     // ================= DESPESA =================
@@ -259,7 +231,6 @@ async function adicionarTransacao() {
 
         if (formaPagamento === "pix" || formaPagamento === "debito") {
             conta = document.getElementById("conta-bancaria-debitada")?.value || "";
-
             if (!conta) {
                 showToast("Selecione a conta", "error");
                 return;
@@ -277,8 +248,8 @@ async function adicionarTransacao() {
             }
         }
 
-        if (isNaN(valor) || !data || !formaPagamento) {
-            showToast("Preencha os campos obrigatórios", "error");
+        if (isNaN(valor) || !data || !formaPagamento || !categoria || !subcategoria) {
+            showToast("Preencha todos os campos obrigatórios", "error");
             return;
         }
 
@@ -299,14 +270,35 @@ async function adicionarTransacao() {
     }
 
     try {
-        const docRef = await addDoc(
-    collection(db, "users", user.uid, "transacoes"),
-    dados
-);
 
-        console.log("SALVO NO FIRESTORE:", dados);
+        // 🔥 EDIÇÃO
+        if (idEmEdicao) {
+            await updateDoc(
+                doc(db, "users", user.uid, "transacoes", idEmEdicao),
+                dados
+            );
+
+            showToast("Transação atualizada!");
+
+            idEmEdicao = null;
+
+            document.getElementById("indicador-edicao").style.display = "none";
+
+            const btn = document.getElementById("btn-adicionar");
+            btn.textContent = "Adicionar";
+            btn.classList.remove("modo-edicao");
+
+            limparFormulario();
+            return;
+        }
+
+        // 🔥 NOVA
+        await addDoc(
+            collection(db, "users", user.uid, "transacoes"),
+            dados
+        );
+
         showToast("Transação adicionada!");
-
         limparFormulario();
 
     } catch (error) {
@@ -677,19 +669,9 @@ window.editarTransacao = function(id) {
     const transacao = transacoes.find(t => t.id === id);
     if (!transacao) return;
 
-    // ================= TIPO =================
     const tipo = document.getElementById("tipo-teste");
     tipo.value = transacao.tipo;
-
     tipo.dispatchEvent(new Event("change"));
-
-// 🔥 força repaint (CRÍTICO PRA DESPESA)
-setTimeout(() => {
-    if (transacao.tipo === "despesa") {
-        document.getElementById("forma-pagamento-teste")
-            ?.dispatchEvent(new Event("change"));
-    }
-}, 0);
 
     // ================= RECEITA =================
     if (transacao.tipo === "receita") {
@@ -706,28 +688,20 @@ setTimeout(() => {
 
         document.getElementById("essencial").value = transacao.essencial || "";
 
-        // 🔥 mantém padrão antigo
-        atualizarCategorias();
-
         const categoria = document.getElementById("categoria-teste");
         categoria.value = transacao.categoria || "";
 
-        // 🔥 ESSENCIAL: atualizar subcategorias
-        categoria.dispatchEvent(new Event("change"));
+        // 🔥 atualiza subcategorias corretamente
+        atualizarSubcategoriasTeste();
 
-        setTimeout(() => {
-    document.getElementById("subcategoria-teste").value = transacao.subcategoria || "";
-}, 0);
+        document.getElementById("subcategoria-teste").value = transacao.subcategoria || "";
 
-       // document.getElementById("subcategoria-teste").value = transacao.subcategoria || "";
         document.getElementById("descricao-despesa").value = transacao.descricao || "";
         document.getElementById("valor-despesa").value = transacao.valor || "";
         document.getElementById("data-despesa").value = transacao.data || "";
 
         const forma = document.getElementById("forma-pagamento-teste");
         forma.value = transacao.formaPagamento || "";
-
-        // 🔥 ESSENCIAL: mostrar campos corretos
         forma.dispatchEvent(new Event("change"));
 
         if (transacao.formaPagamento === "pix" || transacao.formaPagamento === "debito") {
@@ -741,40 +715,21 @@ setTimeout(() => {
         }
     }
 
-    // ================= UI (IGUAL AO ORIGINAL) =================
+    // ================= UI =================
 
     document.getElementById("indicador-edicao").style.display = "flex";
-
     idEmEdicao = id;
-
-    document.querySelectorAll("li").forEach(li => {
-        li.classList.remove("linha-editando");
-    });
-
-    const linha = document
-        .querySelector(`button[onclick*="${id}"]`)
-        ?.closest("li");
-
-    if (linha) {
-        linha.classList.add("linha-editando");
-    }
 
     const btn = document.getElementById("btn-adicionar");
     btn.textContent = "Salvar alteração";
     btn.classList.add("modo-edicao");
 
-    // ================= SCROLL =================
-
-    const form = document.getElementById("form-transacao");
-
-    if (form) {
-        setTimeout(() => {
-    form.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-    });
-}, 100);
-    }
+    setTimeout(() => {
+        document.getElementById("form-transacao")?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }, 100);
 };
 
 function converterDataFirestore(dataFirestore) {
@@ -1584,7 +1539,7 @@ function carregarCategoriasTeste(){
 
 }
 
-function atualizarSubcategoriasTeste(){
+function atualizarSubcategoriasTeste() {
 
     const categoria = document.getElementById("categoria-teste");
     const subcategoria = document.getElementById("subcategoria-teste");
@@ -1593,26 +1548,19 @@ function atualizarSubcategoriasTeste(){
 
     const selecionada = categoria.value;
 
-    subcategoria.innerHTML = "";
+    subcategoria.innerHTML = '<option value="">Selecione...</option>';
 
-    // opção vazia
-    const defaultOption = document.createElement("option");
-    defaultOption.value = "";
-    defaultOption.textContent = "Selecione...";
-    subcategoria.appendChild(defaultOption);
+    if (!selecionada || !subcategorias[selecionada]) return;
 
-    if (!selecionada) return;
-
-    CATEGORIAS[selecionada]?.forEach(sub => {
+    subcategorias[selecionada].forEach(sub => {
 
         const option = document.createElement("option");
-        option.value = sub.toLowerCase();
+        option.value = sub;
         option.textContent = sub;
 
         subcategoria.appendChild(option);
 
     });
-
 }
 
 // Inicialização correta
