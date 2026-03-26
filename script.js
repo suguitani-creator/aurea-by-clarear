@@ -1550,9 +1550,9 @@ function atualizarSubcategoriasTeste() {
 
     subcategoria.innerHTML = '<option value="">Selecione...</option>';
 
-    if (!selecionada || !subcategorias[selecionada]) return;
+    if (!selecionada || !subcategoria[selecionada]) return;
 
-    subcategorias[selecionada].forEach(sub => {
+    subcategoria[selecionada].forEach(sub => {
 
         const option = document.createElement("option");
         option.value = sub;
