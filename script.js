@@ -718,7 +718,7 @@ setTimeout(() => {
     document.getElementById("subcategoria-teste").value = transacao.subcategoria || "";
 }, 0);
 
-        document.getElementById("subcategoria-teste").value = transacao.subcategoria || "";
+       // document.getElementById("subcategoria-teste").value = transacao.subcategoria || "";
         document.getElementById("descricao-despesa").value = transacao.descricao || "";
         document.getElementById("valor-despesa").value = transacao.valor || "";
         document.getElementById("data-despesa").value = transacao.data || "";
@@ -775,8 +775,6 @@ setTimeout(() => {
 }, 100);
     }
 };
-
-
 
 function converterDataFirestore(dataFirestore) {
     const [ano, mes, dia] = dataFirestore.split("-"); // formato YYYY-MM-DD
