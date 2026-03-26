@@ -189,6 +189,9 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
 // ================= FINANÇAS =================
 
 async function adicionarTransacao() {
+    const user = auth.currentUser;
+    if (!user) return;
+    
     if (idEmEdicao) {
     await updateDoc(
         doc(db, "users", user.uid, "transacoes", idEmEdicao),
@@ -207,8 +210,6 @@ async function adicionarTransacao() {
 
     return;
 }
-    const user = auth.currentUser;
-    if (!user) return;
 
     const tipo = document.getElementById("tipo-teste").value;
 
