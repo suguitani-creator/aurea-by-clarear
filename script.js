@@ -484,7 +484,7 @@ async function removerTransacao(id) {
 
     setTimeout(async () => {
         await deleteDoc(doc(db, "users", user.uid, "transacoes", id));
-        carregarTransacoes();
+        carregarTransacoesTempoReal();
         showToast("Transação removida", "delete");
     }, 300);
 }
@@ -650,7 +650,7 @@ document.getElementById("confirmar-exclusao").addEventListener("click", async ()
         idParaExcluir = null;
         tipoParaExcluir = null;
 
-        carregarTransacoes();
+        carregarTransacoesTempoReal();
         carregarContasECartoes();
 
     } catch (error) {
