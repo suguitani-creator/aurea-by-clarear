@@ -315,8 +315,8 @@ async function adicionarTransacao() {
 }
 
 function atualizarCategorias() {
-    const tipo = document.getElementById("tipo").value;
-    const selectCategoria = document.getElementById("categoria");
+    const tipo = document.getElementById("tipo-teste").value;
+    const selectCategoria = document.getElementById("categoria-teste");
     selectCategoria.innerHTML = "";
 
     categorias[tipo].forEach(cat => {
