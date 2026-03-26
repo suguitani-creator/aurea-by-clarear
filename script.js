@@ -1520,56 +1520,40 @@ const CATEGORIAS = {
     servicos_financeiros: ["Taxas Bancárias", "IOF", "Anuidade"]
 };
 
-function carregarCategoriasTeste(){
+function carregarCategoriasTeste() {
 
-    const selectCategoria = document.getElementById("categoria-teste");
+    const select = document.getElementById("categoria-teste");
 
-    if (!selectCategoria) return;
-
-    selectCategoria.innerHTML = "";
-
-    // opção vazia padrão
-    const defaultOption = document.createElement("option");
-    defaultOption.value = "";
-    defaultOption.textContent = "Selecione...";
-    selectCategoria.appendChild(defaultOption);
+    select.innerHTML = '<option value="">Selecione...</option>';
 
     Object.keys(CATEGORIAS).forEach(cat => {
 
         const option = document.createElement("option");
-        option.value = cat;
-        option.textContent =
-            cat.charAt(0).toUpperCase() + cat.slice(1);
 
-        selectCategoria.appendChild(option);
+        option.value = cat; // 🔥 chave correta
+        option.textContent = cat.replace("_", " ");
 
+        select.appendChild(option);
     });
-
 }
 
 function atualizarSubcategoriasTeste() {
 
-    const categoria = document.getElementById("categoria-teste");
+    const categoria = document.getElementById("categoria-teste").value;
     const subcategoria = document.getElementById("subcategoria-teste");
-
-    if (!categoria || !subcategoria) return;
-
-    const selecionada = categoria.value;
 
     subcategoria.innerHTML = '<option value="">Selecione...</option>';
 
-    if (!selecionada || !CATEGORIAS[selecionada]) return;
+    if (!categoria || !CATEGORIAS[categoria]) return;
 
-    CATEGORIAS[selecionada].forEach(sub => {
-
-        const valor = sub.toLowerCase();
+    CATEGORIAS[categoria].forEach(sub => {
 
         const option = document.createElement("option");
-        option.value = valor;
+
+        option.value = sub.toLowerCase();
         option.textContent = sub;
 
         subcategoria.appendChild(option);
-
     });
 }
 
