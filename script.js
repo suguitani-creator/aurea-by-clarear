@@ -736,9 +736,37 @@ window.editarTransacao = function(id) {
         }
     }
 
-    // Exibe o indicador de edição
+     // ================= UI (IGUAL AO ORIGINAL) =================
     document.getElementById("indicador-edicao").style.display = "flex";
+
     idEmEdicao = id;
+
+    document.querySelectorAll("li").forEach(li => {
+        li.classList.remove("linha-editando");
+    });
+
+    const linha = document
+        .querySelector(`button[onclick*="${id}"]`)
+        ?.closest("li");
+
+    if (linha) {
+        linha.classList.add("linha-editando");
+    }
+
+    const btn = document.getElementById("btn-adicionar");
+    btn.textContent = "Salvar alteração";
+    btn.classList.add("modo-edicao");
+
+    // ================= SCROLL =================
+    const form = document.getElementById("form-transacao");
+    if (form) {
+        setTimeout(() => {
+            form.scrollIntoView({
+                behavior: "smooth",
+                block: "start" // Muda para "start" para garantir que o formulário apareça no topo
+            });
+        }, 100); // Atraso de 100ms para garantir que a atualização do formulário seja finalizada
+    }
 };
 
 function converterDataFirestore(dataFirestore) {
