@@ -25,10 +25,6 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-//const categorias = {
-//    receita: ["Salário","Pró-labore","Investimentos","Dividendos","Outros"],
-//   despesa: ["Alimentação","Moradia","Transporte","Lazer","Saúde","Educação","Outros"]
-//};
 
 let transacoes = [];
 let grafico;
@@ -260,7 +256,7 @@ async function adicionarTransacao() {
         }
 
         // Se for um "Investimento", não é necessário preencher categoria e subcategoria
-        if (tipo === "despesa" && categoria !== "investimentos") {
+        if (tipo === "despesa" && categoria !== "investimento") {
             if (!categoria || !subcategoria) {
                 showToast("Preencha categoria e subcategoria", "error");
                 return;
