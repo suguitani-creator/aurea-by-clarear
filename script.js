@@ -27,7 +27,7 @@ import {
 
 //const categorias = {
 //    receita: ["Salário","Pró-labore","Investimentos","Dividendos","Outros"],
-//    despesa: ["Alimentação","Moradia","Transporte","Lazer","Saúde","Educação","Outros"]
+//   despesa: ["Alimentação","Moradia","Transporte","Lazer","Saúde","Educação","Outros"]
 //};
 
 let transacoes = [];
@@ -673,13 +673,14 @@ window.editarTransacao = function(id) {
     const transacao = transacoes.find(t => t.id === id);
     if (!transacao) return;
 
+    // Atualiza o tipo da transação
     const tipo = document.getElementById("tipo-teste");
     tipo.value = transacao.tipo;
+
     tipo.dispatchEvent(new Event("change"));
 
-    // ================= RECEITA =================
+    // Atualizar para RECEITA
     if (transacao.tipo === "receita") {
-
         document.getElementById("fonte").value = transacao.fonte || "";
         document.getElementById("descricao-receita").value = transacao.descricao || "";
         document.getElementById("valor-receita").value = transacao.valor || "";
@@ -687,22 +688,18 @@ window.editarTransacao = function(id) {
         document.getElementById("conta-bancaria-depositada").value = transacao.conta || "";
     }
 
-    // ================= DESPESA =================
+    // Atualizar para DESPESA
     if (transacao.tipo === "despesa") {
-
         document.getElementById("essencial").value = transacao.essencial || "";
+        atualizarCategorias();
 
         const categoria = document.getElementById("categoria-teste");
         categoria.value = transacao.categoria || "";
+        categoria.dispatchEvent(new Event("change"));
 
-        // 🔥 atualiza subcategorias corretamente
-        atualizarSubcategoriasTeste();
-
-        const sub = document.getElementById("subcategoria-teste");
-
-    setTimeout(() => {
-        sub.value = (transacao.subcategoria || "").toLowerCase();
-    }, 0);
+        setTimeout(() => {
+            document.getElementById("subcategoria-teste").value = transacao.subcategoria || "";
+        }, 0);
 
         document.getElementById("descricao-despesa").value = transacao.descricao || "";
         document.getElementById("valor-despesa").value = transacao.valor || "";
@@ -723,21 +720,9 @@ window.editarTransacao = function(id) {
         }
     }
 
-    // ================= UI =================
-
+    // Exibe o indicador de edição
     document.getElementById("indicador-edicao").style.display = "flex";
     idEmEdicao = id;
-
-    const btn = document.getElementById("btn-adicionar");
-    btn.textContent = "Salvar alteração";
-    btn.classList.add("modo-edicao");
-
-    setTimeout(() => {
-        document.getElementById("form-transacao")?.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-    }, 100);
 };
 
 function converterDataFirestore(dataFirestore) {
@@ -1511,57 +1496,70 @@ function atualizarSelectCartoes(cartoes) {
 
 // ================= CATEGORIAS E SUBCATEGORIAS (TESTE) =================
 
+// Categorias de Receita e Despesa
 const CATEGORIAS = {
-    alimentacao: ["Supermercado", "Restaurante", "Delivery"],
-    transporte: ["Uber", "Combustível", "Ônibus"],
-    lazer: ["Cinema", "Viagem", "Streaming"],
-    moradia: ["Aluguel", "Condomínio", "Energia"],
-    saude: ["Farmácia", "Plano de saúde"],
-    servicos_financeiros: ["Taxas Bancárias", "IOF", "Anuidade"]
+    receita: ["Salário", "Prólabore", "Investimentos", "Dividendos", "Outros"],
+    despesa: {
+        alimentacao: ["Supermercado", "Restaurante", "Delivery"],
+        moradia: ["Aluguel", "Condomínio", "Energia"],
+        transporte: ["Uber", "Combustível", "Ônibus"],
+        lazer: ["Cinema", "Viagem", "Streaming"],
+        saude: ["Farmácia", "Plano de saúde"],
+        educacao: ["Cursos", "Faculdade", "Material Escolar"],
+        servicos_financeiros: ["Taxas Bancárias", "IOF", "Anuidade"]
+    }
 };
 
 function carregarCategoriasTeste() {
-
     const select = document.getElementById("categoria-teste");
 
     select.innerHTML = '<option value="">Selecione...</option>';
 
-    Object.keys(CATEGORIAS).forEach(cat => {
-
+    // Carregar categorias de receita
+    CATEGORIAS.receita.forEach(cat => {
         const option = document.createElement("option");
+        option.value = cat.toLowerCase();  // Usa valor em minúsculo
+        option.textContent = cat;  // Exibe com a primeira letra maiúscula
+        select.appendChild(option);
+    });
 
-        option.value = cat; // 🔥 chave correta (alimentacao)
-        
-        // texto bonito (Alimentação)
-        option.textContent = cat
-            .replace("_", " ")
-            .replace(/\b\w/g, l => l.toUpperCase());
-
+    // Carregar categorias de despesa
+    Object.keys(CATEGORIAS.despesa).forEach(cat => {
+        const option = document.createElement("option");
+        option.value = cat.toLowerCase();  // Usa valor em minúsculo
+        option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1); // Exibe com a primeira letra maiúscula
         select.appendChild(option);
     });
 }
 
 function atualizarSubcategoriasTeste() {
-
-    const categoria = document.getElementById("categoria-teste").value;
-
-    console.log(document.getElementById("categoria-teste").value);
-
+    const categoria = document.getElementById("categoria-teste");
     const subcategoria = document.getElementById("subcategoria-teste");
 
-    subcategoria.innerHTML = '<option value="">Selecione...</option>';
+    if (!categoria || !subcategoria) return;
 
-    if (!categoria || !CATEGORIAS[categoria]) return;
+    const selecionada = categoria.value;
 
-    CATEGORIAS[categoria].forEach(sub => {
+    subcategoria.innerHTML = "";
 
-        const option = document.createElement("option");
+    // Adiciona a opção "Selecione..."
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Selecione...";
+    subcategoria.appendChild(defaultOption);
 
-        option.value = sub.toLowerCase();
-        option.textContent = sub;
+    if (!selecionada) return;
 
-        subcategoria.appendChild(option);
-    });
+    // Carregar as subcategorias conforme a categoria selecionada
+    const subcategorias = CATEGORIAS.despesa[selecionada];
+    if (subcategorias) {
+        subcategorias.forEach(sub => {
+            const option = document.createElement("option");
+            option.value = sub.toLowerCase();
+            option.textContent = sub;
+            subcategoria.appendChild(option);
+        });
+    }
 }
 
 // Inicialização correta
