@@ -192,13 +192,33 @@ async function adicionarTransacao() {
     const user = auth.currentUser;
     if (!user) return;
 
+    if (idEmEdicao) {
+        await updateDoc(
+            doc(db, "users", user.uid, "transacoes", idEmEdicao),
+            dados
+        );
+
+        showToast("Transação atualizada!");
+
+        idEmEdicao = null;
+
+        document.getElementById("indicador-edicao").style.display = "none";
+
+        const btn = document.getElementById("btn-adicionar");
+        btn.textContent = "Adicionar";
+        btn.classList.remove("modo-edicao");
+
+        return;
+    }
+
     const tipo = document.getElementById("tipo-teste").value;
 
-    let dados = { tipo };
+    let dados = {
+        tipo: tipo
+    };
 
     // ================= RECEITA =================
     if (tipo === "receita") {
-
         const fonte = document.getElementById("fonte")?.value || "";
         const descricao = document.getElementById("descricao-receita")?.value || "";
         const valor = parseFloat(document.getElementById("valor-receita")?.value);
@@ -210,12 +230,18 @@ async function adicionarTransacao() {
             return;
         }
 
-        dados = { ...dados, fonte, descricao, valor, data, conta };
+        dados = {
+            ...dados,
+            fonte,
+            descricao,
+            valor,
+            data,
+            conta
+        };
     }
 
     // ================= DESPESA =================
     if (tipo === "despesa") {
-
         const essencial = document.getElementById("essencial")?.value || "";
         const categoria = document.getElementById("categoria-teste")?.value || "";
         const subcategoria = document.getElementById("subcategoria-teste")?.value || "";
@@ -229,8 +255,10 @@ async function adicionarTransacao() {
         let parcelas = "";
         let mesFatura = "";
 
+        // Verifica se está preenchido
         if (formaPagamento === "pix" || formaPagamento === "debito") {
             conta = document.getElementById("conta-bancaria-debitada")?.value || "";
+
             if (!conta) {
                 showToast("Selecione a conta", "error");
                 return;
@@ -246,11 +274,26 @@ async function adicionarTransacao() {
                 showToast("Preencha os dados do cartão", "error");
                 return;
             }
+
+            // Tornar a fatura do cartão obrigatória
+            if (!mesFatura) {
+                showToast("Preencha o mês da fatura", "error");
+                return;
+            }
         }
 
-        if (isNaN(valor) || !data || !formaPagamento || !categoria || !subcategoria) {
-            showToast("Preencha todos os campos obrigatórios", "error");
+        // Valida se os campos obrigatórios estão preenchidos, com exceção de categoria e subcategoria para investimento
+        if (isNaN(valor) || !data || !formaPagamento) {
+            showToast("Preencha os campos obrigatórios", "error");
             return;
+        }
+
+        // Se for um "Investimento", não é necessário preencher categoria e subcategoria
+        if (tipo === "despesa" && categoria !== "investimentos") {
+            if (!categoria || !subcategoria) {
+                showToast("Preencha categoria e subcategoria", "error");
+                return;
+            }
         }
 
         dados = {
@@ -270,39 +313,14 @@ async function adicionarTransacao() {
     }
 
     try {
-
-        // 🔥 EDIÇÃO
-        if (idEmEdicao !== null) {
-
-    console.log("ATUALIZANDO:", idEmEdicao);
-
-    await updateDoc(
-        doc(db, "users", user.uid, "transacoes", idEmEdicao),
-        dados
-    );
-
-    idEmEdicao = null;
-
-    showToast("Transação atualizada!");
-
-    document.getElementById("indicador-edicao").style.display = "none";
-
-    const btn = document.getElementById("btn-adicionar");
-    btn.textContent = "Adicionar";
-    btn.classList.remove("modo-edicao");
-
-    limparFormulario();
-
-    return;
-}
-
-        // 🔥 NOVA
-        await addDoc(
+        const docRef = await addDoc(
             collection(db, "users", user.uid, "transacoes"),
             dados
         );
 
+        console.log("SALVO NO FIRESTORE:", dados);
         showToast("Transação adicionada!");
+
         limparFormulario();
 
     } catch (error) {
