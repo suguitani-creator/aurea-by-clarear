@@ -246,11 +246,25 @@ async function adicionarTransacao() {
                 showToast("Preencha os dados do cartão", "error");
                 return;
             }
+
+            // Tornar a fatura do cartão obrigatória
+            if (!mesFatura) {
+                showToast("Preencha o mês da fatura", "error");
+                return;
+            }
+        }
+        // Valida se os campos obrigatórios estão preenchidos, com exceção de categoria e subcategoria para investimento
+        if (isNaN(valor) || !data || !formaPagamento) {
+            showToast("Preencha os campos obrigatórios", "error");
+            return;
         }
 
-        if (isNaN(valor) || !data || !formaPagamento || !categoria || !subcategoria) {
-            showToast("Preencha todos os campos obrigatórios", "error");
-            return;
+        // Se for um "Investimento", não é necessário preencher categoria e subcategoria
+        if (tipo === "despesa" && categoria !== "investimentos") {
+            if (!categoria || !subcategoria) {
+                showToast("Preencha categoria e subcategoria", "error");
+                return;
+            }
         }
 
         dados = {
@@ -727,37 +741,7 @@ window.editarTransacao = function(id) {
 
         if (transacao.formaPagamento === "pix" || transacao.formaPagamento === "debito") {
             document.getElementById("conta-bancaria-debitada").value = transacao.conta || "";
-        }
-
-        if (formaPagamento === "credito") {
-            cartao = document.getElementById("nome-cartao")?.value || "";
-            parcelas = document.getElementById("parcelas")?.value || "";
-            mesFatura = document.getElementById("mes-fatura")?.value || "";
-
-            if (!cartao || !parcelas) {
-                showToast("Preencha os dados do cartão", "error");
-                return;
-            }
-
-            // Tornar a fatura do cartão obrigatória
-            if (!mesFatura) {
-                showToast("Preencha o mês da fatura", "error");
-                return;
-            }
-        }
-        // Valida se os campos obrigatórios estão preenchidos, com exceção de categoria e subcategoria para investimento
-        if (isNaN(valor) || !data || !formaPagamento) {
-            showToast("Preencha os campos obrigatórios", "error");
-            return;
-        }
-
-        // Se for um "Investimento", não é necessário preencher categoria e subcategoria
-        if (tipo === "despesa" && categoria !== "investimentos") {
-            if (!categoria || !subcategoria) {
-                showToast("Preencha categoria e subcategoria", "error");
-                return;
-            }
-        }
+        }    
     }
 
      // ================= UI (IGUAL AO ORIGINAL) =================
