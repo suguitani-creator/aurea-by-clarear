@@ -1530,8 +1530,12 @@ function carregarCategoriasTeste() {
 
         const option = document.createElement("option");
 
-        option.value = cat; // 🔥 chave correta
-        option.textContent = cat.replace("_", " ");
+        option.value = cat; // 🔥 chave correta (alimentacao)
+        
+        // texto bonito (Alimentação)
+        option.textContent = cat
+            .replace("_", " ")
+            .replace(/\b\w/g, l => l.toUpperCase());
 
         select.appendChild(option);
     });
@@ -1542,7 +1546,7 @@ function atualizarSubcategoriasTeste() {
     const categoria = document.getElementById("categoria-teste").value;
 
     console.log(document.getElementById("categoria-teste").value);
-    
+
     const subcategoria = document.getElementById("subcategoria-teste");
 
     subcategoria.innerHTML = '<option value="">Selecione...</option>';
