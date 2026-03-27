@@ -25,10 +25,10 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-const categorias = {
-    receita: ["Salário","Pró-labore","Investimentos","Dividendos","Outros"],
-    despesa: ["Alimentação","Moradia","Transporte","Lazer","Saúde","Educação","Outros"]
-};
+//const categorias = {
+//    receita: ["Salário","Pró-labore","Investimentos","Dividendos","Outros"],
+//    despesa: ["Alimentação","Moradia","Transporte","Lazer","Saúde","Educação","Outros"]
+//};
 
 let transacoes = [];
 let grafico;
