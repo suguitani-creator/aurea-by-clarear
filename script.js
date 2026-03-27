@@ -689,13 +689,21 @@ window.editarTransacao = function(id) {
     const transacao = transacoes.find(t => t.id === id);
     if (!transacao) return;
 
-    // Atualiza o tipo da transação
+    // ================= TIPO =================
     const tipo = document.getElementById("tipo-teste");
     tipo.value = transacao.tipo;
 
     tipo.dispatchEvent(new Event("change"));
 
-    // Atualizar para RECEITA
+    // Força repaint (CRÍTICO PARA DESPESA)
+    setTimeout(() => {
+        if (transacao.tipo === "despesa") {
+            document.getElementById("forma-pagamento-teste")
+                ?.dispatchEvent(new Event("change"));
+        }
+    }, 0);
+
+    // ================= RECEITA =================
     if (transacao.tipo === "receita") {
         document.getElementById("fonte").value = transacao.fonte || "";
         document.getElementById("descricao-receita").value = transacao.descricao || "";
@@ -704,13 +712,17 @@ window.editarTransacao = function(id) {
         document.getElementById("conta-bancaria-depositada").value = transacao.conta || "";
     }
 
-    // Atualizar para DESPESA
+    // ================= DESPESA =================
     if (transacao.tipo === "despesa") {
         document.getElementById("essencial").value = transacao.essencial || "";
+
+        // Atualiza categorias e subcategorias
         atualizarCategorias();
 
         const categoria = document.getElementById("categoria-teste");
         categoria.value = transacao.categoria || "";
+
+        // Atualiza as subcategorias
         categoria.dispatchEvent(new Event("change"));
 
         setTimeout(() => {
@@ -723,6 +735,7 @@ window.editarTransacao = function(id) {
 
         const forma = document.getElementById("forma-pagamento-teste");
         forma.value = transacao.formaPagamento || "";
+
         forma.dispatchEvent(new Event("change"));
 
         if (transacao.formaPagamento === "pix" || transacao.formaPagamento === "debito") {
@@ -736,9 +749,37 @@ window.editarTransacao = function(id) {
         }
     }
 
-    // Exibe o indicador de edição
+    // ================= UI (IGUAL AO ORIGINAL) =================
     document.getElementById("indicador-edicao").style.display = "flex";
+
     idEmEdicao = id;
+
+    document.querySelectorAll("li").forEach(li => {
+        li.classList.remove("linha-editando");
+    });
+
+    const linha = document
+        .querySelector(`button[onclick*="${id}"]`)
+        ?.closest("li");
+
+    if (linha) {
+        linha.classList.add("linha-editando");
+    }
+
+    const btn = document.getElementById("btn-adicionar");
+    btn.textContent = "Salvar alteração";
+    btn.classList.add("modo-edicao");
+
+    // ================= SCROLL =================
+    const form = document.getElementById("form-transacao");
+    if (form) {
+        setTimeout(() => {
+            form.scrollIntoView({
+                behavior: "smooth",
+                block: "start" // Muda para "start" para garantir que o formulário apareça no topo
+            });
+        }, 100); // Atraso de 100ms para garantir que a atualização do formulário seja finalizada
+    }
 };
 
 function converterDataFirestore(dataFirestore) {
