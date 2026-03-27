@@ -729,10 +729,34 @@ window.editarTransacao = function(id) {
             document.getElementById("conta-bancaria-debitada").value = transacao.conta || "";
         }
 
-        if (transacao.formaPagamento === "credito") {
-            document.getElementById("nome-cartao").value = transacao.cartao || "";
-            document.getElementById("parcelas").value = transacao.parcelas || "";
-            document.getElementById("mes-fatura").value = transacao.mesFatura || "";
+        if (formaPagamento === "credito") {
+            cartao = document.getElementById("nome-cartao")?.value || "";
+            parcelas = document.getElementById("parcelas")?.value || "";
+            mesFatura = document.getElementById("mes-fatura")?.value || "";
+
+            if (!cartao || !parcelas) {
+                showToast("Preencha os dados do cartão", "error");
+                return;
+            }
+
+            // Tornar a fatura do cartão obrigatória
+            if (!mesFatura) {
+                showToast("Preencha o mês da fatura", "error");
+                return;
+            }
+        }
+        // Valida se os campos obrigatórios estão preenchidos, com exceção de categoria e subcategoria para investimento
+        if (isNaN(valor) || !data || !formaPagamento) {
+            showToast("Preencha os campos obrigatórios", "error");
+            return;
+        }
+
+        // Se for um "Investimento", não é necessário preencher categoria e subcategoria
+        if (tipo === "despesa" && categoria !== "investimentos") {
+            if (!categoria || !subcategoria) {
+                showToast("Preencha categoria e subcategoria", "error");
+                return;
+            }
         }
     }
 
