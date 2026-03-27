@@ -741,7 +741,12 @@ window.editarTransacao = function(id) {
 
         if (transacao.formaPagamento === "pix" || transacao.formaPagamento === "debito") {
             document.getElementById("conta-bancaria-debitada").value = transacao.conta || "";
-        }    
+        } 
+        if (transacao.formaPagamento === "credito") {
+            document.getElementById("nome-cartao").value = transacao.cartao || "";
+            document.getElementById("parcelas").value = transacao.parcelas || "";
+            document.getElementById("mes-fatura").value = transacao.mesFatura || "";
+        }   
     }
 
      // ================= UI (IGUAL AO ORIGINAL) =================
