@@ -256,7 +256,7 @@ async function adicionarTransacao() {
         }
 
         // Se for um "Investimento", não é necessário preencher categoria e subcategoria
-        if (tipo === "despesa" && categoria !== "investimento") {
+        if (tipo === "despesa" && categoria !== "Investimentos") {
             if (!categoria || !subcategoria) {
                 showToast("Preencha categoria e subcategoria", "error");
                 return;
