@@ -578,12 +578,41 @@ function carregarTransacoesTempoReal() {
 }
 
 function limparFormulario() {
-    document.getElementById("descricao-receita").value = "";
-    document.getElementById("valor-receita").value = "";
-    document.getElementById("data-receita").value = "";
-    document.getElementById("descricao-despesa").value = "";
-    document.getElementById("valor-despesa").value = "";
-    document.getElementById("data-despesa").value = "";
+    // Limpar campos de receita
+    document.getElementById("tipo-teste").value = ""; // Tipo (Receita/Despesa)
+    document.getElementById("fonte").value = ""; // Fonte da receita
+    document.getElementById("descricao-receita").value = ""; // Descrição da receita
+    document.getElementById("valor-receita").value = ""; // Valor da receita
+    document.getElementById("data-receita").value = ""; // Data da receita
+    document.getElementById("conta-bancaria-depositada").value = ""; // Conta bancária de depósito
+
+    // Limpar campos de despesa
+    document.getElementById("essencial").value = ""; // Essencial / Não Essencial
+    document.getElementById("categoria-teste").value = ""; // Categoria da despesa
+    document.getElementById("subcategoria-teste").value = ""; // Subcategoria da despesa
+    document.getElementById("descricao-despesa").value = ""; // Descrição da despesa
+    document.getElementById("valor-despesa").value = ""; // Valor da despesa
+    document.getElementById("data-despesa").value = ""; // Data da despesa
+    document.getElementById("forma-pagamento-teste").value = ""; // Forma de pagamento
+    document.getElementById("conta-bancaria-debitada").value = ""; // Conta bancária debitada
+    document.getElementById("nome-cartao").value = ""; // Nome do cartão
+    document.getElementById("parcelas").value = ""; // Parcelas do cartão
+    document.getElementById("mes-fatura").value = ""; // Mês da fatura
+
+    // Resetando a visibilidade dos campos
+    document.getElementById("bloco-receita").style.display = "none"; // Esconde o bloco de receita
+    document.getElementById("bloco-despesa").style.display = "none"; // Esconde o bloco de despesa
+    document.getElementById("indicador-edicao").style.display = "none"; // Esconde o indicador de edição
+
+    // Limpar outras variáveis de estado
+    idEmEdicao = null;
+    document.querySelectorAll("li").forEach(li => {
+        li.classList.remove("linha-editando"); // Remove a marcação de edição de todas as transações
+    });
+
+    const btn = document.getElementById("btn-adicionar");
+    btn.textContent = "Adicionar"; // Restaura o texto do botão para "Adicionar"
+    btn.classList.remove("modo-edicao"); // Remove a classe de modo de edição
 }
 
 function showToast(message, type = "success") {
