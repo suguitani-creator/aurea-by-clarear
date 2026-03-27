@@ -314,12 +314,28 @@ async function adicionarTransacao() {
 function atualizarCategorias() {
     const tipo = document.getElementById("tipo-teste").value;
     const selectCategoria = document.getElementById("categoria-teste");
-    selectCategoria.innerHTML = "";
+    selectCategoria.innerHTML = "";  // Limpa as categorias antes de adicionar
 
-    categorias[tipo].forEach(cat => {
+    let categoriasLista = [];
+
+    // Carregar categorias baseadas no tipo de transação
+    if (tipo === "receita") {
+        categoriasLista = CATEGORIAS.receita;  // Receita
+    } else if (tipo === "despesa") {
+        categoriasLista = Object.keys(CATEGORIAS.despesa);  // Despesa
+    }
+
+    // Adiciona a opção "Selecione..." como padrão
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Selecione...";
+    selectCategoria.appendChild(defaultOption);
+
+    // Adiciona as categorias para o tipo selecionado (Receita ou Despesa)
+    categoriasLista.forEach(cat => {
         const option = document.createElement("option");
-        option.value = cat;
-        option.textContent = cat;
+        option.value = cat.toLowerCase();  // Usando o nome da categoria em minúsculo
+        option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);  // Capitaliza a primeira letra
         selectCategoria.appendChild(option);
     });
 }
