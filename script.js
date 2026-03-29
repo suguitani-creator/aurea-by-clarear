@@ -821,9 +821,17 @@ window.editarTransacao = function(id) {
     }
 };
 
-function converterDataFirestore(dataFirestore) {
-    const [ano, mes, dia] = dataFirestore.split("-"); // formato YYYY-MM-DD
-    return new Date(ano, mes - 1, dia); // meses começam do zero
+function converterDataFirestore(data) {
+
+    if (!data || typeof data !== "string") return null;
+
+    const partes = data.split("-");
+
+    if (partes.length !== 3) return null;
+
+    const [ano, mes, dia] = partes;
+
+    return new Date(ano, mes - 1, dia);
 }
 
 function formatarData(data) {
