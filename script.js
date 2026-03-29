@@ -750,11 +750,7 @@ window.editarTransacao = function(id) {
 
     // Atualizar para DESPESA
     if (transacao.tipo === "despesa") {
-        const essencial = document.getElementById("essencial");
-        essencial.value = transacao.essencial || "";
-
-        // 🔥 ESSA LINHA RESOLVE TUDO
-        essencial.dispatchEvent(new Event("change"));
+        document.getElementById("essencial").value = transacao.essencial || "";
         atualizarCategorias();
 
         const categoria = document.getElementById("categoria-teste");
