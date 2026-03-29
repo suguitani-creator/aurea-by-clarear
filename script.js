@@ -263,10 +263,6 @@ async function adicionarTransacao() {
             }
         }
 
-        if (transacao.essencial === "investimento") {
-    document.getElementById("categoria-teste").value = "";
-    document.getElementById("subcategoria-teste").innerHTML = '<option value="">Selecione...</option>';
-}
 
         dados = {
             ...dados,
