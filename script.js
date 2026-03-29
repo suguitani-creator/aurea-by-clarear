@@ -356,7 +356,7 @@ function aplicarFiltro() {
 
     if (mesSelecionado) {
         filtradas = transacoes.filter(t =>
-            t.data.startsWith(mesSelecionado)
+            t.data && t.data.startsWith(mesSelecionado)
         );
     }
 
@@ -575,6 +575,11 @@ function carregarTransacoesTempoReal() {
 
         aplicarFiltro();
     });
+    transacoes.forEach(t => {
+    if (!t.data) {
+        console.log("SEM DATA:", t);
+    }
+});
 }
 
 function limparFormulario() {
