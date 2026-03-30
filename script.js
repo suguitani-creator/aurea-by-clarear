@@ -192,6 +192,11 @@ async function adicionarTransacao() {
 
     let dados = { tipo };
 
+    if (!tipo) {
+    showToast("Selecione receita ou despesa", "error");
+    return;
+}
+
     // ================= RECEITA =================
     if (tipo === "receita") {
 
@@ -263,6 +268,10 @@ async function adicionarTransacao() {
             }
         }
 
+        if (!dados.data) {
+        showToast("Data obrigatória", "error");
+        return;
+}
 
         dados = {
             ...dados,
