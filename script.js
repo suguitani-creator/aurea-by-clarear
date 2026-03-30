@@ -268,10 +268,6 @@ async function adicionarTransacao() {
             }
         }
 
-        if (!dados.data) {
-        showToast("Data obrigatória", "error");
-        return;
-}
 
         dados = {
             ...dados,
