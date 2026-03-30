@@ -861,17 +861,23 @@ function calcularTotaisPorMes(mes, ano) {
     let totalDespesas = 0;
 
     transacoes.forEach(t => {
-        const data = converterDataFirestore(t.data); // Usando a função nova para converter a data
 
-        // Verificar se a transação é do mês e ano correto
+        const data = converterDataFirestore(t.data);
+
+        // 🔥 IGNORA registros inválidos
+        if (!data) return;
+
+        // 🔥 garante que valor é número
+        const valor = Number(t.valor) || 0;
+
         if (data.getMonth() === mes && data.getFullYear() === ano) {
             if (t.tipo === "receita") {
-                totalReceitas += t.valor;
-            } else {
-                totalDespesas += t.valor;
+                totalReceitas += valor;
+            } else if (t.tipo === "despesa") {
+                totalDespesas += valor;
             }
         }
-    })
+    });
 
     return { totalReceitas, totalDespesas };
 }
