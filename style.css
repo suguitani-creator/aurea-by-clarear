@@ -959,3 +959,74 @@ button.modo-edicao:hover {
     outline: none;
     border-color: #C6A75E;
 }
+
+.form-container {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: #fff;
+}
+
+/* GRID 2 COLUNAS */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+/* GRID 3 COLUNAS */
+.form-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+}
+
+/* INPUT PADRÃO */
+.input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 100%;
+}
+
+/* INPUT FOCO */
+.input:focus {
+    outline: none;
+    border-color: #C6A75E;
+}
+
+/* FULL WIDTH */
+.full {
+    grid-column: span 2;
+}
+
+/* BOTÕES */
+.botoes-formulario {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+#btn-adicionar {
+    background: #4A7C59;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#btn-adicionar.modo-edicao {
+    background: #C6A75E;
+}
+
+.btn-cancelar {
+    background: #ccc;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
