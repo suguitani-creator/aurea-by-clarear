@@ -968,7 +968,6 @@ button.modo-edicao:hover {
     background: #fff;
 }
 
-/* GRID 2 COLUNAS */
 .form-grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -976,20 +975,24 @@ button.modo-edicao:hover {
     margin-bottom: 12px;
 }
 
-/* GRID 3 COLUNAS */
 .form-grid-3 {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 12px;
+    margin-bottom: 12px;
 }
 
-/* INPUT */
 .input {
+    width: 100%;
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ccc;
-    font-size: 14px;
-    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ocupa linha toda */
+.full {
+    grid-column: 1 / -1;
 }
 
 /* FOCO */

@@ -99,39 +99,63 @@
         <div></div>
     </div>
 
-    <!-- ================= RECEITA ================= -->
-    <div id="bloco-receita" class="form-grid-2">
+    <!--BLOCO RECEITA-->
+    <div id="bloco-receita">
 
-        <!-- Linha 1 -->
+    <!-- Linha 1 -->
+    <div class="form-grid-2">
+        <select id="tipo-teste" class="input">
+            <option value="receita">Receita</option>
+            <option value="despesa">Despesa</option>
+        </select>
+
         <select id="fonte" class="input">
             <option value="salario">Salário</option>
             <option value="bolsa">Bolsa</option>
             <option value="rendimentos">Rendimentos</option>
         </select>
-        <div></div>
+    </div>
 
-        <!-- Linha 2 -->
+    <!-- Linha 2 -->
+    <div class="form-grid-2">
         <input id="descricao-receita" class="input full" placeholder="Descrição (opcional)">
+    </div>
 
-        <!-- Linha 3 -->
+    <!-- Linha 3 -->
+    <div class="form-grid-2">
         <input id="valor-receita" type="number" class="input" placeholder="Valor">
         <input id="data-receita" type="date" class="input">
+    </div>
 
-        <!-- Linha 4 -->
+    <!-- Linha 4 -->
+    <div class="form-grid-2">
         <select id="conta-bancaria-depositada" class="input full">
             <option value="">Selecione a conta</option>
         </select>
-
     </div>
 
-    <!-- ================= DESPESA ================= -->
-    <div id="bloco-despesa" class="form-grid-2" style="display:none;">
+</div>
 
-        <!-- Linha 1 -->
+<!--BLOCO DESPESAS-->
+    <div id="bloco-despesa" style="display:none;">
+
+    <!-- Linha 1 -->
+    <div class="form-grid-2">
         <select id="essencial" class="input">
             <option value="sim">Essencial</option>
             <option value="nao">Não essencial</option>
             <option value="investimento">Investimentos</option>
+        </select>
+
+        <select id="categoria-teste" class="input">
+            <option value="">Selecione...</option>
+        </select>
+    </div>
+
+    <!-- Linha 2 -->
+    <div class="form-grid-2">
+        <select id="subcategoria-teste" class="input">
+            <option value="">Selecione...</option>
         </select>
 
         <select id="forma-pagamento-teste" class="input">
@@ -139,57 +163,53 @@
             <option value="debito">Débito</option>
             <option value="credito">Crédito</option>
         </select>
+    </div>
 
-        <!-- Linha 2 -->
-        <select id="categoria-teste" class="input">
-            <option value="">Selecione...</option>
-        </select>
-
-        <select id="subcategoria-teste" class="input">
-            <option value="">Selecione...</option>
-        </select>
-
-        <!-- Linha 3 -->
+    <!-- Linha 3 -->
+    <div class="form-grid-2">
         <input id="descricao-despesa" class="input full" placeholder="Descrição (opcional)">
+    </div>
 
-        <!-- Linha 4 -->
+    <!-- Linha 4 -->
+    <div class="form-grid-2">
         <input id="valor-despesa" type="number" class="input" placeholder="Valor">
         <input id="data-despesa" type="date" class="input">
+    </div>
 
-        <!-- PIX / DÉBITO -->
-        <div id="bloco-conta-debito" class="full">
-            <select id="conta-bancaria-debitada" class="input">
-                <option value="">Selecione a conta</option>
-            </select>
-        </div>
+    <!-- Linha 5 PIX / DÉBITO -->
+    <div id="bloco-conta-debito" class="form-grid-2">
+        <select id="conta-bancaria-debitada" class="input full">
+            <option value="">Selecione a conta</option>
+        </select>
+    </div>
 
-        <!-- CARTÃO -->
-        <div id="bloco-cartao" class="form-grid-3 full" style="display:none;">
+    <!-- Linha 5 CARTÃO -->
+    <div id="bloco-cartao" class="form-grid-3" style="display:none;">
 
-            <select id="nome-cartao" class="input">
-                <option value="">Selecione o cartão</option>
-            </select>
+        <select id="nome-cartao" class="input">
+            <option value="">Selecione o cartão</option>
+        </select>
 
-            <select id="parcelas" class="input">
-                <option value="1">1x</option>
-                <option value="2">2x</option>
-                <option value="3">3x</option>
-                <option value="4">4x</option>
-                <option value="5">5x</option>
-                <option value="6">6x</option>
-                <option value="7">7x</option>
-                <option value="8">8x</option>
-                <option value="9">9x</option>
-                <option value="10">10x</option>
-                <option value="11">11x</option>
-                <option value="12">12x</option>
-            </select>
+        <select id="parcelas" class="input">
+            <option value="1">1x</option>
+            <option value="2">2x</option>
+            <option value="3">3x</option>
+            <option value="4">4x</option>
+            <option value="5">5x</option>
+            <option value="6">6x</option>
+            <option value="7">7x</option>
+            <option value="8">8x</option>
+            <option value="9">9x</option>
+            <option value="10">10x</option>
+            <option value="11">11x</option>
+            <option value="12">12x</option>
+        </select>
 
-            <input type="month" id="mes-fatura" class="input">
-
-        </div>
+        <input type="month" id="mes-fatura" class="input">
 
     </div>
+
+</div>
 
     <!-- BOTÕES -->
     <div class="botoes-formulario">
