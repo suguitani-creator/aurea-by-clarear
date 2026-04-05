@@ -1056,3 +1056,15 @@ button.modo-edicao:hover {
     border-radius: 8px;
     cursor: pointer;
 }
+
+/* Campo com erro */
+.input.erro {
+    border-color: #A94442;
+    background: #fff5f5;
+}
+
+/* Remove erro ao focar */
+.input.erro:focus {
+    border-color: #C6A75E;
+    background: white;
+}
