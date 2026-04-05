@@ -190,12 +190,12 @@ async function adicionarTransacao() {
 
     const tipo = document.getElementById("tipo-teste").value;
 
-    let dados = { tipo };
-
     if (!tipo) {
-    showToast("Selecione receita ou despesa", "error");
-    return;
-}
+        showToast("Selecione receita ou despesa", "error");
+        return;
+    }
+
+    let dados = { tipo };
 
     // ================= RECEITA =================
     if (tipo === "receita") {
@@ -248,26 +248,23 @@ async function adicionarTransacao() {
                 return;
             }
 
-            // Tornar a fatura do cartão obrigatória
             if (!mesFatura) {
                 showToast("Preencha o mês da fatura", "error");
                 return;
             }
         }
-        // Valida se os campos obrigatórios estão preenchidos, com exceção de categoria e subcategoria para investimento
+
         if (isNaN(valor) || !data || !formaPagamento) {
             showToast("Preencha os campos obrigatórios", "error");
             return;
         }
 
-        // Se for um "Investimento", não é necessário preencher categoria e subcategoria
-        if (tipo === "despesa" && essencial !== "investimento") {
+        if (essencial !== "investimento") {
             if (!categoria || !subcategoria) {
                 showToast("Preencha categoria e subcategoria", "error");
                 return;
             }
         }
-
 
         dados = {
             ...dados,
@@ -285,38 +282,55 @@ async function adicionarTransacao() {
         };
     }
 
+    // ================= 🔥 LIMPEZA DE DADOS (CRÍTICO) =================
+    Object.keys(dados).forEach(key => {
+        if (
+            dados[key] === undefined ||
+            dados[key] === null ||
+            dados[key] === ""
+        ) {
+            delete dados[key];
+        }
+    });
+
+    // ================= 🔍 DEBUG =================
+    console.log("DADOS ENVIADOS:", dados);
+    console.log("UID:", user.uid);
+
     try {
 
-        // 🔥 EDIÇÃO
+        // ================= ✏️ EDIÇÃO =================
         if (idEmEdicao !== null) {
 
-    console.log("ATUALIZANDO:", idEmEdicao);
+            console.log("ATUALIZANDO:", idEmEdicao);
 
-    await updateDoc(
-        doc(db, "users", user.uid, "transacoes", idEmEdicao),
-        dados
-    );
+            await updateDoc(
+                doc(db, "users", user.uid, "transacoes", idEmEdicao),
+                dados
+            );
 
-    idEmEdicao = null;
+            idEmEdicao = null;
 
-    showToast("Transação atualizada!");
+            showToast("Transação atualizada!");
 
-    document.getElementById("indicador-edicao").style.display = "none";
+            document.getElementById("indicador-edicao").style.display = "none";
 
-    const btn = document.getElementById("btn-adicionar");
-    btn.textContent = "Adicionar";
-    btn.classList.remove("modo-edicao");
+            const btn = document.getElementById("btn-adicionar");
+            btn.textContent = "Adicionar";
+            btn.classList.remove("modo-edicao");
 
-    limparFormulario();
+            limparFormulario();
 
-    return;
-}
+            return;
+        }
 
-        // 🔥 NOVA
-        await addDoc(
+        // ================= ➕ NOVA =================
+        const docRef = await addDoc(
             collection(db, "users", user.uid, "transacoes"),
             dados
         );
+
+        console.log("DOC CRIADO:", docRef.id);
 
         showToast("Transação adicionada!");
         limparFormulario();
