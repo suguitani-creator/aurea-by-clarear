@@ -85,104 +85,126 @@
         </div>
         
 
-        <!--FORMULÁRIO TESTE-->
-        <div id="form-transacao" style="margin-top:30px; padding:20px; border:1px solid #ccc; border-radius:10px;">
+        <!-- FORMULÁRIO -->
+<div id="form-transacao" class="form-container">
 
-            <h3>TESTE NOVO FORMULÁRIO</h3>
+    <h3>Nova Transação</h3>
 
-            <!-- Tipo -->
-            <select id="tipo-teste">
-                <option value="receita">Receita</option>
-                <option value="despesa">Despesa</option>
-            </select>
+    <!-- TIPO -->
+    <div class="form-grid-2">
+        <select id="tipo-teste" class="input">
+            <option value="receita">Receita</option>
+            <option value="despesa">Despesa</option>
+        </select>
+        <div></div>
+    </div>
 
-            <!-- RECEITA -->
-            <div id="bloco-receita">
+    <!-- ================= RECEITA ================= -->
+    <div id="bloco-receita" class="form-grid-2">
 
-                <select id="fonte">
-                    <option value="salario">Salário</option>
-                    <option value="bolsa">Bolsa</option>
-                    <option value="rendimentos">Rendimentos</option>
-                </select>
+        <!-- Linha 1 -->
+        <select id="fonte" class="input">
+            <option value="salario">Salário</option>
+            <option value="bolsa">Bolsa</option>
+            <option value="rendimentos">Rendimentos</option>
+        </select>
+        <div></div>
 
-                <input id="descricao-receita" placeholder="Descrição (opcional)">
-                <input id="valor-receita" type="number" placeholder="Valor">
-                <input id="data-receita" type="date">
+        <!-- Linha 2 -->
+        <input id="descricao-receita" class="input full" placeholder="Descrição (opcional)">
 
-                <select id="conta-bancaria-depositada"></select>
+        <!-- Linha 3 -->
+        <input id="valor-receita" type="number" class="input" placeholder="Valor">
+        <input id="data-receita" type="date" class="input">
 
-            </div>
-
-            <!-- DESPESA -->
-            <div id="bloco-despesa" style="display:none;">
-
-                <select id="essencial">
-                    <option value="sim">Essencial</option>
-                    <option value="nao">Não essencial</option>
-                    <option value="investimento">Investimentos</option>
-                </select>
-
-                <select id="categoria-teste">
-                    <option value="">Selecione...</option>
-                </select>
-                <select id="subcategoria-teste">
-                    <option value="">Selecione...</option>
-                </select>
-
-                <input id="descricao-despesa" placeholder="Descrição (opcional)">
-                <input id="valor-despesa" type="number" placeholder="Valor">
-                <input id="data-despesa" type="date">
-
-                <select id="forma-pagamento-teste">
-                    <option value="pix">Pix</option>
-                    <option value="debito">Débito</option>
-                    <option value="credito">Crédito</option>
-                </select>
-
-                <!-- PIX / DÉBITO -->
-                <div id="bloco-conta-debito">
-                    <select id="conta-bancaria-debitada"></select>
-                </div>
-
-                <!-- CARTÃO -->
-                <div id="bloco-cartao" style="display:none;">
-
-                    <select id="nome-cartao"></select>
-
-                    <select id="parcelas">
-                        <option value="1">1x</option>
-                        <option value="2">2x</option>
-                        <option value="3">3x</option>
-                        <option value="4">4x</option>
-                        <option value="4">5x</option>
-                        <option value="4">6x</option>
-                        <option value="4">7x</option>
-                        <option value="4">8x</option>
-                        <option value="4">9x</option>
-                        <option value="4">10x</option>
-                        <option value="4">11x</option>
-                        <option value="4">12x</option>
-                    </select>
-
-                    <input type="month" id="mes-fatura">
-
-                </div>
-
-            </div>
-
-            <div class="botoes-formulario">
-
-                <button id="btn-adicionar">
-                    Adicionar
-                </button>
-
-                <button id="btn-cancelar-edicao-transacao" class="btn-cancelar">
-                    Cancelar
-                </button>
-
-            </div>
+        <!-- Linha 4 -->
+        <select id="conta-bancaria-depositada" class="input full">
+            <option value="">Selecione a conta</option>
+        </select>
 
     </div>
+
+    <!-- ================= DESPESA ================= -->
+    <div id="bloco-despesa" class="form-grid-2" style="display:none;">
+
+        <!-- Linha 1 -->
+        <select id="essencial" class="input">
+            <option value="sim">Essencial</option>
+            <option value="nao">Não essencial</option>
+            <option value="investimento">Investimentos</option>
+        </select>
+
+        <select id="forma-pagamento-teste" class="input">
+            <option value="pix">Pix</option>
+            <option value="debito">Débito</option>
+            <option value="credito">Crédito</option>
+        </select>
+
+        <!-- Linha 2 -->
+        <select id="categoria-teste" class="input">
+            <option value="">Selecione...</option>
+        </select>
+
+        <select id="subcategoria-teste" class="input">
+            <option value="">Selecione...</option>
+        </select>
+
+        <!-- Linha 3 -->
+        <input id="descricao-despesa" class="input full" placeholder="Descrição (opcional)">
+
+        <!-- Linha 4 -->
+        <input id="valor-despesa" type="number" class="input" placeholder="Valor">
+        <input id="data-despesa" type="date" class="input">
+
+        <!-- PIX / DÉBITO -->
+        <div id="bloco-conta-debito" class="full">
+            <select id="conta-bancaria-debitada" class="input">
+                <option value="">Selecione a conta</option>
+            </select>
+        </div>
+
+        <!-- CARTÃO -->
+        <div id="bloco-cartao" class="form-grid-3 full" style="display:none;">
+
+            <select id="nome-cartao" class="input">
+                <option value="">Selecione o cartão</option>
+            </select>
+
+            <select id="parcelas" class="input">
+                <option value="1">1x</option>
+                <option value="2">2x</option>
+                <option value="3">3x</option>
+                <option value="4">4x</option>
+                <option value="5">5x</option>
+                <option value="6">6x</option>
+                <option value="7">7x</option>
+                <option value="8">8x</option>
+                <option value="9">9x</option>
+                <option value="10">10x</option>
+                <option value="11">11x</option>
+                <option value="12">12x</option>
+            </select>
+
+            <input type="month" id="mes-fatura" class="input">
+
+        </div>
+
+    </div>
+
+    <!-- BOTÕES -->
+    <div class="botoes-formulario">
+
+        <button id="btn-adicionar">
+            Adicionar
+        </button>
+
+        <button id="btn-cancelar-edicao-transacao" class="btn-cancelar">
+            Cancelar
+        </button>
+
+    </div>
+
+</div>
 
         <h2>Fluxo Financeiro</h2>
         <ul id="lista-despesas"></ul>

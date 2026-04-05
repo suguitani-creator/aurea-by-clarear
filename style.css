@@ -983,7 +983,7 @@ button.modo-edicao:hover {
     gap: 12px;
 }
 
-/* INPUT PADRÃO */
+/* INPUT */
 .input {
     padding: 10px;
     border-radius: 8px;
@@ -992,7 +992,7 @@ button.modo-edicao:hover {
     width: 100%;
 }
 
-/* INPUT FOCO */
+/* FOCO */
 .input:focus {
     outline: none;
     border-color: #C6A75E;
