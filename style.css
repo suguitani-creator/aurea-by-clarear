@@ -1049,10 +1049,8 @@ button.modo-edicao:hover {
     transition: all 0.2s ease;
 }
 
-
-
 .btn-cancelar {
-    background: #ccc;
+    background: transparent;
     border: none;
     padding: 10px 16px;
     border-radius: 8px;
