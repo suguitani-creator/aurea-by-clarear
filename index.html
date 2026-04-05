@@ -86,41 +86,38 @@
         
 
         <!--FORMULÁRIO TESTE-->
-        <div id="form-transacao" style="margin-top:30px; padding:20px; border:1px solid #ccc; border-radius:10px;">
+        <div id="form-transacao" class="form-container">
 
-    <h3>LANÇAMENTOS</h3>
+    <h3>TESTE NOVO FORMULÁRIO</h3>
 
     <!-- Tipo -->
-    <select id="tipo-teste">
-        <option value="receita">Receita</option>
-        <option value="despesa">Despesa</option>
-    </select>
+    <div class="form-grid-2">
+        <select id="tipo-teste" class="input"></select>
+    </div>
 
-    <!-- RECEITA -->
-    <div id="bloco-receita" class="form-grid">
+    <!-- ================= RECEITA ================= -->
+    <div id="bloco-receita" class="form-grid-2">
 
         <!-- Linha 1 -->
-        <select id="tipo-teste" class="input"></select>
         <select id="fonte" class="input"></select>
+        <div></div>
 
         <!-- Linha 2 -->
-        <input id="descricao-receita" class="input full-width" placeholder="Descrição (opcional)" />
+        <input id="descricao-receita" class="input full" placeholder="Descrição (opcional)">
 
         <!-- Linha 3 -->
-        <input id="valor-receita" class="input" placeholder="Valor" />
-        <input id="data-receita" class="input" type="date" />
-    
+        <input id="valor-receita" type="number" class="input" placeholder="Valor">
+        <input id="data-receita" type="date" class="input">
+
+        <!-- Linha 4 -->
+        <select id="conta-bancaria-depositada" class="input full"></select>
+
     </div>
 
-    <div class="form-grid">
-        <select id="conta-bancaria-depositada" class="input full-width"></select>
-    </div>
-
-    <!-- DESPESA -->
-    <div id="bloco-despesa" class="form-grid">
+    <!-- ================= DESPESA ================= -->
+    <div id="bloco-despesa" class="form-grid-2" style="display:none;">
 
         <!-- Linha 1 -->
-        <select id="tipo-teste" class="input"></select>
         <select id="essencial" class="input"></select>
 
         <!-- Linha 2 -->
@@ -128,36 +125,39 @@
         <select id="subcategoria-teste" class="input"></select>
 
         <!-- Linha 3 -->
-        <input id="descricao-despesa" class="input full-width" placeholder="Descrição (opcional)" />
+        <input id="descricao-despesa" class="input full" placeholder="Descrição (opcional)">
 
         <!-- Linha 4 -->
-        <input id="valor-despesa" class="input" placeholder="Valor" />
-        <input id="data-despesa" class="input" type="date" />
+        <input id="valor-despesa" type="number" class="input" placeholder="Valor">
+        <input id="data-despesa" type="date" class="input">
+
+        <!-- Linha 5 -->
+        <select id="forma-pagamento-teste" class="input full"></select>
+
+        <!-- PIX / DÉBITO -->
+        <div id="bloco-conta-debito" class="full">
+            <select id="conta-bancaria-debitada" class="input"></select>
+        </div>
+
+        <!-- CARTÃO -->
+        <div id="bloco-cartao" class="form-grid-3 full" style="display:none;">
+
+            <select id="nome-cartao" class="input"></select>
+
+            <select id="parcelas" class="input"></select>
+
+            <input type="month" id="mes-fatura" class="input">
+
+        </div>
 
     </div>
 
-    <!-- Linha 5 (dinâmica) -->
-
-    <div id="linha-pix-debito" class="form-grid" style="display:none;">
-        <select id="conta-bancaria-debitada" class="input full-width"></select>
-    </div>
-
-    <div id="linha-credito" class="form-grid-3" style="display:none;">
-        <select id="nome-cartao" class="input"></select>
-        <select id="parcelas" class="input"></select>
-        <input id="mes-fatura" class="input" type="month" />
-    </div>
-
+    <!-- BOTÕES -->
     <div class="botoes-formulario">
-
-                <button id="btn-adicionar">
-                    Adicionar
-                </button>
-
-                <button id="btn-cancelar-edicao-transacao" class="btn-cancelar">
-                    Cancelar
-                </button>
-
+        <button id="btn-adicionar">Adicionar</button>
+        <button id="btn-cancelar-edicao-transacao" class="btn-cancelar">
+            Cancelar
+        </button>
     </div>
 
 </div>
