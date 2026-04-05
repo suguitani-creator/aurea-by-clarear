@@ -1011,7 +1011,7 @@ button.modo-edicao:hover {
 }
 
 #btn-adicionar {
-    background: #4A7C59;
+    background: #7A5C42; /* marrom elegante */
     color: white;
     border: none;
     padding: 10px 16px;
@@ -1020,7 +1020,7 @@ button.modo-edicao:hover {
 }
 
 #btn-adicionar.modo-edicao {
-    background: #C6A75E;
+    background: #C6A75E; /* dourado/bege */
 }
 
 .btn-cancelar {
