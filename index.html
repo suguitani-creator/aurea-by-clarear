@@ -86,39 +86,32 @@
         
 
         <!--FORMULÁRIO TESTE-->
-        <div id="form-transacao" class="form-container">
+        <div id="form-transacao" style="margin-top:30px; padding:20px; border:1px solid #ccc; border-radius:10px;">
 
-            <h3>LANÇAMENTOS</h3>
+            <h3>TESTE NOVO FORMULÁRIO</h3>
 
             <!-- Tipo -->
-             <div class="form-grid-2">
-                <select id="tipo-teste">
-                    <option value="receita">Receita</option>
-                    <option value="despesa">Despesa</option>
-                    </select>
-             </div>           
+            <select id="tipo-teste">
+                <option value="receita">Receita</option>
+                <option value="despesa">Despesa</option>
+            </select>
+
             <!-- RECEITA -->
-            <div id="bloco-receita" class="form-grid-2">
+            <div id="bloco-receita">
 
-        <!-- Linha 1 -->
-        <select id="fonte" class="input">
-            <option value="salario">Salário</option>
-            <option value="bolsa">Bolsa</option>
-            <option value="rendimentos">Rendimentos</option>
-        </select>
-        <div></div>
+                <select id="fonte">
+                    <option value="salario">Salário</option>
+                    <option value="bolsa">Bolsa</option>
+                    <option value="rendimentos">Rendimentos</option>
+                </select>
 
-        <!-- Linha 2 -->
-        <input id="descricao-receita" class="input full" placeholder="Descrição (opcional)">
+                <input id="descricao-receita" placeholder="Descrição (opcional)">
+                <input id="valor-receita" type="number" placeholder="Valor">
+                <input id="data-receita" type="date">
 
-        <!-- Linha 3 -->
-        <input id="valor-receita" type="number" class="input" placeholder="Valor">
-        <input id="data-receita" type="date" class="input">
+                <select id="conta-bancaria-depositada"></select>
 
-        <!-- Linha 4 -->
-        <select id="conta-bancaria-depositada" class="input full"></select>
-
-    </div>
+            </div>
 
             <!-- DESPESA -->
             <div id="bloco-despesa" style="display:none;">
@@ -189,7 +182,7 @@
 
             </div>
 
-        </div>
+    </div>
 
         <h2>Fluxo Financeiro</h2>
         <ul id="lista-despesas"></ul>
