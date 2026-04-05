@@ -1069,16 +1069,20 @@ button.modo-edicao:hover {
     background: white;
 }
 
+/* estado escondido */
 .animavel {
     opacity: 0;
     transform: translateY(-5px);
-    transition: all 0.25s ease;
-    height: 0;
+    pointer-events: none;
+    max-height: 0;
     overflow: hidden;
+    transition: all 0.25s ease;
 }
 
+/* estado visível */
 .animavel.ativo {
     opacity: 1;
     transform: translateY(0);
-    height: auto;
+    pointer-events: auto;
+    max-height: 500px; /* 🔥 importante */
 }
