@@ -1068,3 +1068,17 @@ button.modo-edicao:hover {
     border-color: #C6A75E;
     background: white;
 }
+
+.animavel {
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: all 0.25s ease;
+    height: 0;
+    overflow: hidden;
+}
+
+.animavel.ativo {
+    opacity: 1;
+    transform: translateY(0);
+    height: auto;
+}
