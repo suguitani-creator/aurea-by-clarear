@@ -180,34 +180,6 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         limparFormulario();
     }
 });
-    const formaPagamento = document.getElementById("forma-pagamento-teste");
-
-if (formaPagamento) {
-
-    formaPagamento.addEventListener("change", () => {
-
-        const valor = formaPagamento.value;
-
-        const blocoConta = document.getElementById("bloco-conta-debito");
-        const blocoCartao = document.getElementById("bloco-cartao");
-
-        if (!blocoConta || !blocoCartao) return;
-
-        if (valor === "pix" || valor === "debito") {
-
-            blocoConta.classList.add("ativo");
-            blocoCartao.classList.remove("ativo");
-
-        } else if (valor === "credito") {
-
-            blocoConta.classList.remove("ativo");
-            blocoCartao.classList.add("ativo");
-        }
-    });
-
-    // 🔥 dispara uma vez ao carregar (ESSENCIAL)
-    formaPagamento.dispatchEvent(new Event("change"));
-}
 });
 
 // ================= FINANÇAS =================
@@ -1487,8 +1459,6 @@ document.getElementById("btn-cancelar-edicao-transacao")
         btn.classList.remove("modo-edicao");
     });
 
-//////////////////////// Formulário Teste //////////////////////////////////
-
 
 // Alternar entre receita e despesa
 document.getElementById("tipo-teste").addEventListener("change", () => {
@@ -1971,3 +1941,45 @@ async function testarLeituraTransacoes() {
     });
 
 }
+
+window.addEventListener("load", () => {
+
+    const formaPagamento = document.getElementById("forma-pagamento-teste");
+
+    if (!formaPagamento) {
+        console.log("forma-pagamento NÃO encontrado");
+        return;
+    }
+
+    console.log("forma-pagamento OK");
+
+    const atualizarFormaPagamento = () => {
+
+        const valor = formaPagamento.value;
+
+        const blocoConta = document.getElementById("bloco-conta-debito");
+        const blocoCartao = document.getElementById("bloco-cartao");
+
+        if (!blocoConta || !blocoCartao) {
+            console.log("blocos não encontrados");
+            return;
+        }
+
+        if (valor === "pix" || valor === "debito") {
+
+            blocoConta.classList.add("ativo");
+            blocoCartao.classList.remove("ativo");
+
+        } else if (valor === "credito") {
+
+            blocoConta.classList.remove("ativo");
+            blocoCartao.classList.add("ativo");
+        }
+    };
+
+    formaPagamento.addEventListener("change", atualizarFormaPagamento);
+
+    // 🔥 executa ao carregar
+    atualizarFormaPagamento();
+
+});
