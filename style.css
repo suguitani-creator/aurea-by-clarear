@@ -988,6 +988,8 @@ button.modo-edicao:hover {
     border-radius: 8px;
     border: 1px solid #ccc;
     box-sizing: border-box;
+
+    transition: all 0.2s ease; /* 🔥 animação suave */
 }
 
 /* ocupa linha toda */
@@ -995,10 +997,16 @@ button.modo-edicao:hover {
     grid-column: 1 / -1;
 }
 
-/* FOCO */
+/* Hover suave */
+.input:hover {
+    border-color: #A68A64; /* marrom claro */
+}
+
+/* Foco premium */
 .input:focus {
     outline: none;
-    border-color: #C6A75E;
+    border-color: #C6A75E; /* dourado */
+    box-shadow: 0 0 0 2px rgba(198,167,94,0.15);
 }
 
 /* FULL WIDTH */
