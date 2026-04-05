@@ -1022,17 +1022,34 @@ button.modo-edicao:hover {
 }
 
 #btn-adicionar {
-    background: #7A5C42; /* marrom elegante */
+    background: #7A5C42; /* mantém seu padrão */
     color: white;
     border: none;
     padding: 10px 16px;
     border-radius: 8px;
     cursor: pointer;
+
+    transition: all 0.2s ease; /* 🔥 animação */
+}
+
+/* Hover (elevação leve) */
+#btn-adicionar:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Clique (feedback físico) */
+#btn-adicionar:active {
+    transform: scale(0.97);
 }
 
 #btn-adicionar.modo-edicao {
     background: #C6A75E; /* dourado/bege */
+
+    transition: all 0.2s ease;
 }
+
+
 
 .btn-cancelar {
     background: #ccc;
