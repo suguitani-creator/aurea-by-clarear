@@ -1440,21 +1440,24 @@ document
 .getElementById("btn-cancelar-edicao-conta")
 .addEventListener("click", cancelarEdicaoConta);
 
-function cancelarEdicaoTransacao() {
+document.getElementById("btn-cancelar-edicao-transacao")
+    .addEventListener("click", () => {
 
-    idEmEdicao = null;
+        // limpa campos
+        limparFormulario();
 
-    limparFormulario();
+        // 🔥 limpa erros visuais
+        limparErrosFormulario();
 
-    document.getElementById("indicador-edicao").style.display = "none";
+        // reseta modo edição
+        idEmEdicao = null;
 
-    const btn = document.getElementById("btn-adicionar");
-    btn.textContent = "Adicionar";
-    btn.classList.remove("modo-edicao");
+        document.getElementById("indicador-edicao").style.display = "none";
 
-}
-
-document.getElementById("btn-cancelar-edicao-transacao").addEventListener("click", cancelarEdicaoTransacao);
+        const btn = document.getElementById("btn-adicionar");
+        btn.textContent = "Adicionar";
+        btn.classList.remove("modo-edicao");
+    });
 
 //////////////////////// Formulário Teste //////////////////////////////////
 
