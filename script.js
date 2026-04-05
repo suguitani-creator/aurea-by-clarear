@@ -185,6 +185,7 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
 // ================= FINANÇAS =================
 
 async function adicionarTransacao() {
+    limparErrosFormulario();
     const user = auth.currentUser;
     if (!user) return;
 
@@ -206,10 +207,22 @@ async function adicionarTransacao() {
         const data = document.getElementById("data-receita")?.value || "";
         const conta = document.getElementById("conta-bancaria-depositada")?.value || "";
 
-        if (isNaN(valor) || !data || !conta) {
-            showToast("Preencha os campos obrigatórios", "error");
-            return;
-        }
+        if (isNaN(valor)) {
+    marcarErro(document.getElementById("valor-receita"));
+}
+
+if (!data) {
+    marcarErro(document.getElementById("data-receita"));
+}
+
+if (!conta) {
+    marcarErro(document.getElementById("conta-bancaria-depositada"));
+}
+
+if (isNaN(valor) || !data || !conta) {
+    showToast("Preencha os campos obrigatórios", "error");
+    return;
+}
 
         dados = { ...dados, fonte, descricao, valor, data, conta };
     }
@@ -233,9 +246,10 @@ async function adicionarTransacao() {
         if (formaPagamento === "pix" || formaPagamento === "debito") {
             conta = document.getElementById("conta-bancaria-debitada")?.value || "";
             if (!conta) {
-                showToast("Selecione a conta", "error");
-                return;
-            }
+    marcarErro(document.getElementById("conta-bancaria-debitada"));
+    showToast("Selecione a conta", "error");
+    return;
+}
         }
 
         if (formaPagamento === "credito") {
@@ -243,28 +257,56 @@ async function adicionarTransacao() {
             parcelas = document.getElementById("parcelas")?.value || "";
             mesFatura = document.getElementById("mes-fatura")?.value || "";
 
-            if (!cartao || !parcelas) {
-                showToast("Preencha os dados do cartão", "error");
-                return;
-            }
+            if (!cartao) {
+    marcarErro(document.getElementById("nome-cartao"));
+}
 
-            if (!mesFatura) {
-                showToast("Preencha o mês da fatura", "error");
-                return;
-            }
+if (!parcelas) {
+    marcarErro(document.getElementById("parcelas"));
+}
+
+if (!mesFatura) {
+    marcarErro(document.getElementById("mes-fatura"));
+}
+
+if (!cartao || !parcelas || !mesFatura) {
+    showToast("Preencha os dados do cartão", "error");
+    return;
+}
         }
 
-        if (isNaN(valor) || !data || !formaPagamento) {
-            showToast("Preencha os campos obrigatórios", "error");
-            return;
-        }
+        if (isNaN(valor)) {
+    marcarErro(document.getElementById("valor-despesa"));
+}
+
+if (!data) {
+    marcarErro(document.getElementById("data-despesa"));
+}
+
+if (!formaPagamento) {
+    marcarErro(document.getElementById("forma-pagamento-teste"));
+}
+
+if (isNaN(valor) || !data || !formaPagamento) {
+    showToast("Preencha os campos obrigatórios", "error");
+    return;
+}
 
         if (essencial !== "investimento") {
-            if (!categoria || !subcategoria) {
-                showToast("Preencha categoria e subcategoria", "error");
-                return;
-            }
-        }
+
+    if (!categoria) {
+        marcarErro(document.getElementById("categoria-teste"));
+    }
+
+    if (!subcategoria) {
+        marcarErro(document.getElementById("subcategoria-teste"));
+    }
+
+    if (!categoria || !subcategoria) {
+        showToast("Preencha categoria e subcategoria", "error");
+        return;
+    }
+}
 
         dados = {
             ...dados,
@@ -649,6 +691,17 @@ function showToast(message, type = "success") {
     setTimeout(() => {
         toast.className = "toast";
     }, 3000);
+}
+
+function marcarErro(campo) {
+    if (!campo) return;
+    campo.classList.add("erro");
+}
+
+function limparErrosFormulario() {
+    document.querySelectorAll(".input.erro").forEach(el => {
+        el.classList.remove("erro");
+    });
 }
 
 let idParaExcluir = null;
