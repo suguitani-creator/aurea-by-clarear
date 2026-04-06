@@ -1073,16 +1073,13 @@ button.modo-edicao:hover {
 .animavel {
     opacity: 0;
     transform: translateY(-5px);
-    pointer-events: none;
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.25s ease;
+    display: none;
+    transition: all 0.2s ease;
 }
 
-/* estado visível */
+/* visível */
 .animavel.ativo {
+    display: grid; /* 🔥 essencial pro seu layout */
     opacity: 1;
     transform: translateY(0);
-    pointer-events: auto;
-    max-height: 500px; /* 🔥 importante */
 }
