@@ -1069,17 +1069,3 @@ button.modo-edicao:hover {
     background: white;
 }
 
-/* estado escondido */
-.animavel {
-    opacity: 0;
-    transform: translateY(-5px);
-    display: none;
-    transition: all 0.2s ease;
-}
-
-/* visível */
-.animavel.ativo {
-    display: grid; /* 🔥 essencial pro seu layout */
-    opacity: 1;
-    transform: translateY(0);
-}
