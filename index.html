@@ -93,7 +93,7 @@
     <!-- TIPO -->
     <div class="form-grid-2">
         <select id="tipo-teste" class="input full" required>
-            <option value="">Selecione tipo de transação</option>
+            <option value="">Selecione tipo de transação...</option>
             <option value="receita">Receita</option>
             <option value="despesa">Despesa</option>
         </select>
@@ -105,7 +105,8 @@
 
     <!-- Linha 1 -->
     <div class="form-grid-2">
-        <select id="fonte" class="input full">
+        <select id="fonte" class="input full" required>
+            <option value="">Selecione a receita...</option>
             <option value="salario">Salário</option>
             <option value="bolsa">Bolsa</option>
             <option value="rendimentos">Rendimentos</option>
@@ -125,8 +126,8 @@
 
     <!-- Linha 4 -->
     <div class="form-grid-2">
-        <select id="conta-bancaria-depositada" class="input full">
-            <option value="">Selecione a conta</option>
+        <select id="conta-bancaria-depositada" class="input full" required>
+            <option value="">Selecione a conta...</option>
         </select>
     </div>
 
@@ -137,24 +138,26 @@
 
     <!-- Linha 1 -->
     <div class="form-grid-2">
-        <select id="essencial" class="input">
+        <select id="essencial" class="input" required>
+            <option value="">Selecione o tipo...</option>
             <option value="sim">Essencial</option>
             <option value="nao">Não essencial</option>
             <option value="investimento">Investimentos</option>
         </select>
 
         <select id="categoria-teste" class="input">
-            <option value="">Selecione...</option>
+            <option value="">Selecione a cateoria...</option>
         </select>
     </div>
 
     <!-- Linha 2 -->
     <div class="form-grid-2">
         <select id="subcategoria-teste" class="input">
-            <option value="">Selecione...</option>
+            <option value="">Selecione a subcategoria...</option>
         </select>
 
-        <select id="forma-pagamento-teste" class="input">
+        <select id="forma-pagamento-teste" class="input" required>
+            <option value="">Selecione a forma de pagamento...</option>
             <option value="pix">Pix</option>
             <option value="debito">Débito</option>
             <option value="credito">Crédito</option>
