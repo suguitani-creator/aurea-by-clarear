@@ -1548,16 +1548,19 @@ async function carregarContasTeste(){
         collection(db, "users", user.uid, "contas")
     );
 
-    // SELECTS (receita + despesa)
     const selectReceita = document.getElementById("conta-bancaria-depositada");
     const selectDespesa = document.getElementById("conta-bancaria-debitada");
 
     if (selectReceita) {
-        selectReceita.innerHTML = '<option value="">Selecione...</option>';
+        selectReceita.innerHTML = `
+            <option value="" disabled selected>Conta Depositada</option>
+        `;
     }
 
     if (selectDespesa) {
-        selectDespesa.innerHTML = '<option value="">Selecione...</option>';
+        selectDespesa.innerHTML = `
+            <option value="" disabled selected>Conta Debitada</option>
+        `;
     }
 
     snapshot.forEach(doc => {
@@ -1572,7 +1575,6 @@ async function carregarContasTeste(){
         if (selectReceita) selectReceita.appendChild(option1);
         if (selectDespesa) selectDespesa.appendChild(option2);
     });
-
 }
 
 async function carregarCartoesTeste(){
