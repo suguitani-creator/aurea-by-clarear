@@ -1692,7 +1692,7 @@ const CATEGORIAS = {
 function carregarCategoriasTeste() {
     const select = document.getElementById("categoria-teste");
 
-    select.innerHTML = '<option value="">Selecione...</option>';
+    select.innerHTML = '<option value="">Categorias...</option>';
 
     // Carregar categorias de receita
     CATEGORIAS.receita.forEach(cat => {
