@@ -1674,7 +1674,9 @@ function atualizarSelectCartoes(cartoes) {
 
     if (!selectCartao) return;
 
-    selectCartao.innerHTML = '<option value="">Selecione...</option>';
+    selectCartao.innerHTML = `
+        <option value="" disabled selected>Cartão</option>
+    `;
 
     cartoes.forEach(cartao => {
         const option = document.createElement("option");
@@ -1882,7 +1884,10 @@ document.getElementById("essencial").addEventListener("change", () => {
     if (tipo === "investimento" || tipo === "financeiro") {
 
         categoria.value = "";
-        subcategoria.innerHTML = '<option value="">Selecione...</option>';
+
+        subcategoria.innerHTML = `
+            <option value="" disabled selected>Subcategoria</option>
+        `;
 
         categoria.disabled = true;
         subcategoria.disabled = true;
