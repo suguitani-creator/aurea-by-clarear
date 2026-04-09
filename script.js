@@ -1722,10 +1722,10 @@ function atualizarSubcategoriasTeste() {
     subcategoria.innerHTML = "";
 
     // Adiciona a opção "Selecione..."
-    const defaultOption = document.createElement("option");
-    defaultOption.value = "";
-    defaultOption.textContent = "Selecione...";
-    subcategoria.appendChild(defaultOption);
+    //const defaultOption = document.createElement("option");
+    //defaultOption.value = "";
+    //defaultOption.textContent = "Selecione...";
+    //subcategoria.appendChild(defaultOption);
 
     if (!selecionada) return;
 
