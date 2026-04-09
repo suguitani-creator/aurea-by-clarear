@@ -386,28 +386,35 @@ if (isNaN(valor) || !data || !formaPagamento) {
 function atualizarCategorias() {
     const tipo = document.getElementById("tipo-teste").value;
     const selectCategoria = document.getElementById("categoria-teste");
-    selectCategoria.innerHTML = "";  // Limpa as categorias antes de adicionar
+
+    selectCategoria.innerHTML = "";
 
     let categoriasLista = [];
 
-    // Carregar categorias baseadas no tipo de transação
     if (tipo === "receita") {
-        categoriasLista = CATEGORIAS.receita;  // Receita
+        categoriasLista = CATEGORIAS.receita;
     } else if (tipo === "despesa") {
-        categoriasLista = Object.keys(CATEGORIAS.despesa);  // Despesa
+        categoriasLista = Object.keys(CATEGORIAS.despesa);
     }
 
-    // Adiciona a opção "Selecione..." como padrão
+    // Placeholder elegante
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
-    defaultOption.textContent = "Selecione...";
+    defaultOption.textContent = "Categoria";
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
     selectCategoria.appendChild(defaultOption);
 
-    // Adiciona as categorias para o tipo selecionado (Receita ou Despesa)
+    // Adiciona categorias
     categoriasLista.forEach(cat => {
         const option = document.createElement("option");
-        option.value = cat.toLowerCase();  // Usando o nome da categoria em minúsculo
-        option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);  // Capitaliza a primeira letra
+        option.value = cat.toLowerCase();
+
+        option.textContent =
+            tipo === "receita"
+                ? cat
+                : cat.charAt(0).toUpperCase() + cat.slice(1);
+
         selectCategoria.appendChild(option);
     });
 }
@@ -1692,21 +1699,20 @@ const CATEGORIAS = {
 function carregarCategoriasTeste() {
     const select = document.getElementById("categoria-teste");
 
-    select.innerHTML = '<option value="">Categorias...</option>';
+    select.innerHTML = '<option value="" disabled selected>Categoria</option>';
 
-    // Carregar categorias de receita
     CATEGORIAS.receita.forEach(cat => {
         const option = document.createElement("option");
-        option.value = cat.toLowerCase();  // Usa valor em minúsculo
-        option.textContent = cat;  // Exibe com a primeira letra maiúscula
+        option.value = cat.toLowerCase();
+        option.textContent = cat;
         select.appendChild(option);
     });
 
-    // Carregar categorias de despesa
     Object.keys(CATEGORIAS.despesa).forEach(cat => {
         const option = document.createElement("option");
-        option.value = cat.toLowerCase();  // Usa valor em minúsculo
-        option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1); // Exibe com a primeira letra maiúscula
+        option.value = cat.toLowerCase();
+        option.textContent =
+            cat.charAt(0).toUpperCase() + cat.slice(1);
         select.appendChild(option);
     });
 }
@@ -1721,16 +1727,17 @@ function atualizarSubcategoriasTeste() {
 
     subcategoria.innerHTML = "";
 
-    // Adiciona a opção "Selecione..."
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
-    defaultOption.textContent = "Selecione...";
+    defaultOption.textContent = "Subcategoria";
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
     subcategoria.appendChild(defaultOption);
 
     if (!selecionada) return;
 
-    // Carregar as subcategorias conforme a categoria selecionada
     const subcategorias = CATEGORIAS.despesa[selecionada];
+
     if (subcategorias) {
         subcategorias.forEach(sub => {
             const option = document.createElement("option");
