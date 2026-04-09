@@ -1646,11 +1646,15 @@ function atualizarSelectContas(contas) {
     const selectDespesa = document.getElementById("conta-bancaria-debitada");
 
     if (selectReceita) {
-        selectReceita.innerHTML = '<option value="">Selecione...</option>';
+        selectReceita.innerHTML = `
+            <option value="" disabled selected>Conta Depositada</option>
+        `;
     }
 
     if (selectDespesa) {
-        selectDespesa.innerHTML = '<option value="">Selecione...</option>';
+        selectDespesa.innerHTML = `
+            <option value="" disabled selected>Conta Debitada</option>
+        `;
     }
 
     contas.forEach(conta => {
@@ -1664,7 +1668,6 @@ function atualizarSelectContas(contas) {
         if (selectDespesa) selectDespesa.appendChild(option2);
     });
 }
-
 function atualizarSelectCartoes(cartoes) {
 
     const selectCartao = document.getElementById("nome-cartao");
