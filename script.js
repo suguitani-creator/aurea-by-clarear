@@ -398,10 +398,10 @@ function atualizarCategorias() {
     }
 
     // Adiciona a opção "Selecione..." como padrão
-    //const defaultOption = document.createElement("option");
-    //defaultOption.value = "";
-    //defaultOption.textContent = "Selecione...";
-    //selectCategoria.appendChild(defaultOption);
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Selecione...";
+    selectCategoria.appendChild(defaultOption);
 
     // Adiciona as categorias para o tipo selecionado (Receita ou Despesa)
     categoriasLista.forEach(cat => {
@@ -1722,10 +1722,10 @@ function atualizarSubcategoriasTeste() {
     subcategoria.innerHTML = "";
 
     // Adiciona a opção "Selecione..."
-    //const defaultOption = document.createElement("option");
-    //defaultOption.value = "";
-    //defaultOption.textContent = "Selecione...";
-    //subcategoria.appendChild(defaultOption);
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Selecione...";
+    subcategoria.appendChild(defaultOption);
 
     if (!selecionada) return;
 
