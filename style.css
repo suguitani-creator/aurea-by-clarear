@@ -1069,3 +1069,25 @@ button.modo-edicao:hover {
     background: white;
 }
 
+#saldo-contas-detalhe {
+    display: none;
+    margin-top: 8px;
+}
+
+#saldo-contas-container.show #saldo-contas-detalhe {
+    display: block;
+}
+
+.saldo-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.saldo-total {
+    margin-top: 8px;
+    font-weight: bold;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding-top: 6px;
+}
+

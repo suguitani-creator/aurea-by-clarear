@@ -1959,3 +1959,83 @@ async function testarLeituraTransacoes() {
 
 }
 
+async function calcularSaldoContas() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const contasRef = collection(db, "users", user.uid, "contas");
+    const transacoesRef = collection(db, "users", user.uid, "transacoes");
+
+    const [contasSnap, transacoesSnap] = await Promise.all([
+        getDocs(contasRef),
+        getDocs(transacoesRef)
+    ]);
+
+    const saldos = {};
+
+    // 🔹 saldo inicial das contas
+    contasSnap.forEach(doc => {
+        const data = doc.data();
+        saldos[data.nome] = data.saldo || 0;
+    });
+
+    // 🔹 aplicar transações
+    transacoesSnap.forEach(doc => {
+        const t = doc.data();
+
+        // RECEITA
+        if (t.tipo === "receita" && t.conta) {
+            saldos[t.conta] = (saldos[t.conta] || 0) + t.valor;
+        }
+
+        // DESPESA (débito/pix)
+        if (t.tipo === "despesa" && t.conta) {
+            saldos[t.conta] = (saldos[t.conta] || 0) - t.valor;
+        }
+    });
+
+    return saldos;
+}
+
+async function renderizarSaldoContas() {
+    const container = document.getElementById("saldo-contas-detalhe");
+
+    const saldos = await calcularSaldoContas();
+
+    container.innerHTML = "";
+
+    let total = 0;
+
+    Object.entries(saldos).forEach(([nome, saldo]) => {
+        total += saldo;
+
+        const div = document.createElement("div");
+        div.className = "saldo-item";
+        div.innerHTML = `
+            <span>${nome}</span>
+            <span>R$ ${saldo.toFixed(2)}</span>
+        `;
+        container.appendChild(div);
+    });
+
+    const totalDiv = document.createElement("div");
+    totalDiv.className = "saldo-total";
+    totalDiv.innerHTML = `
+        <span>Total</span>
+        <span>R$ ${total.toFixed(2)}</span>
+    `;
+
+    container.appendChild(totalDiv);
+}
+
+document
+    .getElementById("saldo-contas-container")
+    .addEventListener("click", async function () {
+
+        this.classList.toggle("show");
+
+        if (this.classList.contains("show")) {
+            await renderizarSaldoContas();
+        }
+    });
+
