@@ -1,79 +1,73 @@
-/* ================= PADRONIZAÇÃO DE ESPAÇAMENTO ================= */
-
-.filtro-comparativo {
-    gap: 12px; /* mais equilibrado */
-}
-
-/* remove qualquer variação de margem escondida */
-.comparativo-container {
-    margin: 0 !important;
-}
-
-/* ================= CARDS (melhor consistência visual) ================= */
+/* ================= CARDS MAIS MODERNOS ================= */
 
 .comparativo-container {
+    background: #F0E7DA;
+    border-radius: 14px;
+    padding: 12px 16px;
+    box-shadow: 0 6px 16px rgba(62, 47, 35, 0.08);
     transition: all 0.25s ease;
 }
 
 .comparativo-container:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: 0 10px 22px rgba(62, 47, 35, 0.12);
 }
 
-/* ================= TEXTO INTERNO ================= */
+/* ================= CABEÇALHO MAIS FORTE ================= */
 
 .comparativo-container small {
-    display: block;
-    margin-bottom: 6px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    color: #7A5C42;
 }
 
-.comparativo-container p {
-    margin: 4px 0;
+/* ================= VALORES MAIS DESTACADOS ================= */
+
+.saldo-item span:last-child,
+.saldo-total span:last-child {
+    font-weight: 700;
+    color: #3E2F23;
 }
 
-/* ================= SALDO E FATURAS ================= */
-
-.saldo-item {
-    padding: 2px 0;
-}
+/* ================= TOTAL COM DESTAQUE ================= */
 
 .saldo-total {
     margin-top: 10px;
     padding-top: 8px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    font-size: 15px;
 }
 
-/* ================= FORMULÁRIOS (refino leve) ================= */
-
-input, select {
-    transition: all 0.2s ease;
-}
-
-input:hover, select:hover {
-    border-color: #C6A75E;
-}
-
-/* ================= BOTÕES (consistência) ================= */
-
-button {
-    transition: all 0.2s ease;
-}
-
-button:active {
-    transform: scale(0.97);
-}
-
-/* ================= LISTAS (leve melhoria visual) ================= */
+/* ================= LISTAS MAIS "CARD" ================= */
 
 li {
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+/* ================= INPUT MAIS MODERNO ================= */
+
+input, select {
+    border-radius: 10px;
     transition: all 0.2s ease;
 }
 
-li:hover {
+input:focus, select:focus {
+    box-shadow: 0 0 0 2px rgba(198,167,94,0.2);
+}
+
+/* ================= BOTÃO MAIS PREMIUM ================= */
+
+button {
+    border-radius: 10px;
+}
+
+button:hover {
     transform: translateY(-1px);
 }
 
-/* ================= PADRÃO DE ALINHAMENTO ================= */
+/* ================= ESPAÇAMENTO MAIS LIMPO ================= */
 
-.saldo-item span:last-child,
-.saldo-total span:last-child {
-    font-weight: 600;
+.filtro-comparativo {
+    gap: 14px;
 }
