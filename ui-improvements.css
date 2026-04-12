@@ -1,73 +1,140 @@
-/* ================= CARDS MAIS MODERNOS ================= */
+/* ================= DESIGN MODERNO (FINTECH STYLE) ================= */
+
+/* 🎯 VARIÁVEIS VISUAIS */
+:root {
+    --cor-primaria: #3E2F23;
+    --cor-secundaria: #C6A75E;
+    --cor-fundo-card: rgba(255, 255, 255, 0.6);
+    --blur: blur(12px);
+}
+
+/* ================= CARDS GLASS EFFECT ================= */
 
 .comparativo-container {
-    background: #F0E7DA;
-    border-radius: 14px;
-    padding: 12px 16px;
-    box-shadow: 0 6px 16px rgba(62, 47, 35, 0.08);
-    transition: all 0.25s ease;
+    background: var(--cor-fundo-card);
+    backdrop-filter: var(--blur);
+    -webkit-backdrop-filter: var(--blur);
+
+    border-radius: 16px;
+    padding: 14px 18px;
+
+    border: 1px solid rgba(255,255,255,0.4);
+
+    box-shadow: 
+        0 10px 30px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+
+    transition: all 0.3s ease;
 }
 
+/* hover elegante */
 .comparativo-container:hover {
-    transform: translateY(-3px) scale(1.01);
-    box-shadow: 0 10px 22px rgba(62, 47, 35, 0.12);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 
+        0 15px 40px rgba(0,0,0,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.5);
 }
 
-/* ================= CABEÇALHO MAIS FORTE ================= */
+/* ================= CABEÇALHO ================= */
 
 .comparativo-container small {
-    font-size: 12px;
-    letter-spacing: 0.5px;
-    color: #7A5C42;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #8B6F4E;
 }
 
-/* ================= VALORES MAIS DESTACADOS ================= */
+/* ================= VALORES ================= */
 
-.saldo-item span:last-child,
-.saldo-total span:last-child {
+.saldo-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 14px;
+}
+
+/* valor destacado */
+.saldo-item span:last-child {
     font-weight: 700;
-    color: #3E2F23;
+    color: var(--cor-primaria);
 }
 
-/* ================= TOTAL COM DESTAQUE ================= */
+/* ================= TOTAL ================= */
 
 .saldo-total {
     margin-top: 10px;
-    padding-top: 8px;
+    padding-top: 10px;
     border-top: 1px solid rgba(0,0,0,0.08);
+
+    display: flex;
+    justify-content: space-between;
+
     font-size: 15px;
+    font-weight: 700;
+    color: var(--cor-primaria);
 }
 
-/* ================= LISTAS MAIS "CARD" ================= */
+/* ================= ESPAÇAMENTO MAIS PREMIUM ================= */
 
-li {
-    border-radius: 10px;
-    padding: 10px 12px;
+.filtro-comparativo {
+    gap: 16px;
 }
 
-/* ================= INPUT MAIS MODERNO ================= */
+/* ================= INPUT MODERNO ================= */
 
 input, select {
-    border-radius: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(255,255,255,0.7);
+
+    transition: all 0.25s ease;
+}
+
+/* foco elegante */
+input:focus, select:focus {
+    border-color: var(--cor-secundaria);
+    box-shadow: 0 0 0 3px rgba(198,167,94,0.2);
+    background: white;
+}
+
+/* ================= BOTÕES PREMIUM ================= */
+
+button {
+    border-radius: 12px;
+    transition: all 0.25s ease;
+}
+
+/* hover com leve "lift" */
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+/* clique físico */
+button:active {
+    transform: scale(0.97);
+}
+
+/* ================= LISTAS MAIS MODERNAS ================= */
+
+li {
+    border-radius: 12px;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(6px);
+
     transition: all 0.2s ease;
 }
 
-input:focus, select:focus {
-    box-shadow: 0 0 0 2px rgba(198,167,94,0.2);
+/* hover tipo app */
+li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
 }
 
-/* ================= BOTÃO MAIS PREMIUM ================= */
+/* ================= ANIMAÇÃO SUAVE ================= */
 
+.comparativo-container,
+li,
 button {
-    border-radius: 10px;
-}
-
-button:hover {
-    transform: translateY(-1px);
-}
-
-/* ================= ESPAÇAMENTO MAIS LIMPO ================= */
-
-.filtro-comparativo {
-    gap: 14px;
+    will-change: transform;
 }
