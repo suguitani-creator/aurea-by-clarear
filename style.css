@@ -595,11 +595,15 @@ li.despesa {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 15px;
     margin-bottom: 20px;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .comparativo-container {
+    display: block;
+    width: 100%;
+    max-width: 200px; /* mantém seu tamanho */
     background: #F0E7DA;
     padding: 10px 16px;
     border-radius: 10px;
