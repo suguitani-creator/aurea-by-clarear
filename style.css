@@ -595,7 +595,6 @@ li.despesa {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin-bottom: 20px;
     flex-direction: column;
     gap: 10px;
 }
