@@ -1,62 +1,55 @@
-/* ================= DESIGN MODERNO (FINTECH STYLE) ================= */
+/* ================= NUBANK STYLE ================= */
 
-/* 🎯 VARIÁVEIS VISUAIS */
-:root {
-    --cor-primaria: #3E2F23;
-    --cor-secundaria: #C6A75E;
-    --cor-fundo-card: rgba(255, 255, 255, 0.6);
-    --blur: blur(12px);
+/* 🎯 BASE LIMPA */
+body {
+    background: #F7F7F7;
 }
 
-/* ================= CARDS GLASS EFFECT ================= */
+/* ================= CONTAINER MAIS LEVE ================= */
+
+.container {
+    background: transparent;
+    box-shadow: none;
+}
+
+/* ================= CARDS ================= */
 
 .comparativo-container {
-    background: var(--cor-fundo-card);
-    backdrop-filter: var(--blur);
-    -webkit-backdrop-filter: var(--blur);
-
+    background: #FFFFFF;
     border-radius: 16px;
-    padding: 14px 18px;
+    padding: 16px;
 
-    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 
-    box-shadow: 
-        0 10px 30px rgba(0,0,0,0.08),
-        inset 0 1px 0 rgba(255,255,255,0.4);
-
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
-/* hover elegante */
 .comparativo-container:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 
-        0 15px 40px rgba(0,0,0,0.12),
-        inset 0 1px 0 rgba(255,255,255,0.5);
+    transform: translateY(-2px);
 }
 
-/* ================= CABEÇALHO ================= */
+/* ================= TÍTULO DOS CARDS ================= */
 
 .comparativo-container small {
-    font-size: 11px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: #8B6F4E;
+    font-size: 12px;
+    color: #8A8A8A;
+    letter-spacing: 0.3px;
 }
 
-/* ================= VALORES ================= */
+/* ================= LISTA DE VALORES ================= */
 
 .saldo-item {
     display: flex;
     justify-content: space-between;
-    padding: 4px 0;
-    font-size: 14px;
+    padding: 6px 0;
+
+    font-size: 15px;
+    color: #333;
 }
 
-/* valor destacado */
+/* valor */
 .saldo-item span:last-child {
-    font-weight: 700;
-    color: var(--cor-primaria);
+    font-weight: 600;
 }
 
 /* ================= TOTAL ================= */
@@ -64,71 +57,89 @@
 .saldo-total {
     margin-top: 10px;
     padding-top: 10px;
-    border-top: 1px solid rgba(0,0,0,0.08);
+    border-top: 1px solid #eee;
 
     display: flex;
     justify-content: space-between;
 
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
-    color: var(--cor-primaria);
 }
 
-/* ================= ESPAÇAMENTO MAIS PREMIUM ================= */
+/* ================= ESPAÇAMENTO ================= */
 
 .filtro-comparativo {
-    gap: 16px;
+    gap: 14px;
 }
 
-/* ================= INPUT MODERNO ================= */
+/* ================= INPUTS ================= */
 
 input, select {
     border-radius: 12px;
-    border: 1px solid rgba(0,0,0,0.08);
-    background: rgba(255,255,255,0.7);
+    border: 1px solid #E5E5E5;
+    background: #FFFFFF;
 
-    transition: all 0.25s ease;
-}
-
-/* foco elegante */
-input:focus, select:focus {
-    border-color: var(--cor-secundaria);
-    box-shadow: 0 0 0 3px rgba(198,167,94,0.2);
-    background: white;
-}
-
-/* ================= BOTÕES PREMIUM ================= */
-
-button {
-    border-radius: 12px;
-    transition: all 0.25s ease;
-}
-
-/* hover com leve "lift" */
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
-}
-
-/* clique físico */
-button:active {
-    transform: scale(0.97);
-}
-
-/* ================= LISTAS MAIS MODERNAS ================= */
-
-li {
-    border-radius: 12px;
-    background: rgba(255,255,255,0.6);
-    backdrop-filter: blur(6px);
+    padding: 12px;
 
     transition: all 0.2s ease;
 }
 
-/* hover tipo app */
+/* foco estilo Nubank */
+input:focus, select:focus {
+    border-color: #820AD1;
+    box-shadow: 0 0 0 2px rgba(130,10,209,0.1);
+}
+
+/* ================= BOTÕES ================= */
+
+button {
+    border-radius: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+/* ================= LISTAS ================= */
+
+li {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 12px;
+
+    border: 1px solid #F0F0F0;
+
+    transition: all 0.2s ease;
+}
+
 li:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    background: #FAFAFA;
+}
+
+/* ================= TIPOGRAFIA ================= */
+
+h1 {
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+.card p {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* ================= CORES DINÂMICAS ================= */
+
+/* receita */
+.valor.receita {
+    color: #2E7D32;
+}
+
+/* despesa */
+.valor.despesa {
+    color: #C62828;
 }
 
 /* ================= ANIMAÇÃO SUAVE ================= */

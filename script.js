@@ -2013,7 +2013,9 @@ async function renderizarSaldoContas() {
         div.className = "saldo-item";
         div.innerHTML = `
             <span>${nome}</span>
-            <span>R$ ${saldo.toFixed(2)}</span>
+            <span class="valor ${saldo >= 0 ? 'receita' : 'despesa'}">
+                R$ ${saldo.toFixed(2)}
+            </span>
         `;
         container.appendChild(div);
     });
@@ -2086,7 +2088,9 @@ async function renderizarFaturas() {
         div.className = "saldo-item";
         div.innerHTML = `
             <span>${cartao} (${mes})</span>
-            <span>R$ ${valor.toFixed(2)}</span>
+            <span class="valor despesa">
+                R$ ${valor.toFixed(2)}
+            </span>
         `;
 
         container.appendChild(div);
