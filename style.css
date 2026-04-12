@@ -1091,3 +1091,12 @@ button.modo-edicao:hover {
     padding-top: 6px;
 }
 
+#faturas-detalhe {
+    display: none;
+    margin-top: 8px;
+}
+
+#faturas-container.show #faturas-detalhe {
+    display: block;
+}
+

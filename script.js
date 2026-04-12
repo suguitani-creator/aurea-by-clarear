@@ -2039,3 +2039,77 @@ document
         }
     });
 
+    async function calcularFaturasCartoes() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const transacoesRef = collection(db, "users", user.uid, "transacoes");
+    const snapshot = await getDocs(transacoesRef);
+
+    const faturas = {};
+
+    snapshot.forEach(doc => {
+        const t = doc.data();
+
+        if (
+            t.tipo === "despesa" &&
+            t.formaPagamento === "credito" &&
+            t.cartao
+        ) {
+            const valorParcela = t.valor / (parseInt(t.parcelas) || 1);
+
+            // 👉 chave: cartão + mês da fatura
+            const chave = `${t.cartao}__${t.mesFatura}`;
+
+            faturas[chave] = (faturas[chave] || 0) + valorParcela;
+        }
+    });
+
+    return faturas;
+}
+
+async function renderizarFaturas() {
+    const container = document.getElementById("faturas-detalhe");
+
+    const faturas = await calcularFaturasCartoes();
+
+    container.innerHTML = "";
+
+    let total = 0;
+
+    Object.entries(faturas).forEach(([chave, valor]) => {
+        total += valor;
+
+        const [cartao, mes] = chave.split("__");
+
+        const div = document.createElement("div");
+        div.className = "saldo-item";
+        div.innerHTML = `
+            <span>${cartao} (${mes})</span>
+            <span>R$ ${valor.toFixed(2)}</span>
+        `;
+
+        container.appendChild(div);
+    });
+
+    const totalDiv = document.createElement("div");
+    totalDiv.className = "saldo-total";
+    totalDiv.innerHTML = `
+        <span>Total</span>
+        <span>R$ ${total.toFixed(2)}</span>
+    `;
+
+    container.appendChild(totalDiv);
+}
+
+document
+    .getElementById("faturas-container")
+    .addEventListener("click", async function () {
+
+        this.classList.toggle("show");
+
+        if (this.classList.contains("show")) {
+            await renderizarFaturas();
+        }
+    });
+
