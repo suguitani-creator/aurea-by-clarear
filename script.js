@@ -2148,27 +2148,26 @@ function renderSaldo() {
     const el = document.getElementById("saldo-valor");
 
     el.classList.remove("animar");
-
     void el.offsetWidth;
 
     if (!saldoVisivel) {
         el.textContent = "••••••";
         el.classList.add("saldo-oculto");
+        return; // 🔥 impede animação
+    }
+
+    el.classList.remove("saldo-oculto");
+
+    const valorAtualTela = parseFloat(
+        el.textContent.replace(/[^\d,-]/g, "").replace(",", ".")
+    ) || 0;
+
+    animarContagem(el, valorAtualTela, saldoAtual);
+
+    if (saldoAtual < 0) {
+        el.classList.add("saldo-negativo");
     } else {
-
-        el.classList.remove("saldo-oculto");
-
-        const valorAtualTela = parseFloat(
-            el.textContent.replace(/[^\d,-]/g, "").replace(",", ".")
-        ) || 0;
-
-        animarContagem(el, valorAtualTela, saldoAtual);
-
-        if (saldoAtual < 0) {
-            el.classList.add("saldo-negativo");
-        } else {
-            el.classList.remove("saldo-negativo");
-        }
+        el.classList.remove("saldo-negativo");
     }
 
     el.classList.add("animar");
@@ -2176,18 +2175,17 @@ function renderSaldo() {
 
 document.getElementById("toggle-saldo").addEventListener("click", () => {
 
-    const el = document.getElementById("saldo-valor");
-
     saldoVisivel = !saldoVisivel;
 
-    if (saldoVisivel) {
-        atualizarSaldoTopo();
-    } else {
-        el.textContent = "••••••";
-    }
+    const icone = document.getElementById("icone-olho");
+
+    // 👁 aberto / fechado elegante
+    icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
+
+    renderSaldo();
 });
 
-function animarContagem(elemento, inicio, fim, duracao = 600) {
+function animarContagem(elemento, inicio, fim, duracao = 800) {
 
     const start = performance.now();
 
