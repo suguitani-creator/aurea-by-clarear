@@ -149,3 +149,52 @@ li,
 button {
     will-change: transform;
 }
+
+/* ================= TOPO ESTILO NUBANK ================= */
+
+.saldo-topo {
+    background: #FFFFFF;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* cabeçalho */
+.saldo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: 14px;
+    color: #8A8A8A;
+}
+
+/* botão olho */
+.btn-olho {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* valor grande */
+.saldo-valor {
+    font-size: 32px;
+    font-weight: 700;
+    color: #111;
+    margin-top: 10px;
+
+    letter-spacing: -1px;
+}
+
+/* animação suave */
+.saldo-valor.animar {
+    animation: fadeSaldo 0.3s ease;
+}
+
+@keyframes fadeSaldo {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -612,6 +612,7 @@ li.despesa {
     transition: all 0.3s ease;
     width: 200px;
     text-align: center;
+    margin: 0; /* importante */
 }
 
 .comparativo-container:hover {

@@ -43,6 +43,7 @@ const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
 
     atualizarCategorias();
     atualizarPlaceholderSaldo();
+    atualizarSaldoTopo();
 
     const hoje = new Date().toISOString().slice(0,7);
     document.getElementById("mes-filtro").value = hoje;
@@ -2116,4 +2117,42 @@ document
             await renderizarFaturas();
         }
     });
+
+async function atualizarSaldoTopo() {
+    const saldos = await calcularSaldoContas();
+
+    let total = 0;
+
+    Object.values(saldos).forEach(valor => {
+        total += valor;
+    });
+
+    const el = document.getElementById("saldo-valor");
+
+    el.textContent = total.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
+
+    el.classList.add("animar");
+
+    setTimeout(() => {
+        el.classList.remove("animar");
+    }, 300);
+}
+
+let saldoVisivel = true;
+
+document.getElementById("toggle-saldo").addEventListener("click", () => {
+
+    const el = document.getElementById("saldo-valor");
+
+    saldoVisivel = !saldoVisivel;
+
+    if (saldoVisivel) {
+        atualizarSaldoTopo();
+    } else {
+        el.textContent = "••••••";
+    }
+});
 
