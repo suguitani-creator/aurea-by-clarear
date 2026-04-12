@@ -2149,20 +2149,21 @@ function renderSaldo() {
 
     el.classList.remove("animar");
 
-    void el.offsetWidth; // força reflow (reinicia animação)
+    void el.offsetWidth;
 
     if (!saldoVisivel) {
         el.textContent = "••••••";
         el.classList.add("saldo-oculto");
     } else {
+
         el.classList.remove("saldo-oculto");
 
-        el.textContent = saldoAtual.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL"
-        });
+        const valorAtualTela = parseFloat(
+            el.textContent.replace(/[^\d,-]/g, "").replace(",", ".")
+        ) || 0;
 
-        // cor dinâmica
+        animarContagem(el, valorAtualTela, saldoAtual);
+
         if (saldoAtual < 0) {
             el.classList.add("saldo-negativo");
         } else {
@@ -2185,4 +2186,29 @@ document.getElementById("toggle-saldo").addEventListener("click", () => {
         el.textContent = "••••••";
     }
 });
+
+function animarContagem(elemento, inicio, fim, duracao = 600) {
+
+    const start = performance.now();
+
+    function atualizar(tempoAtual) {
+        const progresso = Math.min((tempoAtual - start) / duracao, 1);
+
+        // easing suave (ease-out)
+        const ease = 1 - Math.pow(1 - progresso, 3);
+
+        const valorAtual = inicio + (fim - inicio) * ease;
+
+        elemento.textContent = valorAtual.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+
+        if (progresso < 1) {
+            requestAnimationFrame(atualizar);
+        }
+    }
+
+    requestAnimationFrame(atualizar);
+}
 
