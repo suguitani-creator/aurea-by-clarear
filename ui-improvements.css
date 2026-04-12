@@ -1,0 +1,79 @@
+/* ================= PADRONIZAÇÃO DE ESPAÇAMENTO ================= */
+
+.filtro-comparativo {
+    gap: 12px; /* mais equilibrado */
+}
+
+/* remove qualquer variação de margem escondida */
+.comparativo-container {
+    margin: 0 !important;
+}
+
+/* ================= CARDS (melhor consistência visual) ================= */
+
+.comparativo-container {
+    transition: all 0.25s ease;
+}
+
+.comparativo-container:hover {
+    transform: translateY(-2px);
+}
+
+/* ================= TEXTO INTERNO ================= */
+
+.comparativo-container small {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.comparativo-container p {
+    margin: 4px 0;
+}
+
+/* ================= SALDO E FATURAS ================= */
+
+.saldo-item {
+    padding: 2px 0;
+}
+
+.saldo-total {
+    margin-top: 10px;
+    padding-top: 8px;
+}
+
+/* ================= FORMULÁRIOS (refino leve) ================= */
+
+input, select {
+    transition: all 0.2s ease;
+}
+
+input:hover, select:hover {
+    border-color: #C6A75E;
+}
+
+/* ================= BOTÕES (consistência) ================= */
+
+button {
+    transition: all 0.2s ease;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* ================= LISTAS (leve melhoria visual) ================= */
+
+li {
+    transition: all 0.2s ease;
+}
+
+li:hover {
+    transform: translateY(-1px);
+}
+
+/* ================= PADRÃO DE ALINHAMENTO ================= */
+
+.saldo-item span:last-child,
+.saldo-total span:last-child {
+    font-weight: 600;
+}
