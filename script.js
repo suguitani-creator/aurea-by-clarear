@@ -2175,14 +2175,15 @@ function renderSaldo() {
 
 document.getElementById("toggle-saldo").addEventListener("click", () => {
 
+    const el = document.getElementById("saldo-valor");
+
     saldoVisivel = !saldoVisivel;
 
-    const icone = document.getElementById("icone-olho");
-
-    // 👁 aberto / fechado elegante
-    icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
-
-    renderSaldo();
+    if (saldoVisivel) {
+        atualizarSaldoTopo();
+    } else {
+        el.textContent = "••••••";
+    }
 });
 
 function animarContagem(elemento, inicio, fim, duracao = 800) {
