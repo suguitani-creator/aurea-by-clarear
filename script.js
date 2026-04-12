@@ -2107,6 +2107,17 @@ async function renderizarFaturas() {
     container.appendChild(totalDiv);
 }
 
+document.getElementById("toggle-saldo").addEventListener("click", () => {
+
+    saldoVisivel = !saldoVisivel;
+
+    const icone = document.getElementById("icone-olho");
+
+    icone.textContent = saldoVisivel ? "👁" : "🙈";
+
+    renderSaldo();
+});
+
 document
     .getElementById("faturas-container")
     .addEventListener("click", async function () {
@@ -2118,30 +2129,49 @@ document
         }
     });
 
+let saldoVisivel = true;
+let saldoAtual = 0;
+
 async function atualizarSaldoTopo() {
     const saldos = await calcularSaldoContas();
 
     let total = 0;
 
-    Object.values(saldos).forEach(valor => {
-        total += valor;
-    });
+    Object.values(saldos).forEach(v => total += v);
 
-    const el = document.getElementById("saldo-valor");
+    saldoAtual = total;
 
-    el.textContent = total.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-    });
-
-    el.classList.add("animar");
-
-    setTimeout(() => {
-        el.classList.remove("animar");
-    }, 300);
+    renderSaldo();
 }
 
-let saldoVisivel = true;
+function renderSaldo() {
+    const el = document.getElementById("saldo-valor");
+
+    el.classList.remove("animar");
+
+    void el.offsetWidth; // força reflow (reinicia animação)
+
+    if (!saldoVisivel) {
+        el.textContent = "••••••";
+        el.classList.add("saldo-oculto");
+    } else {
+        el.classList.remove("saldo-oculto");
+
+        el.textContent = saldoAtual.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+
+        // cor dinâmica
+        if (saldoAtual < 0) {
+            el.classList.add("saldo-negativo");
+        } else {
+            el.classList.remove("saldo-negativo");
+        }
+    }
+
+    el.classList.add("animar");
+}
 
 document.getElementById("toggle-saldo").addEventListener("click", () => {
 

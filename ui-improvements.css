@@ -150,24 +150,24 @@ button {
     will-change: transform;
 }
 
-/* ================= TOPO ESTILO NUBANK ================= */
+/* ================= TOPO PREMIUM ================= */
 
 .saldo-topo {
     background: #FFFFFF;
     border-radius: 20px;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 22px;
+    margin-bottom: 22px;
 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
 }
 
-/* cabeçalho */
+/* header */
 .saldo-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    font-size: 14px;
+    font-size: 13px;
     color: #8A8A8A;
 }
 
@@ -177,24 +177,49 @@ button {
     border: none;
     font-size: 18px;
     cursor: pointer;
+
+    transition: transform 0.2s ease;
 }
 
-/* valor grande */
+.btn-olho:hover {
+    transform: scale(1.15);
+}
+
+/* valor principal */
 .saldo-valor {
-    font-size: 32px;
+    font-size: 34px;
     font-weight: 700;
     color: #111;
-    margin-top: 10px;
+    margin-top: 12px;
 
     letter-spacing: -1px;
+
+    transition: all 0.25s ease;
 }
 
-/* animação suave */
+/* animação entrada */
 .saldo-valor.animar {
-    animation: fadeSaldo 0.3s ease;
+    animation: slideFade 0.35s ease;
 }
 
-@keyframes fadeSaldo {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes slideFade {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* oculto */
+.saldo-oculto {
+    letter-spacing: 4px;
+    color: #AAA;
+}
+
+/* negativo */
+.saldo-negativo {
+    color: #C62828;
 }
