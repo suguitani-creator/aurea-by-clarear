@@ -2225,10 +2225,10 @@ document.getElementById("toggle-saldo").addEventListener("click", () => {
     }
 
     // Atualiza o saldo ao alternar a visibilidade
+    const el = document.getElementById("saldo-valor");
     if (saldoVisivel) {
-        renderSaldo();  // Quando visível, renderiza o saldo
+        renderSaldo();  // Quando visível, renderiza o saldo com animação
     } else {
-        const el = document.getElementById("saldo-valor");
         el.textContent = "••••••";  // Apenas oculta o valor, sem animação
     }
 });
