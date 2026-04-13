@@ -2113,7 +2113,8 @@ document.getElementById("toggle-saldo").addEventListener("click", () => {
 
     const icone = document.getElementById("icone-olho");
 
-    icone.textContent = saldoVisivel ? "👁" : "🙈";
+    // 👁 aberto / fechado elegante
+    icone.textContent = saldoVisivel ? "Mostrar" : "Ocultar";
 
     renderSaldo();
 });
