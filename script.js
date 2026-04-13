@@ -2182,13 +2182,79 @@ function animarContagem(elemento, inicio, fim, duracao = 800) {
 
     const start = performance.now();
 
+    let saldoVisivel = true;
+let saldoAtual = 0;
+
+// 🔥 garante que só roda depois do HTML existir
+document.addEventListener("DOMContentLoaded", () => {
+
+    const btn = document.getElementById("toggle-saldo");
+
+    if (btn) {
+        btn.addEventListener("click", () => {
+            saldoVisivel = !saldoVisivel;
+            renderSaldo();
+        });
+    }
+
+});
+
+// 🔥 função principal
+async function atualizarSaldoTopo() {
+
+    const el = document.getElementById("saldo-valor");
+    if (!el) return;
+
+    const saldos = await calcularSaldoContas();
+
+    let total = 0;
+    Object.values(saldos).forEach(v => total += v);
+
+    saldoAtual = total;
+
+    renderSaldo();
+}
+
+// 🔥 render seguro
+function renderSaldo() {
+
+    const el = document.getElementById("saldo-valor");
+    if (!el) return;
+
+    // oculto
+    if (!saldoVisivel) {
+        el.textContent = "••••••";
+        el.classList.add("saldo-oculto");
+        return;
+    }
+
+    el.classList.remove("saldo-oculto");
+
+    const valorAtualTela = parseFloat(
+        el.textContent.replace(/[^\d,-]/g, "").replace(",", ".")
+    ) || 0;
+
+    animarContagem(el, valorAtualTela, saldoAtual);
+
+    if (saldoAtual < 0) {
+        el.classList.add("saldo-negativo");
+    } else {
+        el.classList.remove("saldo-negativo");
+    }
+}
+
+// 🔥 animação segura
+function animarContagem(elemento, inicio, fim, duracao = 800) {
+
+    if (!saldoVisivel) return;
+
+    const start = performance.now();
+
     function atualizar(tempoAtual) {
 
-        // 🔒 se ficar oculto durante animação → para imediatamente
         if (!saldoVisivel) return;
 
         const progresso = Math.min((tempoAtual - start) / duracao, 1);
-
         const ease = 1 - Math.pow(1 - progresso, 3);
 
         const valorAtual = inicio + (fim - inicio) * ease;
@@ -2202,6 +2268,9 @@ function animarContagem(elemento, inicio, fim, duracao = 800) {
             requestAnimationFrame(atualizar);
         }
     }
+
+    requestAnimationFrame(atualizar);
+}
 
     requestAnimationFrame(atualizar);
 }
