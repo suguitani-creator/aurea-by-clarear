@@ -1962,7 +1962,7 @@ async function testarLeituraTransacoes() {
 
 async function calcularSaldoContas() {
     const user = auth.currentUser;
-    if (!user) return {};  // Retorna um objeto vazio caso o usuário não esteja logado
+    if (!user) return {};
 
     const contasRef = collection(db, "users", user.uid, "contas");
     const transacoesRef = collection(db, "users", user.uid, "transacoes");
@@ -1977,25 +1977,34 @@ async function calcularSaldoContas() {
     // 🔹 saldo inicial das contas
     contasSnap.forEach(doc => {
         const data = doc.data();
-        saldos[data.nome] = data.saldo || 0;  // Garantir que o saldo seja 0 se não existir
+        if (data.nome && data.saldo !== undefined) {
+            saldos[data.nome] = data.saldo || 0;  // Se não houver saldo, considera 0
+        }
     });
 
     // 🔹 aplicar transações
     transacoesSnap.forEach(doc => {
         const t = doc.data();
 
+        // Verifique se a transação tem um valor e conta válidos
+        if (!t.conta || t.valor === undefined) {
+            console.warn('Transação inválida:', t);
+            return;  // Ignorar transação inválida
+        }
+
         // RECEITA
-        if (t.tipo === "receita" && t.conta) {
+        if (t.tipo === "receita") {
             saldos[t.conta] = (saldos[t.conta] || 0) + t.valor;
         }
 
         // DESPESA (débito/pix)
-        if (t.tipo === "despesa" && t.conta) {
+        if (t.tipo === "despesa") {
             saldos[t.conta] = (saldos[t.conta] || 0) - t.valor;
         }
     });
 
-    return saldos;  // Retorna o objeto saldos com os valores de todas as contas
+    console.log('Saldos Finais:', saldos);  // Verificando o saldo final
+    return saldos;
 }
 
 async function renderizarSaldoContas() {
