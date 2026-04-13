@@ -2143,44 +2143,28 @@ let saldoVisivel = true;
 let saldoAtual = 0;
 let ultimoValorRenderizado = 0;
 
-// 🔥 garante que o botão só é conectado depois do HTML existir
-document.getElementById("toggle-saldo").addEventListener("click", () => {
-    saldoVisivel = !saldoVisivel;
-
-    const icone = document.getElementById("icone-olho");
-    if (icone) {
-        icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
-    }
-
-    console.log(`Saldo visível: ${saldoVisivel}`); // Verifique se está alternando
-    renderSaldo();
-});
-
-// 🔥 função para atualizar o saldo (chama essa após carregar dados)
+// 🔥 Atualizar saldo do topo
 async function atualizarSaldoTopo() {
-    const el = document.getElementById("saldo-valor");
-    if (!el) return;
-
     const saldos = await calcularSaldoContas();
 
-    console.log('Saldos:', saldos); // Verifique se está retornando o valor correto
+    // Log para ver os saldos calculados
+    console.log('Saldos Calculados:', saldos);
 
     let total = 0;
     Object.values(saldos).forEach(v => total += v);
 
-    saldoAtual = total;
+    saldoAtual = total;  // Atualizando o saldo com o valor calculado corretamente
 
-    console.log('Saldo Atual:', saldoAtual); // Verifique se o saldo atual está correto
-
+    // Chama a função de renderização após atualizar o saldo
     renderSaldo();
 }
 
-// 🔥 função renderizada de forma segura
+// 🔥 Função de renderização do saldo
 function renderSaldo() {
     const el = document.getElementById("saldo-valor");
     if (!el) return;
 
-    // 🔒 se estiver oculto → não deixa ninguém sobrescrever
+    // Se estiver oculto → Não permite animar
     if (!saldoVisivel) {
         el.textContent = "••••••";
         el.classList.add("saldo-oculto");
@@ -2189,10 +2173,9 @@ function renderSaldo() {
 
     el.classList.remove("saldo-oculto");
 
-    // Atualiza a animação com o último valor renderizado
-    animarContagem(el, ultimoValorRenderizado, saldoAtual);
+    animarContagem(el, ultimoValorRenderizado, saldoAtual);  // Passando saldo atualizado para animação
 
-    ultimoValorRenderizado = saldoAtual;  // Armazenar o valor atual para a próxima animação
+    ultimoValorRenderizado = saldoAtual;  // Atualizando o último valor renderizado
 
     if (saldoAtual < 0) {
         el.classList.add("saldo-negativo");
@@ -2201,13 +2184,11 @@ function renderSaldo() {
     }
 }
 
-// 🔥 animação suave do valor
+// 🔥 Animação do saldo
 function animarContagem(elemento, inicio, fim, duracao = 800) {
-    if (!saldoVisivel) return;
+    if (!saldoVisivel) return;  // Se o saldo não estiver visível, não anima
 
     const start = performance.now();
-
-    console.log(`Início da animação: ${inicio}, Fim da animação: ${fim}`); // Verifique os valores de início e fim
 
     function atualizar(tempoAtual) {
         if (!saldoVisivel) return;
@@ -2229,3 +2210,15 @@ function animarContagem(elemento, inicio, fim, duracao = 800) {
 
     requestAnimationFrame(atualizar);
 }
+
+// 🔥 Alternar visibilidade do saldo
+document.getElementById("toggle-saldo").addEventListener("click", () => {
+    saldoVisivel = !saldoVisivel;
+
+    const icone = document.getElementById("icone-olho");
+    if (icone) {
+        icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
+    }
+
+    renderSaldo(); // Chama a renderização sempre que o saldo for ocultado ou mostrado
+});
