@@ -2107,18 +2107,6 @@ async function renderizarFaturas() {
     container.appendChild(totalDiv);
 }
 
-document.getElementById("toggle-saldo").addEventListener("click", () => {
-
-    saldoVisivel = !saldoVisivel;
-
-    const icone = document.getElementById("icone-olho");
-
-    // 👁 aberto / fechado elegante
-    icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
-
-    renderSaldo();
-});
-
 document
     .getElementById("faturas-container")
     .addEventListener("click", async function () {
@@ -2132,60 +2120,9 @@ document
 
 let saldoVisivel = true;
 let saldoAtual = 0;
+let ultimoValorRenderizado = 0;
 
-async function atualizarSaldoTopo() {
-    const saldos = await calcularSaldoContas();
-
-    let total = 0;
-    Object.values(saldos).forEach(v => total += v);
-
-    saldoAtual = total;
-
-    renderSaldo(); // 🔥 sempre chama, mas respeita estado interno
-}
-
-function renderSaldo() {
-    const el = document.getElementById("saldo-valor");
-
-    // 🔒 estado oculto é soberano (nada sobrescreve)
-    if (!saldoVisivel) {
-        el.textContent = "••••••";
-        el.classList.add("saldo-oculto");
-        return;
-    }
-
-    el.classList.remove("saldo-oculto");
-
-    const valorAtualTela = parseFloat(
-        el.textContent.replace(/[^\d,-]/g, "").replace(",", ".")
-    ) || 0;
-
-    animarContagem(el, valorAtualTela, saldoAtual);
-
-    if (saldoAtual < 0) {
-        el.classList.add("saldo-negativo");
-    } else {
-        el.classList.remove("saldo-negativo");
-    }
-}
-
-// 🔥 botão corrigido (sem lógica paralela)
-document.getElementById("toggle-saldo").addEventListener("click", () => {
-    saldoVisivel = !saldoVisivel;
-    renderSaldo();
-});
-
-function animarContagem(elemento, inicio, fim, duracao = 800) {
-
-    // 🔒 impede animação quando oculto
-    if (!saldoVisivel) return;
-
-    const start = performance.now();
-
-    let saldoVisivel = true;
-let saldoAtual = 0;
-
-// 🔥 garante que só roda depois do HTML existir
+// 🔥 garante que o botão só é conectado depois do HTML existir
 document.addEventListener("DOMContentLoaded", () => {
 
     const btn = document.getElementById("toggle-saldo");
@@ -2193,13 +2130,19 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btn) {
         btn.addEventListener("click", () => {
             saldoVisivel = !saldoVisivel;
+
+            const icone = document.getElementById("icone-olho");
+            if (icone) {
+                icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
+            }
+
             renderSaldo();
         });
     }
 
 });
 
-// 🔥 função principal
+// 🔥 atualiza saldo (chame essa função após carregar dados)
 async function atualizarSaldoTopo() {
 
     const el = document.getElementById("saldo-valor");
@@ -2215,13 +2158,13 @@ async function atualizarSaldoTopo() {
     renderSaldo();
 }
 
-// 🔥 render seguro
+// 🔥 render único (fonte de verdade)
 function renderSaldo() {
 
     const el = document.getElementById("saldo-valor");
     if (!el) return;
 
-    // oculto
+    // 🔒 modo oculto
     if (!saldoVisivel) {
         el.textContent = "••••••";
         el.classList.add("saldo-oculto");
@@ -2230,11 +2173,9 @@ function renderSaldo() {
 
     el.classList.remove("saldo-oculto");
 
-    const valorAtualTela = parseFloat(
-        el.textContent.replace(/[^\d,-]/g, "").replace(",", ".")
-    ) || 0;
+    animarContagem(el, ultimoValorRenderizado, saldoAtual);
 
-    animarContagem(el, valorAtualTela, saldoAtual);
+    ultimoValorRenderizado = saldoAtual;
 
     if (saldoAtual < 0) {
         el.classList.add("saldo-negativo");
@@ -2243,7 +2184,7 @@ function renderSaldo() {
     }
 }
 
-// 🔥 animação segura
+// 🔥 animação estável
 function animarContagem(elemento, inicio, fim, duracao = 800) {
 
     if (!saldoVisivel) return;
@@ -2268,9 +2209,6 @@ function animarContagem(elemento, inicio, fim, duracao = 800) {
             requestAnimationFrame(atualizar);
         }
     }
-
-    requestAnimationFrame(atualizar);
-}
 
     requestAnimationFrame(atualizar);
 }
