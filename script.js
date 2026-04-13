@@ -2140,8 +2140,8 @@ document
     });
 
 let saldoVisivel = true;
-let saldoAtual = 0;  // Variável para armazenar o saldo total
-let ultimoValorRenderizado = 0;  // Variável para armazenar o último valor exibido
+let saldoAtual = 0;  // Inicia com o saldo 0
+let ultimoValorRenderizado = 0;  // Inicia com o valor 0 também
 
 // 🔥 Atualizar saldo do topo
 async function atualizarSaldoTopo() {
@@ -2151,9 +2151,9 @@ async function atualizarSaldoTopo() {
     // Somando todos os saldos das contas
     Object.values(saldos).forEach(v => total += v);
 
-    saldoAtual = total;  // Atualiza saldoAtual com o total das contas e transações
+    saldoAtual = total;  // Atualiza o saldo com o total das contas e transações
 
-    console.log('Novo saldoAtual:', saldoAtual);  // Verifique o valor do saldo
+    console.log('Novo saldoAtual:', saldoAtual);  // Verifique se o saldoAtual foi atualizado corretamente
 
     renderSaldo();  // Chama a função de renderização do saldo
 }
@@ -2163,7 +2163,7 @@ function renderSaldo() {
     const el = document.getElementById("saldo-valor");
     if (!el) return;
 
-    // Se o saldo estiver oculto, não faz a animação
+    // 🔒 Se o saldo não estiver visível, não faz animação nem mostra valor
     if (!saldoVisivel) {
         el.textContent = "••••••";
         el.classList.add("saldo-oculto");
@@ -2177,7 +2177,7 @@ function renderSaldo() {
         animarContagem(el, ultimoValorRenderizado, saldoAtual);
     }
 
-    ultimoValorRenderizado = saldoAtual;  // Atualiza o valor que foi renderizado para o próximo cálculo
+    ultimoValorRenderizado = saldoAtual;  // Atualiza o último valor renderizado para o próximo cálculo
 
     if (saldoAtual < 0) {
         el.classList.add("saldo-negativo");
@@ -2188,7 +2188,7 @@ function renderSaldo() {
 
 // 🔥 Animação suave de contagem
 function animarContagem(elemento, inicio, fim, duracao = 800) {
-    if (!saldoVisivel) return;  // Não anima se o saldo não estiver visível
+    if (!saldoVisivel) return;  // Se o saldo não estiver visível, não anima
 
     const start = performance.now();
 
@@ -2217,12 +2217,12 @@ function animarContagem(elemento, inicio, fim, duracao = 800) {
 
 // 🔥 Alternar visibilidade do saldo
 document.getElementById("toggle-saldo").addEventListener("click", () => {
-    saldoVisivel = !saldoVisivel;
+    saldoVisivel = !saldoVisivel;  // Inverte a visibilidade
 
     const icone = document.getElementById("icone-olho");
     if (icone) {
-        icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
+        icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";  // Alterna o ícone
     }
 
-    renderSaldo();  // Atualiza sempre que o saldo for ocultado ou mostrado
+    renderSaldo();  // Atualiza o saldo quando for ocultado ou mostrado
 });
