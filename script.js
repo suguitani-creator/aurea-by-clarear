@@ -2137,24 +2137,24 @@ async function atualizarSaldoTopo() {
     const saldos = await calcularSaldoContas();
 
     let total = 0;
-
     Object.values(saldos).forEach(v => total += v);
 
     saldoAtual = total;
 
-    renderSaldo();
+    // 🔒 só renderiza se visível
+    if (saldoVisivel) {
+        renderSaldo();
+    }
 }
 
 function renderSaldo() {
     const el = document.getElementById("saldo-valor");
 
-    el.classList.remove("animar");
-    void el.offsetWidth;
-
+    // 🔒 se estiver oculto → não deixa ninguém sobrescrever
     if (!saldoVisivel) {
         el.textContent = "••••••";
         el.classList.add("saldo-oculto");
-        return; // 🔥 impede animação
+        return;
     }
 
     el.classList.remove("saldo-oculto");
@@ -2170,8 +2170,6 @@ function renderSaldo() {
     } else {
         el.classList.remove("saldo-negativo");
     }
-
-    el.classList.add("animar");
 }
 
 document.getElementById("toggle-saldo").addEventListener("click", () => {
