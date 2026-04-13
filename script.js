@@ -2151,9 +2151,14 @@ async function atualizarSaldoTopo() {
     console.log('Saldos Calculados:', saldos);
 
     let total = 0;
-    Object.values(saldos).forEach(v => total += v);
 
-    saldoAtual = total;  // Atualiza saldo com o valor calculado corretamente
+    // SOMAR os saldos de todas as contas corretamente
+    for (let conta in saldos) {
+        total += saldos[conta];
+    }
+
+    // Atualiza o valor final
+    saldoAtual = total;  // Agora saldoAtual vai conter o total das contas
 
     console.log('Novo saldoAtual:', saldoAtual); // Verifique se o saldoAtual foi atualizado corretamente
 
