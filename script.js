@@ -1982,7 +1982,7 @@ async function calcularSaldoContas() {
         const data = doc.data();
         console.log('Conta:', data); // Verificando o conteúdo de cada conta
         if (data.nome && data.saldo !== undefined) {
-            saldos[data.nome] = data.saldo || 0;
+            saldos[data.nome] = data.saldo || 0;  // Salva o saldo inicial de cada conta
         }
     });
 
@@ -1994,20 +1994,26 @@ async function calcularSaldoContas() {
         const t = doc.data();
         console.log('Transação:', t); // Verificando a estrutura de cada transação
 
+        // Certifique-se de que a transação tem dados corretos
+        if (!t.conta || !t.valor || isNaN(t.valor)) {
+            console.warn('Transação inválida, ignorada:', t);
+            return;  // Ignorar transações inválidas
+        }
+
         // RECEITA
         if (t.tipo === "receita" && t.conta) {
             saldos[t.conta] = (saldos[t.conta] || 0) + t.valor;
-            console.log(`Adicionando receita: ${t.valor} na conta ${t.conta}, novo saldo: ${saldos[t.conta]}`);
+            console.log(`Receita adicionada: ${t.valor} na conta ${t.conta}, saldo: ${saldos[t.conta]}`);
         }
 
         // DESPESA (débito/pix)
         if (t.tipo === "despesa" && t.conta) {
             saldos[t.conta] = (saldos[t.conta] || 0) - t.valor;
-            console.log(`Subtraindo despesa: ${t.valor} da conta ${t.conta}, novo saldo: ${saldos[t.conta]}`);
+            console.log(`Despesa subtraída: ${t.valor} da conta ${t.conta}, saldo: ${saldos[t.conta]}`);
         }
     });
 
-    console.log('Saldos Finais:', saldos); // Verificando o saldo final
+    console.log('Saldos Finais:', saldos);  // Verificando o saldo final
     return saldos;
 }
 
