@@ -2114,7 +2114,7 @@ document.getElementById("toggle-saldo").addEventListener("click", () => {
     const icone = document.getElementById("icone-olho");
 
     // 👁 aberto / fechado elegante
-    icone.textContent = saldoVisivel ? "Mostrar" : "Ocultar";
+    icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
 
     renderSaldo();
 });
