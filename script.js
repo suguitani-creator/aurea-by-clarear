@@ -1974,36 +1974,36 @@ async function calcularSaldoContas() {
 
     const saldos = {};
 
+    // 🔹 Log: Verificando o conteúdo das contas
+    console.log('Contas:', contasSnap);
+
     // 🔹 saldo inicial das contas
     contasSnap.forEach(doc => {
         const data = doc.data();
-        if (data.nome && data.saldo !== undefined) {
-            saldos[data.nome] = data.saldo || 0;  // Se não houver saldo, considera 0
-        }
+        console.log('Conta:', data); // Verificando o conteúdo de cada conta
+        saldos[data.nome] = data.saldo || 0;
     });
+
+    // 🔹 Log: Verificando o conteúdo das transações
+    console.log('Transações:', transacoesSnap);
 
     // 🔹 aplicar transações
     transacoesSnap.forEach(doc => {
         const t = doc.data();
-
-        // Verifique se a transação tem um valor e conta válidos
-        if (!t.conta || t.valor === undefined) {
-            console.warn('Transação inválida:', t);
-            return;  // Ignorar transação inválida
-        }
+        console.log('Transação:', t); // Verificando a estrutura de cada transação
 
         // RECEITA
-        if (t.tipo === "receita") {
+        if (t.tipo === "receita" && t.conta) {
             saldos[t.conta] = (saldos[t.conta] || 0) + t.valor;
         }
 
         // DESPESA (débito/pix)
-        if (t.tipo === "despesa") {
+        if (t.tipo === "despesa" && t.conta) {
             saldos[t.conta] = (saldos[t.conta] || 0) - t.valor;
         }
     });
 
-    console.log('Saldos Finais:', saldos);  // Verificando o saldo final
+    console.log('Saldos Finais:', saldos); // Verifique o resultado final dos saldos
     return saldos;
 }
 
