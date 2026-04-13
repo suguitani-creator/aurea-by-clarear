@@ -2140,20 +2140,22 @@ document
     });
 
 let saldoVisivel = true;
-let saldoAtual = 0;
+let saldoAtual = 0; // Essa variável deve ser atualizada corretamente
 let ultimoValorRenderizado = 0;
 
-// 🔥 Atualizar saldo do topo
+// 🔥 Atualizar o saldo no topo
 async function atualizarSaldoTopo() {
     const saldos = await calcularSaldoContas();
 
-    // Log para ver os saldos calculados
+    // Log para verificar os saldos calculados
     console.log('Saldos Calculados:', saldos);
 
     let total = 0;
     Object.values(saldos).forEach(v => total += v);
 
-    saldoAtual = total;  // Atualizando o saldo com o valor calculado corretamente
+    saldoAtual = total;  // Atualiza saldo com o valor calculado corretamente
+
+    console.log('Novo saldoAtual:', saldoAtual); // Verifique se o saldoAtual foi atualizado corretamente
 
     // Chama a função de renderização após atualizar o saldo
     renderSaldo();
@@ -2173,9 +2175,10 @@ function renderSaldo() {
 
     el.classList.remove("saldo-oculto");
 
-    animarContagem(el, ultimoValorRenderizado, saldoAtual);  // Passando saldo atualizado para animação
+    // Passa os valores corretos para a animação de contagem
+    animarContagem(el, ultimoValorRenderizado, saldoAtual);
 
-    ultimoValorRenderizado = saldoAtual;  // Atualizando o último valor renderizado
+    ultimoValorRenderizado = saldoAtual;  // Atualiza o último valor renderizado
 
     if (saldoAtual < 0) {
         el.classList.add("saldo-negativo");
@@ -2184,14 +2187,14 @@ function renderSaldo() {
     }
 }
 
-// 🔥 Animação do saldo
+// 🔥 Animação suave de contagem do saldo
 function animarContagem(elemento, inicio, fim, duracao = 800) {
     if (!saldoVisivel) return;  // Se o saldo não estiver visível, não anima
 
     const start = performance.now();
 
     function atualizar(tempoAtual) {
-        if (!saldoVisivel) return;
+        if (!saldoVisivel) return;  // Se o saldo for ocultado, não anima
 
         const progresso = Math.min((tempoAtual - start) / duracao, 1);
         const ease = 1 - Math.pow(1 - progresso, 3);
@@ -2220,5 +2223,5 @@ document.getElementById("toggle-saldo").addEventListener("click", () => {
         icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
     }
 
-    renderSaldo(); // Chama a renderização sempre que o saldo for ocultado ou mostrado
+    renderSaldo(); // Atualiza sempre que o saldo for ocultado ou mostrado
 });
