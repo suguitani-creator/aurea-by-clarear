@@ -2141,16 +2141,13 @@ async function atualizarSaldoTopo() {
 
     saldoAtual = total;
 
-    // 🔒 só renderiza se visível
-    if (saldoVisivel) {
-        renderSaldo();
-    }
+    renderSaldo(); // 🔥 sempre chama, mas respeita estado interno
 }
 
 function renderSaldo() {
     const el = document.getElementById("saldo-valor");
 
-    // 🔒 se estiver oculto → não deixa ninguém sobrescrever
+    // 🔒 estado oculto é soberano (nada sobrescreve)
     if (!saldoVisivel) {
         el.textContent = "••••••";
         el.classList.add("saldo-oculto");
@@ -2172,27 +2169,26 @@ function renderSaldo() {
     }
 }
 
+// 🔥 botão corrigido (sem lógica paralela)
 document.getElementById("toggle-saldo").addEventListener("click", () => {
-
-    const el = document.getElementById("saldo-valor");
-
     saldoVisivel = !saldoVisivel;
-
-    if (saldoVisivel) {
-        atualizarSaldoTopo();
-    } else {
-        el.textContent = "••••••";
-    }
+    renderSaldo();
 });
 
 function animarContagem(elemento, inicio, fim, duracao = 800) {
 
+    // 🔒 impede animação quando oculto
+    if (!saldoVisivel) return;
+
     const start = performance.now();
 
     function atualizar(tempoAtual) {
+
+        // 🔒 se ficar oculto durante animação → para imediatamente
+        if (!saldoVisivel) return;
+
         const progresso = Math.min((tempoAtual - start) / duracao, 1);
 
-        // easing suave (ease-out)
         const ease = 1 - Math.pow(1 - progresso, 3);
 
         const valorAtual = inicio + (fim - inicio) * ease;
@@ -2209,4 +2205,3 @@ function animarContagem(elemento, inicio, fim, duracao = 800) {
 
     requestAnimationFrame(atualizar);
 }
-
