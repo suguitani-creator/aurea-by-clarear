@@ -2142,7 +2142,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-// 🔥 atualiza saldo (chame essa função após carregar dados)
+// 🔥 função para atualizar o saldo (chama essa após carregar dados)
 async function atualizarSaldoTopo() {
 
     const el = document.getElementById("saldo-valor");
@@ -2158,13 +2158,13 @@ async function atualizarSaldoTopo() {
     renderSaldo();
 }
 
-// 🔥 render único (fonte de verdade)
+// 🔥 função renderizada de forma segura
 function renderSaldo() {
 
     const el = document.getElementById("saldo-valor");
     if (!el) return;
 
-    // 🔒 modo oculto
+    // 🔒 se estiver oculto → não deixa ninguém sobrescrever
     if (!saldoVisivel) {
         el.textContent = "••••••";
         el.classList.add("saldo-oculto");
@@ -2173,6 +2173,7 @@ function renderSaldo() {
 
     el.classList.remove("saldo-oculto");
 
+    // Se o valor for visível, anima a contagem e exibe o saldo
     animarContagem(el, ultimoValorRenderizado, saldoAtual);
 
     ultimoValorRenderizado = saldoAtual;
@@ -2184,10 +2185,10 @@ function renderSaldo() {
     }
 }
 
-// 🔥 animação estável
+// 🔥 animação suave do valor
 function animarContagem(elemento, inicio, fim, duracao = 800) {
 
-    if (!saldoVisivel) return;
+    if (!saldoVisivel) return;  // Só anima se estiver visível
 
     const start = performance.now();
 
