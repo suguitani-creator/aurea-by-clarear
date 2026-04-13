@@ -1962,7 +1962,7 @@ async function testarLeituraTransacoes() {
 
 async function calcularSaldoContas() {
     const user = auth.currentUser;
-    if (!user) return;
+    if (!user) return {};  // Retorna um objeto vazio caso o usuário não esteja logado
 
     const contasRef = collection(db, "users", user.uid, "contas");
     const transacoesRef = collection(db, "users", user.uid, "transacoes");
@@ -1977,7 +1977,7 @@ async function calcularSaldoContas() {
     // 🔹 saldo inicial das contas
     contasSnap.forEach(doc => {
         const data = doc.data();
-        saldos[data.nome] = data.saldo || 0;
+        saldos[data.nome] = data.saldo || 0;  // Garantir que o saldo seja 0 se não existir
     });
 
     // 🔹 aplicar transações
@@ -1995,7 +1995,7 @@ async function calcularSaldoContas() {
         }
     });
 
-    return saldos;
+    return saldos;  // Retorna o objeto saldos com os valores de todas as contas
 }
 
 async function renderizarSaldoContas() {
