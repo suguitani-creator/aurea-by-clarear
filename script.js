@@ -2224,5 +2224,11 @@ document.getElementById("toggle-saldo").addEventListener("click", () => {
         icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";  // Alterna o ícone
     }
 
-    renderSaldo();  // Atualiza o saldo quando for ocultado ou mostrado
+    // Atualiza o saldo ao alternar a visibilidade
+    if (saldoVisivel) {
+        renderSaldo();  // Quando visível, renderiza o saldo
+    } else {
+        const el = document.getElementById("saldo-valor");
+        el.textContent = "••••••";  // Apenas oculta o valor, sem animação
+    }
 });
