@@ -1981,7 +1981,9 @@ async function calcularSaldoContas() {
     contasSnap.forEach(doc => {
         const data = doc.data();
         console.log('Conta:', data); // Verificando o conteúdo de cada conta
-        saldos[data.nome] = data.saldo || 0;
+        if (data.nome && data.saldo !== undefined) {
+            saldos[data.nome] = data.saldo || 0;
+        }
     });
 
     // 🔹 Log: Verificando o conteúdo das transações
@@ -1995,15 +1997,17 @@ async function calcularSaldoContas() {
         // RECEITA
         if (t.tipo === "receita" && t.conta) {
             saldos[t.conta] = (saldos[t.conta] || 0) + t.valor;
+            console.log(`Adicionando receita: ${t.valor} na conta ${t.conta}, novo saldo: ${saldos[t.conta]}`);
         }
 
         // DESPESA (débito/pix)
         if (t.tipo === "despesa" && t.conta) {
             saldos[t.conta] = (saldos[t.conta] || 0) - t.valor;
+            console.log(`Subtraindo despesa: ${t.valor} da conta ${t.conta}, novo saldo: ${saldos[t.conta]}`);
         }
     });
 
-    console.log('Saldos Finais:', saldos); // Verifique o resultado final dos saldos
+    console.log('Saldos Finais:', saldos); // Verificando o saldo final
     return saldos;
 }
 
