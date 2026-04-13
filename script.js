@@ -2129,14 +2129,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btn) {
         btn.addEventListener("click", () => {
             saldoVisivel = !saldoVisivel;
-            renderSaldo();
+            const icone = document.getElementById("icone-olho");
+            if (icone) {
+                icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
+            }
+            renderSaldo(); // Atualiza o saldo sempre que clica
         });
     }
 });
 
-// 🔥 função para atualizar o saldo
+// 🔥 função para atualizar o saldo (chama essa após carregar dados)
 async function atualizarSaldoTopo() {
-
     const el = document.getElementById("saldo-valor");
     if (!el) return;
 
@@ -2166,7 +2169,7 @@ function renderSaldo() {
 
     el.classList.remove("saldo-oculto");
 
-    // Atualizar a animação com o último valor renderizado
+    // Atualiza a animação com o último valor renderizado
     animarContagem(el, ultimoValorRenderizado, saldoAtual);
 
     ultimoValorRenderizado = saldoAtual;  // Armazenar o valor atual para a próxima animação
