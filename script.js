@@ -2124,30 +2124,23 @@ let ultimoValorRenderizado = 0;
 
 // 🔥 garante que o botão só é conectado depois do HTML existir
 document.addEventListener("DOMContentLoaded", () => {
-
     const btn = document.getElementById("toggle-saldo");
 
     if (btn) {
         btn.addEventListener("click", () => {
             saldoVisivel = !saldoVisivel;
-
-            const icone = document.getElementById("icone-olho");
-            if (icone) {
-                icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
-            }
-
             renderSaldo();
         });
     }
-
 });
 
-// 🔥 função para atualizar o saldo (chama essa após carregar dados)
+// 🔥 função para atualizar o saldo
 async function atualizarSaldoTopo() {
 
     const el = document.getElementById("saldo-valor");
     if (!el) return;
 
+    // Atualizar saldo com os valores reais
     const saldos = await calcularSaldoContas();
 
     let total = 0;
@@ -2155,12 +2148,12 @@ async function atualizarSaldoTopo() {
 
     saldoAtual = total;
 
+    // Após atualizar o saldo, renderiza novamente
     renderSaldo();
 }
 
 // 🔥 função renderizada de forma segura
 function renderSaldo() {
-
     const el = document.getElementById("saldo-valor");
     if (!el) return;
 
@@ -2173,10 +2166,10 @@ function renderSaldo() {
 
     el.classList.remove("saldo-oculto");
 
-    // Se o valor for visível, anima a contagem e exibe o saldo
+    // Atualizar a animação com o último valor renderizado
     animarContagem(el, ultimoValorRenderizado, saldoAtual);
 
-    ultimoValorRenderizado = saldoAtual;
+    ultimoValorRenderizado = saldoAtual;  // Armazenar o valor atual para a próxima animação
 
     if (saldoAtual < 0) {
         el.classList.add("saldo-negativo");
@@ -2187,14 +2180,12 @@ function renderSaldo() {
 
 // 🔥 animação suave do valor
 function animarContagem(elemento, inicio, fim, duracao = 800) {
-
     if (!saldoVisivel) return;  // Só anima se estiver visível
 
     const start = performance.now();
 
     function atualizar(tempoAtual) {
-
-        if (!saldoVisivel) return;
+        if (!saldoVisivel) return;  // Se estiver oculto, não anima
 
         const progresso = Math.min((tempoAtual - start) / duracao, 1);
         const ease = 1 - Math.pow(1 - progresso, 3);
