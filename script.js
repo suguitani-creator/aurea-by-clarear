@@ -1962,11 +1962,12 @@ async function testarLeituraTransacoes() {
 
 async function calcularSaldoContas() {
     const user = auth.currentUser;
-    if (!user) return {};
+    if (!user) return {};  // Retorna um objeto vazio caso o usuário não esteja logado
 
     const contasRef = collection(db, "users", user.uid, "contas");
     const transacoesRef = collection(db, "users", user.uid, "transacoes");
 
+    // Obtenha os dados de contas e transações
     const [contasSnap, transacoesSnap] = await Promise.all([
         getDocs(contasRef),
         getDocs(transacoesRef)
@@ -1976,25 +1977,26 @@ async function calcularSaldoContas() {
 
     // 🔹 Log: Verificando o conteúdo das contas
     console.log('Contas:', contasSnap);
-
-    // 🔹 saldo inicial das contas
+    
     contasSnap.forEach(doc => {
         const data = doc.data();
         console.log('Conta:', data); // Verificando o conteúdo de cada conta
+
+        // Verifique se a conta possui saldo e nome
         if (data.nome && data.saldo !== undefined) {
-            saldos[data.nome] = data.saldo || 0;  // Salva o saldo inicial de cada conta
+            saldos[data.nome] = data.saldo || 0;  // Inicializando com saldo 0 se não houver saldo
         }
     });
 
     // 🔹 Log: Verificando o conteúdo das transações
     console.log('Transações:', transacoesSnap);
 
-    // 🔹 aplicar transações
+    // 🔹 Aplicar transações
     transacoesSnap.forEach(doc => {
         const t = doc.data();
-        console.log('Transação:', t); // Verificando a estrutura de cada transação
+        console.log('Transação:', t);  // Verificando o conteúdo de cada transação
 
-        // Certifique-se de que a transação tem dados corretos
+        // Verifique se as transações são válidas e possuem conta e valor
         if (!t.conta || !t.valor || isNaN(t.valor)) {
             console.warn('Transação inválida, ignorada:', t);
             return;  // Ignorar transações inválidas
