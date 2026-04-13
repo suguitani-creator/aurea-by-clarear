@@ -2123,19 +2123,16 @@ let saldoAtual = 0;
 let ultimoValorRenderizado = 0;
 
 // 🔥 garante que o botão só é conectado depois do HTML existir
-document.addEventListener("DOMContentLoaded", () => {
-    const btn = document.getElementById("toggle-saldo");
+document.getElementById("toggle-saldo").addEventListener("click", () => {
+    saldoVisivel = !saldoVisivel;
 
-    if (btn) {
-        btn.addEventListener("click", () => {
-            saldoVisivel = !saldoVisivel;
-            const icone = document.getElementById("icone-olho");
-            if (icone) {
-                icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
-            }
-            renderSaldo(); // Atualiza o saldo sempre que clica
-        });
+    const icone = document.getElementById("icone-olho");
+    if (icone) {
+        icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
     }
+
+    console.log(`Saldo visível: ${saldoVisivel}`); // Verifique se está alternando
+    renderSaldo();
 });
 
 // 🔥 função para atualizar o saldo (chama essa após carregar dados)
@@ -2143,15 +2140,17 @@ async function atualizarSaldoTopo() {
     const el = document.getElementById("saldo-valor");
     if (!el) return;
 
-    // Atualizar saldo com os valores reais
     const saldos = await calcularSaldoContas();
+
+    console.log('Saldos:', saldos); // Verifique se está retornando o valor correto
 
     let total = 0;
     Object.values(saldos).forEach(v => total += v);
 
     saldoAtual = total;
 
-    // Após atualizar o saldo, renderiza novamente
+    console.log('Saldo Atual:', saldoAtual); // Verifique se o saldo atual está correto
+
     renderSaldo();
 }
 
@@ -2183,12 +2182,14 @@ function renderSaldo() {
 
 // 🔥 animação suave do valor
 function animarContagem(elemento, inicio, fim, duracao = 800) {
-    if (!saldoVisivel) return;  // Só anima se estiver visível
+    if (!saldoVisivel) return;
 
     const start = performance.now();
 
+    console.log(`Início da animação: ${inicio}, Fim da animação: ${fim}`); // Verifique os valores de início e fim
+
     function atualizar(tempoAtual) {
-        if (!saldoVisivel) return;  // Se estiver oculto, não anima
+        if (!saldoVisivel) return;
 
         const progresso = Math.min((tempoAtual - start) / duracao, 1);
         const ease = 1 - Math.pow(1 - progresso, 3);
