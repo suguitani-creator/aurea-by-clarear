@@ -2149,9 +2149,11 @@ let saldoAtual = 0;
 async function atualizarSaldoTopo() {
     const saldos = await calcularSaldoContas();
 
+    console.log("Saldos retornados de calcularSaldoContas:", saldos);  // Verifique o conteúdo de saldos
+
     let total = 0;
     Object.values(saldos).forEach(v => {
-        console.log("Valor das contas:", v);  // Verifique os valores antes de somá-los
+        console.log("Valor das contas:", v);  // Este log não aparecerá se saldos estiver vazio
         total += v;
     });
 
