@@ -2168,13 +2168,9 @@ function renderSaldo() {
         el.classList.remove("saldo-oculto");
 
         // Exibe o saldo real com animação
-        const valorAtualTela = (el.textContent !== "••••••") ?
-            parseFloat(el.textContent.replace(/[^\d,-]/g, "").replace(",", ".")) || 0
-            : saldoAtual;
-
-        // Se o valor atual da tela for diferente do saldo atual, anima a contagem
-        if (valorAtualTela !== saldoAtual) {
-            animarContagem(el, valorAtualTela, saldoAtual);
+        if (el.textContent === "••••••") {
+            // Se for "••••••", é hora de exibir o saldo real
+            animarContagem(el, 0, saldoAtual);
         }
 
         if (saldoAtual < 0) {
