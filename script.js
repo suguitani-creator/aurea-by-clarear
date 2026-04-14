@@ -2140,73 +2140,60 @@ document
     });
 
 let saldoVisivel = true;
-let saldoAtual = 0;  // Inicia com o saldo 0
-let ultimoValorRenderizado = 0;  // Inicia com o valor 0 também
+let saldoAtual = 0;
+let ultimoValorRenderizado = 0;
 
-// 🔥 Atualizar saldo do topo
 async function atualizarSaldoTopo() {
-    const saldos = await calcularSaldoContas();  // Calculando o saldo das contas
+    const saldos = await calcularSaldoContas();
 
     let total = 0;
-    // Somando todos os saldos das contas
     Object.values(saldos).forEach(v => total += v);
 
-    saldoAtual = total;  // Atualiza o saldo com o total das contas e transações
+    saldoAtual = total; // Atualizando o saldo total
 
-    console.log('Novo saldoAtual:', saldoAtual);  // Verifique se o saldoAtual foi atualizado corretamente
+    console.log("Novo saldoAtual:", saldoAtual); // Verifique se o saldo total foi calculado corretamente
 
-    renderSaldo();  // Chama a função de renderização do saldo
+    renderSaldo(); // Chama a função de renderização do saldo
 }
 
-// 🔥 Função de renderização do saldo
 function renderSaldo() {
     const el = document.getElementById("saldo-valor");
     if (!el) return;
 
-    // 🔒 Se o saldo não estiver visível, não faz animação nem mostra valor
+    // Se estiver oculto, não permite a animação
     if (!saldoVisivel) {
-        el.textContent = "••••••";  // Texto de placeholder
+        el.textContent = "••••••";
         el.classList.add("saldo-oculto");
         return;
     }
 
     el.classList.remove("saldo-oculto");
 
-    // Se o valor do saldo mudou, anima a contagem
-    if (ultimoValorRenderizado !== saldoAtual) {
-        animarContagem(el, ultimoValorRenderizado, saldoAtual);
-    }
+    // Atualiza a animação de contagem
+    animarContagem(el, ultimoValorRenderizado, saldoAtual);
 
-    ultimoValorRenderizado = saldoAtual;  // Atualiza o último valor renderizado para o próximo cálculo
-
-    if (saldoAtual < 0) {
-        el.classList.add("saldo-negativo");
-    } else {
-        el.classList.remove("saldo-negativo");
-    }
+    ultimoValorRenderizado = saldoAtual; // Atualiza o último valor renderizado
 }
 
-// 🔥 Animação suave de contagem
+// Função para animação suave de contagem
 function animarContagem(elemento, inicio, fim, duracao = 800) {
-    if (!saldoVisivel) return;  // Se o saldo não estiver visível, não anima
+    if (!saldoVisivel) return; // Não anima se o saldo estiver oculto
 
     const start = performance.now();
 
     function atualizar(tempoAtual) {
-        if (!saldoVisivel) return;  // Se o saldo for ocultado, não anima
+        if (!saldoVisivel) return;
 
         const progresso = Math.min((tempoAtual - start) / duracao, 1);
         const ease = 1 - Math.pow(1 - progresso, 3);
 
         const valorAtual = inicio + (fim - inicio) * ease;
 
-        // Exibe o saldo formatado como moeda
         elemento.textContent = valorAtual.toLocaleString("pt-BR", {
             style: "currency",
             currency: "BRL"
         });
 
-        // Continuar a animação até o progresso atingir 100%
         if (progresso < 1) {
             requestAnimationFrame(atualizar);
         }
@@ -2215,20 +2202,14 @@ function animarContagem(elemento, inicio, fim, duracao = 800) {
     requestAnimationFrame(atualizar);
 }
 
-// 🔥 Alternar visibilidade do saldo
+// Alternar visibilidade do saldo
 document.getElementById("toggle-saldo").addEventListener("click", () => {
-    saldoVisivel = !saldoVisivel;  // Inverte a visibilidade
+    saldoVisivel = !saldoVisivel;
 
     const icone = document.getElementById("icone-olho");
     if (icone) {
-        icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";  // Alterna o ícone
+        icone.textContent = saldoVisivel ? "👁" : "👁‍🗙";
     }
 
-    // Atualiza o saldo ao alternar a visibilidade
-    const el = document.getElementById("saldo-valor");
-    if (saldoVisivel) {
-        renderSaldo();  // Quando visível, renderiza o saldo com animação
-    } else {
-        el.textContent = "••••••";  // Apenas oculta o valor, sem animação
-    }
+    renderSaldo(); // Atualiza sempre que o saldo for ocultado ou mostrado
 });
