@@ -2165,7 +2165,7 @@ function renderSaldo() {
 
     // 🔒 Se o saldo não estiver visível, não faz animação nem mostra valor
     if (!saldoVisivel) {
-        el.textContent = "••••••";
+        el.textContent = "••••••";  // Texto de placeholder
         el.classList.add("saldo-oculto");
         return;
     }
