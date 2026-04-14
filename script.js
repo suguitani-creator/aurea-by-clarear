@@ -2141,31 +2141,13 @@ document
 
 let saldoVisivel = true;
 let saldoAtual = 0;
-let ultimoValorRenderizado = 0;
-
-// 🔥 botão
-document.addEventListener("DOMContentLoaded", () => {
-
-    const btn = document.getElementById("toggle-saldo");
-
-    if (btn) {
-        btn.addEventListener("click", () => {
-            saldoVisivel = !saldoVisivel;
-            renderSaldo();
-        });
-    }
-
-});
 
 // 🔥 atualiza saldo
 async function atualizarSaldoTopo() {
-
-    const el = document.getElementById("saldo-valor");
-    if (!el) return;
-
     const saldos = await calcularSaldoContas();
 
     let total = 0;
+
     Object.values(saldos).forEach(v => total += v);
 
     saldoAtual = total;
@@ -2175,42 +2157,57 @@ async function atualizarSaldoTopo() {
 
 // 🔥 render correto
 function renderSaldo() {
-
     const el = document.getElementById("saldo-valor");
-    if (!el) return;
 
-    // 🔒 oculto
+    el.classList.remove("animar");
+
+    void el.offsetWidth;
+
     if (!saldoVisivel) {
         el.textContent = "••••••";
         el.classList.add("saldo-oculto");
-        return;
-    }
-
-    el.classList.remove("saldo-oculto");
-
-    animarContagem(el, ultimoValorRenderizado, saldoAtual);
-
-    ultimoValorRenderizado = saldoAtual;
-
-    if (saldoAtual < 0) {
-        el.classList.add("saldo-negativo");
     } else {
-        el.classList.remove("saldo-negativo");
+
+        el.classList.remove("saldo-oculto");
+
+        const valorAtualTela = parseFloat(
+            el.textContent.replace(/[^\d,-]/g, "").replace(",", ".")
+        ) || 0;
+
+        animarContagem(el, valorAtualTela, saldoAtual);
+
+        if (saldoAtual < 0) {
+            el.classList.add("saldo-negativo");
+        } else {
+            el.classList.remove("saldo-negativo");
+        }
     }
+
+    el.classList.add("animar");
 }
+
+// 🔥 botão
+document.getElementById("toggle-saldo").addEventListener("click", () => {
+
+    saldoVisivel = !saldoVisivel;
+
+    const icone = document.getElementById("icone-olho");
+
+    icone.textContent = saldoVisivel ? "👁" : "🙈";
+
+    renderSaldo();
+});
+
 
 // 🔥 animação confiável
 function animarContagem(elemento, inicio, fim, duracao = 800) {
 
-    if (!saldoVisivel) return;
-
     const start = performance.now();
 
     function atualizar(tempoAtual) {
-
-        if (!saldoVisivel) return;
-
         const progresso = Math.min((tempoAtual - start) / duracao, 1);
+
+        // easing suave (ease-out)
         const ease = 1 - Math.pow(1 - progresso, 3);
 
         const valorAtual = inicio + (fim - inicio) * ease;
