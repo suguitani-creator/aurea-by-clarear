@@ -1977,14 +1977,17 @@ async function calcularSaldoContas() {
 
     // 🔹 Log: Verificando o conteúdo das contas
     console.log('Contas:', contasSnap);
-    
+
     contasSnap.forEach(doc => {
         const data = doc.data();
         console.log('Conta:', data); // Verificando o conteúdo de cada conta
 
         // Verifique se a conta possui saldo e nome
         if (data.nome && data.saldo !== undefined) {
+            console.log(`Conta ${data.nome} tem saldo: ${data.saldo}`);  // Log extra para verificação
             saldos[data.nome] = data.saldo || 0;  // Inicializando com saldo 0 se não houver saldo
+        } else {
+            console.warn(`Conta com nome ${data.nome} está faltando saldo ou nome`);
         }
     });
 
@@ -1994,7 +1997,7 @@ async function calcularSaldoContas() {
     // 🔹 Aplicar transações
     transacoesSnap.forEach(doc => {
         const t = doc.data();
-        console.log('Transação:', t);  // Verificando o conteúdo de cada transação
+        console.log(`Transação ${t.tipo} na conta ${t.conta} com valor ${t.valor}`);  // Verificando as transações
 
         // Verifique se as transações são válidas e possuem conta e valor
         if (!t.conta || !t.valor || isNaN(t.valor)) {
@@ -2146,14 +2149,12 @@ let saldoAtual = 0;
 async function atualizarSaldoTopo() {
     const saldos = await calcularSaldoContas();
 
-    console.log("Saldos calculados:", saldos);  // Verifique o que está sendo retornado
-
     let total = 0;
     Object.values(saldos).forEach(v => total += v);
 
     saldoAtual = total;
 
-    console.log("Saldo Atual:", saldoAtual);  // Verifique o valor do saldo aqui
+    console.log("Saldo Atual Calculado:", saldoAtual);  // Log para verificar se o saldo está correto
 
     renderSaldo();
 }
@@ -2165,6 +2166,9 @@ function renderSaldo() {
     el.classList.remove("animar");
     void el.offsetWidth; // Força a reinicialização da animação
 
+    console.log("Saldo Visível:", saldoVisivel);  // Verifique o status de visibilidade do saldo
+    console.log("Saldo Atual:", saldoAtual);      // Verifique o valor do saldo
+
     if (!saldoVisivel) {
         el.textContent = "••••••";  // Exibe os pontinhos
         el.classList.add("saldo-oculto");
@@ -2173,6 +2177,7 @@ function renderSaldo() {
 
         // Exibe o saldo real com animação
         if (el.textContent === "••••••") {
+            console.log("Iniciando animação para mostrar saldo real..."); // Log de depuração
             // Se for "••••••", é hora de exibir o saldo real
             animarContagem(el, 0, saldoAtual);
         }
@@ -2185,6 +2190,9 @@ function renderSaldo() {
     }
 
     el.classList.add("animar");
+
+    // Log final para verificar se a função foi completada corretamente
+    console.log("Renderização finalizada, texto exibido:", el.textContent);
 }
 
 // 🔥 Botão
