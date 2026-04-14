@@ -2146,6 +2146,8 @@ let saldoAtual = 0;
 async function atualizarSaldoTopo() {
     const saldos = await calcularSaldoContas();
 
+    console.log("Saldos calculados:", saldos);  // Verifique o que está sendo retornado
+
     let total = 0;
     Object.values(saldos).forEach(v => total += v);
 
