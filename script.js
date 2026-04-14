@@ -2151,6 +2151,8 @@ async function atualizarSaldoTopo() {
 
     saldoAtual = total;
 
+    console.log("Saldo Atual:", saldoAtual);  // Verifique o valor do saldo aqui
+
     renderSaldo();
 }
 
