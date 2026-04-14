@@ -2149,22 +2149,23 @@ let saldoAtual = 0;
 async function atualizarSaldoTopo() {
     const saldos = await calcularSaldoContas();
 
-    console.log("Saldos retornados de calcularSaldoContas:", saldos);  // Verificando os saldos antes de processar
+    // Verifique o conteúdo de saldos antes de tentar somá-los
+    console.log("Saldos retornados de calcularSaldoContas:", saldos);  
 
     let total = 0;
 
-    // Verificar o formato de saldos e garantir que os valores sejam numéricos
-    Object.values(saldos).forEach(v => {
-        console.log("Valor da conta (antes de somar):", v);  // Verificando o valor de cada conta
-        if (typeof v === 'number') {
-            total += v;  // Soma apenas se o valor for numérico
+    // Verifique os valores de cada conta
+    Object.entries(saldos).forEach(([nomeConta, saldo]) => {
+        console.log(`Valor da conta ${nomeConta}: ${saldo}`);  // Log para verificar o saldo de cada conta
+        if (typeof saldo === 'number') {
+            total += saldo;  // Soma apenas se o saldo for numérico
         } else {
-            console.warn("Valor não numérico encontrado:", v);  // Log de alerta se o valor não for numérico
+            console.warn("Valor não numérico encontrado para", nomeConta, saldo);  // Log de alerta se o valor não for numérico
         }
     });
 
     saldoAtual = total;
-    console.log("Saldo Atual Calculado:", saldoAtual);  // Verificando o valor final calculado
+    console.log("Saldo Atual Calculado:", saldoAtual);  // Verifique o valor final calculado
 
     renderSaldo();
 }
