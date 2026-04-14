@@ -2147,7 +2147,6 @@ async function atualizarSaldoTopo() {
     const saldos = await calcularSaldoContas();
 
     let total = 0;
-
     Object.values(saldos).forEach(v => total += v);
 
     saldoAtual = total;
@@ -2161,20 +2160,23 @@ function renderSaldo() {
 
     el.classList.remove("animar");
 
-    void el.offsetWidth;
+    void el.offsetWidth; // Força a reinicialização da animação
 
     if (!saldoVisivel) {
-        el.textContent = "••••••";
+        el.textContent = "••••••"; // Exibe o placeholder
         el.classList.add("saldo-oculto");
     } else {
-
         el.classList.remove("saldo-oculto");
 
-        const valorAtualTela = parseFloat(
-            el.textContent.replace(/[^\d,-]/g, "").replace(",", ".")
-        ) || 0;
+        // Obtém o valor atual da tela, mas só se o valor não for "••••••"
+        const valorAtualTela = (el.textContent !== "••••••") ?
+            parseFloat(el.textContent.replace(/[^\d,-]/g, "").replace(",", ".")) || 0
+            : saldoAtual;
 
-        animarContagem(el, valorAtualTela, saldoAtual);
+        // Se o valor atual da tela for diferente do saldo atual, anima a contagem
+        if (valorAtualTela !== saldoAtual) {
+            animarContagem(el, valorAtualTela, saldoAtual);
+        }
 
         if (saldoAtual < 0) {
             el.classList.add("saldo-negativo");
@@ -2188,20 +2190,16 @@ function renderSaldo() {
 
 // 🔥 botão
 document.getElementById("toggle-saldo").addEventListener("click", () => {
-
     saldoVisivel = !saldoVisivel;
 
     const icone = document.getElementById("icone-olho");
-
     icone.textContent = saldoVisivel ? "👁" : "🙈";
 
     renderSaldo();
 });
 
-
 // 🔥 animação confiável
 function animarContagem(elemento, inicio, fim, duracao = 800) {
-
     const start = performance.now();
 
     function atualizar(tempoAtual) {
