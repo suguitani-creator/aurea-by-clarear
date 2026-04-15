@@ -2149,19 +2149,19 @@ let saldoAtual = 0;
 async function atualizarSaldoTopo() {
     const saldos = await calcularSaldoContas();
 
-    // Verifique a estrutura de saldos
+    // Verifique o tipo e estrutura de saldos
     console.log("Tipo de saldos:", typeof saldos);
-    console.log("Estrutura de saldos:", saldos);  // Verifique a estrutura interna de saldos
+    console.log("Estrutura detalhada de saldos:", JSON.stringify(saldos, null, 2));  // Log mais detalhado para visualizar a estrutura de saldos
 
     let total = 0;
 
-    // Verifique se "saldos" é um objeto normal com chaves
+    // Verificar se "saldos" é um objeto simples e tentar acessar os valores
     if (saldos && typeof saldos === "object" && !Array.isArray(saldos)) {
         console.log("Entrando no bloco 'else', iterando sobre o objeto saldos...");
 
         // Verificando se o objeto é um objeto simples com chaves e valores
         Object.entries(saldos).forEach(([nomeConta, saldo]) => {
-            console.log(`Valor da conta ${nomeConta}: ${saldo}`);  // Verificando o valor de cada conta
+            console.log(`Valor da conta ${nomeConta}: ${saldo}`);  // Verifique o valor de cada conta
             if (typeof saldo === 'number') {
                 total += saldo;  // Soma apenas se o saldo for numérico
             } else {
