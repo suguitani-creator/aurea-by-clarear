@@ -2149,37 +2149,27 @@ let saldoAtual = 0;
 async function atualizarSaldoTopo() {
     const saldos = await calcularSaldoContas();
 
-    // Verificar o tipo de saldos
-    console.log("Tipo de saldos:", saldos);  // Verifique o tipo de "saldos" (deve ser um QuerySnapshot ou um objeto normal)
+    // Verifique a estrutura de saldos
+    console.log("Tipo de saldos:", typeof saldos);
+    console.log("Estrutura de saldos:", saldos);  // Verifique a estrutura interna de saldos
 
     let total = 0;
 
-    // Se "saldos" for um QuerySnapshot, extraímos os documentos
-    if (saldos && saldos.docs) {
-        console.log("saldos é um QuerySnapshot!");  // Confirma que estamos lidando com um QuerySnapshot
+    // Verifique se "saldos" é um objeto normal com chaves
+    if (saldos && typeof saldos === "object" && !Array.isArray(saldos)) {
+        console.log("Entrando no bloco 'else', iterando sobre o objeto saldos...");
 
-        // Iteração nos documentos do QuerySnapshot
-        saldos.docs.forEach(doc => {
-            const data = doc.data();
-            console.log("Valor da conta (antes de somar):", data.saldo);  // Verificando saldo da conta
-            if (typeof data.saldo === 'number') {
-                total += data.saldo;  // Soma se o valor for numérico
+        // Verificando se o objeto é um objeto simples com chaves e valores
+        Object.entries(saldos).forEach(([nomeConta, saldo]) => {
+            console.log(`Valor da conta ${nomeConta}: ${saldo}`);  // Verificando o valor de cada conta
+            if (typeof saldo === 'number') {
+                total += saldo;  // Soma apenas se o saldo for numérico
             } else {
-                console.warn("Valor não numérico encontrado para", doc.id, data.saldo);  // Log de alerta
+                console.warn("Valor não numérico encontrado para", nomeConta, saldo);  // Log de alerta se o valor não for numérico
             }
         });
     } else {
-        console.log("saldos não é um QuerySnapshot, verificando como objeto...");
-        
-        // Se saldos não for um QuerySnapshot, verificamos o objeto diretamente
-        Object.entries(saldos).forEach(([nomeConta, saldo]) => {
-            console.log(`Valor da conta ${nomeConta}: ${saldo}`);
-            if (typeof saldo === 'number') {
-                total += saldo;
-            } else {
-                console.warn("Valor não numérico encontrado para", nomeConta, saldo);
-            }
-        });
+        console.warn("O formato de 'saldos' não é esperado, e não conseguimos iterar sobre ele corretamente.");
     }
 
     saldoAtual = total;
