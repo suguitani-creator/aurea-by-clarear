@@ -2149,13 +2149,15 @@ let saldoAtual = 0;
 async function atualizarSaldoTopo() {
     const saldos = await calcularSaldoContas();
 
-    // Verificando o tipo de "saldos" antes de tentar iterar
-    console.log("Saldos retornados de calcularSaldoContas:", saldos);  // Log dos saldos
+    // Verificar o tipo de saldos
+    console.log("Tipo de saldos:", saldos);  // Verifique o tipo de "saldos" (deve ser um QuerySnapshot ou um objeto normal)
 
     let total = 0;
 
     // Se "saldos" for um QuerySnapshot, extraímos os documentos
     if (saldos && saldos.docs) {
+        console.log("saldos é um QuerySnapshot!");  // Confirma que estamos lidando com um QuerySnapshot
+
         // Iteração nos documentos do QuerySnapshot
         saldos.docs.forEach(doc => {
             const data = doc.data();
@@ -2167,6 +2169,8 @@ async function atualizarSaldoTopo() {
             }
         });
     } else {
+        console.log("saldos não é um QuerySnapshot, verificando como objeto...");
+        
         // Se saldos não for um QuerySnapshot, verificamos o objeto diretamente
         Object.entries(saldos).forEach(([nomeConta, saldo]) => {
             console.log(`Valor da conta ${nomeConta}: ${saldo}`);
