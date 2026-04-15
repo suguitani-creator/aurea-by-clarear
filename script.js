@@ -1975,50 +1975,42 @@ async function calcularSaldoContas() {
 
     const saldos = {};
 
-    // 🔹 Log: Verificando o conteúdo das contas
-    console.log('Contas:', contasSnap);
-
+    // Verificando o conteúdo das contas e acessando os campos corretos
     contasSnap.forEach(doc => {
         const data = doc.data();
-        console.log('Conta:', data); // Verificando o conteúdo de cada conta
+        console.log("Conta:", data);  // Verificando o conteúdo de cada conta
 
-        // Verifique se a conta possui saldo e nome
-        if (data.nome && data.saldo !== undefined) {
-            console.log(`Conta ${data.nome} tem saldo: ${data.saldo}`);  // Log extra para verificação
-            saldos[data.nome] = data.saldo || 0;  // Inicializando com saldo 0 se não houver saldo
-        } else {
-            console.warn(`Conta com nome ${data.nome} está faltando saldo ou nome`);
+        // Verifique se a conta possui os campos "nome-conta" e "saldo-conta"
+        if (data['nome-conta'] && data['saldo-conta'] !== undefined) {
+            saldos[data['nome-conta']] = data['saldo-conta'] || 0;  // Inicializando com saldo 0 se não houver saldo
         }
     });
 
-    // 🔹 Log: Verificando o conteúdo das transações
-    console.log('Transações:', transacoesSnap);
+    console.log("Saldos após as contas:", saldos);  // Verifique os saldos antes de retornar
 
-    // 🔹 Aplicar transações
+    // Aplicar transações
     transacoesSnap.forEach(doc => {
         const t = doc.data();
-        console.log(`Transação ${t.tipo} na conta ${t.conta} com valor ${t.valor}`);  // Verificando as transações
+        console.log("Transação:", t);  // Verificando o conteúdo de cada transação
 
         // Verifique se as transações são válidas e possuem conta e valor
         if (!t.conta || !t.valor || isNaN(t.valor)) {
-            console.warn('Transação inválida, ignorada:', t);
+            console.warn("Transação inválida, ignorada:", t);
             return;  // Ignorar transações inválidas
         }
 
         // RECEITA
         if (t.tipo === "receita" && t.conta) {
             saldos[t.conta] = (saldos[t.conta] || 0) + t.valor;
-            console.log(`Receita adicionada: ${t.valor} na conta ${t.conta}, saldo: ${saldos[t.conta]}`);
         }
 
         // DESPESA (débito/pix)
         if (t.tipo === "despesa" && t.conta) {
             saldos[t.conta] = (saldos[t.conta] || 0) - t.valor;
-            console.log(`Despesa subtraída: ${t.valor} da conta ${t.conta}, saldo: ${saldos[t.conta]}`);
         }
     });
 
-    console.log('Saldos Finais:', saldos);  // Verificando o saldo final
+    console.log("Saldos Finais:", saldos);  // Verifique o saldo final antes de retornar
     return saldos;
 }
 
@@ -2149,34 +2141,19 @@ let saldoAtual = 0;
 async function atualizarSaldoTopo() {
     const saldos = await calcularSaldoContas();
 
-    // Verificando o tipo de "saldos" antes de tentar iterar
-    console.log("Saldos retornados de calcularSaldoContas:", saldos);  // Log dos saldos
+    console.log("Saldos retornados de calcularSaldoContas:", saldos);  // Verifique se os saldos foram passados corretamente
 
     let total = 0;
 
-    // Se "saldos" for um QuerySnapshot, extraímos os documentos
-    if (saldos && saldos.docs) {
-        // Iteração nos documentos do QuerySnapshot
-        saldos.docs.forEach(doc => {
-            const data = doc.data();
-            console.log("Valor da conta (antes de somar):", data.saldo);  // Verificando saldo da conta
-            if (typeof data.saldo === 'number') {
-                total += data.saldo;  // Soma se o valor for numérico
-            } else {
-                console.warn("Valor não numérico encontrado para", doc.id, data.saldo);  // Log de alerta
-            }
-        });
-    } else {
-        // Se saldos não for um QuerySnapshot, verificamos o objeto diretamente
-        Object.entries(saldos).forEach(([nomeConta, saldo]) => {
-            console.log(`Valor da conta ${nomeConta}: ${saldo}`);
-            if (typeof saldo === 'number') {
-                total += saldo;
-            } else {
-                console.warn("Valor não numérico encontrado para", nomeConta, saldo);
-            }
-        });
-    }
+    // Iterar sobre os saldos, agora com os campos 'nome-conta' e 'saldo-conta'
+    Object.entries(saldos).forEach(([nomeConta, saldoConta]) => {
+        console.log(`Valor da conta ${nomeConta}: ${saldo}`);  // Verifique o valor de cada conta
+        if (typeof saldo === 'number') {
+            total += saldo;  // Soma apenas se o saldo for numérico
+        } else {
+            console.warn("Valor não numérico encontrado para", nomeConta, saldo);  // Log de alerta se o valor não for numérico
+        }
+    });
 
     saldoAtual = total;
     console.log("Saldo Atual Calculado:", saldoAtual);  // Verifique o valor final calculado
