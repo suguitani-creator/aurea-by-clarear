@@ -2019,7 +2019,7 @@ async function calcularSaldoContas() {
     });
 
     console.log('Saldos Finais:', saldos);  // Verificando o saldo final
-    return saldos;
+    return { ...saldos };  // Retorna uma cópia do objeto saldos para evitar problemas de referência
 }
 
 async function renderizarSaldoContas() {
@@ -2149,16 +2149,16 @@ let saldoAtual = 0;
 async function atualizarSaldoTopo() {
     const saldos = await calcularSaldoContas();
 
-    // Verifique se os saldos estão sendo passados corretamente
-    console.log("Saldos recebidos em atualizarSaldoTopo:", saldos);  // Verificando o conteúdo de saldos antes de usar
+    // Verifique os saldos imediatamente após o retorno da função
+    console.log("Saldos recebidos em atualizarSaldoTopo:", saldos);  // Verifique o conteúdo de saldos
 
     let total = 0;
 
-    // Verifique se "saldos" é um objeto e iterável
+    // Verifique se saldos é um objeto simples e iterável
     if (saldos && typeof saldos === "object" && !Array.isArray(saldos)) {
         console.log("Entrando no bloco 'else', iterando sobre o objeto saldos...");
 
-        // Verificando se o objeto é um objeto simples com chaves e valores
+        // Iteração sobre as chaves e valores de saldos
         Object.entries(saldos).forEach(([nomeConta, saldo]) => {
             console.log(`Valor da conta ${nomeConta}: ${saldo}`);  // Verificando o valor de cada conta
             if (typeof saldo === 'number') {
