@@ -2105,15 +2105,22 @@ function renderSaldo() {
     void el.offsetWidth;
 
     if (!saldoVisivel) {
+        // 🔒 Modo oculto
         el.textContent = "••••••";
         el.classList.add("saldo-oculto");
     } else {
+        // 👁️ Modo visível
         el.classList.remove("saldo-oculto");
 
-        // 🔥 anima do valor anterior para o atual
-    if (saldoAnterior !== saldoAtual) {
-    animarContagem(el, saldoAnterior, saldoAtual);
-}
+        // 🔥 Se estava oculto antes, reinicia do zero
+        if (el.textContent === "••••••") {
+            animarContagem(el, 0, saldoAtual);
+        } else {
+            // 🔥 Atualização normal (valor mudou)
+            if (saldoAnterior !== saldoAtual) {
+                animarContagem(el, saldoAnterior, saldoAtual);
+            }
+        }
 
         saldoAnterior = saldoAtual;
 
