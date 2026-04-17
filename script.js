@@ -2081,6 +2081,7 @@ document
 
 let saldoVisivel = true;
 let saldoAtual = 0;
+let saldoAnterior = 0;
 
 // 🔥 Atualiza saldo
 function atualizarSaldoTopoComDados(saldos) {
@@ -2101,23 +2102,20 @@ function renderSaldo() {
     const el = document.getElementById("saldo-valor");
 
     el.classList.remove("animar");
-    void el.offsetWidth; // Força a reinicialização da animação
-
-    console.log("Saldo Visível:", saldoVisivel);  // Verifique o status de visibilidade do saldo
-    console.log("Saldo Atual:", saldoAtual);      // Verifique o valor do saldo
+    void el.offsetWidth;
 
     if (!saldoVisivel) {
-        el.textContent = "••••••";  // Exibe os pontinhos
+        el.textContent = "••••••";
         el.classList.add("saldo-oculto");
     } else {
         el.classList.remove("saldo-oculto");
 
-        // Exibe o saldo real com animação
-        if (!el.textContent || el.textContent === "••••••") {
-            console.log("Iniciando animação para mostrar saldo real..."); // Log de depuração
-            // Se for "••••••", é hora de exibir o saldo real
-            animarContagem(el, 0, saldoAtual);
-        }
+        // 🔥 anima do valor anterior para o atual
+    if (saldoAnterior !== saldoAtual) {
+    animarContagem(el, saldoAnterior, saldoAtual);
+}
+
+        saldoAnterior = saldoAtual;
 
         if (saldoAtual < 0) {
             el.classList.add("saldo-negativo");
@@ -2127,9 +2125,6 @@ function renderSaldo() {
     }
 
     el.classList.add("animar");
-
-    // Log final para verificar se a função foi completada corretamente
-    console.log("Renderização finalizada, texto exibido:", el.textContent);
 }
 
 // 🔥 Botão
