@@ -173,7 +173,7 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         carregarContasECartoes();  // Carregar contas e cartões após o login
         escutarContasTempoReal();
         escutarCartoesTempoReal();
-        atualizarTudo();
+        iniciarListenerSaldo();
 
     } else {
         authContainer.style.display = "block";
@@ -1960,67 +1960,6 @@ async function testarLeituraTransacoes() {
 
 }
 
-async function calcularSaldoContas() {
-    const user = auth.currentUser;
-    if (!user) return {};  // Retorna um objeto vazio caso o usuário não esteja logado
-
-    const contasRef = collection(db, "users", user.uid, "contas");
-    const transacoesRef = collection(db, "users", user.uid, "transacoes");
-
-    // Obtenha os dados de contas e transações
-    const [contasSnap, transacoesSnap] = await Promise.all([
-        getDocs(contasRef),
-        getDocs(transacoesRef)
-    ]);
-
-    const saldos = {};
-
-    // 🔹 Log: Verificando o conteúdo das contas
-    console.log('Contas:', contasSnap);
-
-    contasSnap.forEach(doc => {
-        const data = doc.data();
-        console.log('Conta:', data); // Verificando o conteúdo de cada conta
-
-        // Verifique se a conta possui saldo e nome
-        if (data.nome && data.saldo !== undefined) {
-            console.log(`Conta ${data.nome} tem saldo: ${data.saldo}`);  // Log extra para verificação
-            saldos[data.nome] = data.saldo || 0;  // Inicializando com saldo 0 se não houver saldo
-        } else {
-            console.warn(`Conta com nome ${data.nome} está faltando saldo ou nome`);
-        }
-    });
-
-    // 🔹 Log: Verificando o conteúdo das transações
-    console.log('Transações:', transacoesSnap);
-
-    // 🔹 Aplicar transações
-    transacoesSnap.forEach(doc => {
-        const t = doc.data();
-        console.log(`Transação ${t.tipo} na conta ${t.conta} com valor ${t.valor}`);  // Verificando as transações
-
-        // Verifique se as transações são válidas e possuem conta e valor
-        if (!t.conta || !t.valor || isNaN(t.valor)) {
-            console.warn('Transação inválida, ignorada:', t);
-            return;  // Ignorar transações inválidas
-        }
-
-        // RECEITA
-        if (t.tipo === "receita" && t.conta) {
-            saldos[t.conta] = (saldos[t.conta] || 0) + t.valor;
-            console.log(`Receita adicionada: ${t.valor} na conta ${t.conta}, saldo: ${saldos[t.conta]}`);
-        }
-
-        // DESPESA (débito/pix)
-        if (t.tipo === "despesa" && t.conta) {
-            saldos[t.conta] = (saldos[t.conta] || 0) - t.valor;
-            console.log(`Despesa subtraída: ${t.valor} da conta ${t.conta}, saldo: ${saldos[t.conta]}`);
-        }
-    });
-
-    console.log('Saldos Finais:', saldos);  // Verificando o saldo final
-    return { ...saldos };  // Retorna uma cópia do objeto saldos para evitar problemas de referência
-}
 
 function renderizarSaldoContasComDados(saldos) {
     const container = document.getElementById("saldo-contas-detalhe");
@@ -2228,9 +2167,56 @@ function animarContagem(elemento, inicio, fim, duracao = 800) {
     requestAnimationFrame(atualizar);
 }
 
-async function atualizarTudo() {
-    const saldos = await calcularSaldoContas();
+function iniciarListenerSaldo() {
+    const user = auth.currentUser;
+    if (!user) return;
 
-    atualizarSaldoTopoComDados(saldos);
-    renderizarSaldoContasComDados(saldos);
+    const contasRef = collection(db, "users", user.uid, "contas");
+    const transacoesRef = collection(db, "users", user.uid, "transacoes");
+
+    let contas = [];
+    let transacoes = [];
+
+    function recalcular() {
+        const saldos = {};
+
+        // Contas
+        contas.forEach(doc => {
+            const data = doc.data();
+            if (data.nome && data.saldo !== undefined) {
+                saldos[data.nome] = Number(data.saldo) || 0;
+            }
+        });
+
+        // Transações
+        transacoes.forEach(doc => {
+            const t = doc.data();
+            const valor = Number(t.valor);
+
+            if (!t.conta || isNaN(valor)) return;
+
+            if (t.tipo === "receita") {
+                saldos[t.conta] = (saldos[t.conta] || 0) + valor;
+            }
+
+            if (t.tipo === "despesa") {
+                saldos[t.conta] = (saldos[t.conta] || 0) - valor;
+            }
+        });
+
+        atualizarSaldoTopoComDados(saldos);
+        renderizarSaldoContasComDados(saldos);
+    }
+
+    onSnapshot(contasRef, (snapshot) => {
+        console.log("🔥 Contas atualizadas");
+        contas = snapshot.docs;
+        recalcular();
+    });
+
+    onSnapshot(transacoesRef, (snapshot) => {
+        console.log("🔥 Transações atualizadas");
+        transacoes = snapshot.docs;
+        recalcular();
+    });
 }
