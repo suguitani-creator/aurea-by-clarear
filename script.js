@@ -2159,12 +2159,12 @@ async function atualizarSaldoTopo() {
         console.log("Entrando no bloco 'else', iterando sobre o objeto saldos...");
 
         // Iteração sobre as chaves e valores de saldos
-        Object.entries(saldos).forEach(([nomeConta, saldo]) => {
-            console.log(`Valor da conta ${nomeConta}: ${saldo}`);  // Verificando o valor de cada conta
+        Object.entries(saldos).forEach(([nome, saldo]) => {
+            console.log(`Valor da conta ${nome}: ${saldo}`);  // Verificando o valor de cada conta
             if (typeof saldo === 'number') {
                 total += saldo;  // Soma apenas se o saldo for numérico
             } else {
-                console.warn("Valor não numérico encontrado para", nomeConta, saldo);  // Log de alerta se o valor não for numérico
+                console.warn("Valor não numérico encontrado para", nome, saldo);  // Log de alerta se o valor não for numérico
             }
         });
     } else {
