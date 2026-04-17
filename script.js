@@ -43,7 +43,6 @@ const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
 
     atualizarCategorias();
     atualizarPlaceholderSaldo();
-    atualizarSaldoTopo();
 
     const hoje = new Date().toISOString().slice(0,7);
     document.getElementById("mes-filtro").value = hoje;
@@ -174,6 +173,7 @@ document.getElementById("btn-login-mobile").addEventListener("click", async () =
         carregarContasECartoes();  // Carregar contas e cartões após o login
         escutarContasTempoReal();
         escutarCartoesTempoReal();
+        atualizarTudo();
 
     } else {
         authContainer.style.display = "block";
@@ -2022,10 +2022,8 @@ async function calcularSaldoContas() {
     return { ...saldos };  // Retorna uma cópia do objeto saldos para evitar problemas de referência
 }
 
-async function renderizarSaldoContas() {
+function renderizarSaldoContasComDados(saldos) {
     const container = document.getElementById("saldo-contas-detalhe");
-
-    const saldos = await calcularSaldoContas();
 
     container.innerHTML = "";
 
@@ -2062,7 +2060,7 @@ document
         this.classList.toggle("show");
 
         if (this.classList.contains("show")) {
-            await renderizarSaldoContas();
+            await atualizarTudo();
         }
     });
 
@@ -2146,34 +2144,16 @@ let saldoVisivel = true;
 let saldoAtual = 0;
 
 // 🔥 Atualiza saldo
-async function atualizarSaldoTopo() {
-    const saldos = await calcularSaldoContas();
-
-    // Verifique os saldos imediatamente após o retorno da função
-    console.log("Saldos recebidos em atualizarSaldoTopo:", saldos);  // Verifique o conteúdo de saldos
-
+function atualizarSaldoTopoComDados(saldos) {
     let total = 0;
 
-    // Verifique se saldos é um objeto simples e iterável
-    if (saldos && typeof saldos === "object" && !Array.isArray(saldos)) {
-        console.log("Entrando no bloco 'else', iterando sobre o objeto saldos...");
-
-        // Iteração sobre as chaves e valores de saldos
-        Object.entries(saldos).forEach(([nome, saldo]) => {
-            console.log(`Valor da conta ${nome}: ${saldo}`);  // Verificando o valor de cada conta
-            if (typeof saldo === 'number') {
-                total += saldo;  // Soma apenas se o saldo for numérico
-            } else {
-                console.warn("Valor não numérico encontrado para", nome, saldo);  // Log de alerta se o valor não for numérico
-            }
-        });
-    } else {
-        console.warn("O formato de 'saldos' não é esperado, e não conseguimos iterar sobre ele corretamente.");
-    }
+    Object.values(saldos).forEach(saldo => {
+        if (typeof saldo === "number") {
+            total += saldo;
+        }
+    });
 
     saldoAtual = total;
-    console.log("Saldo Atual Calculado em atualizarSaldoTopo:", saldoAtual);  // Verifique o valor final calculado
-
     renderSaldo();
 }
 
@@ -2246,4 +2226,11 @@ function animarContagem(elemento, inicio, fim, duracao = 800) {
     }
 
     requestAnimationFrame(atualizar);
+}
+
+async function atualizarTudo() {
+    const saldos = await calcularSaldoContas();
+
+    atualizarSaldoTopoComDados(saldos);
+    renderizarSaldoContasComDados(saldos);
 }
