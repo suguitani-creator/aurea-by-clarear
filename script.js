@@ -2194,7 +2194,7 @@ function renderSaldo() {
         el.classList.remove("saldo-oculto");
 
         // Exibe o saldo real com animação
-        if (el.textContent === "••••••") {
+        if (!el.textContent || el.textContent === "••••••") {
             console.log("Iniciando animação para mostrar saldo real..."); // Log de depuração
             // Se for "••••••", é hora de exibir o saldo real
             animarContagem(el, 0, saldoAtual);
