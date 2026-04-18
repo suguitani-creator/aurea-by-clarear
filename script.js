@@ -254,7 +254,7 @@ async function adicionarTransacao() {
         if (formaPagamento === "credito") {
             cartao = document.getElementById("nome-cartao")?.value || "";
             parcelas = document.getElementById("parcelas")?.value || "";
-            mesFatura = document.getElementById("mes-fatura")?.value || "";
+            mesFatura = document.getElementById("mes-fatura")?.value || "";  // AQUI
 
             if (!cartao) {
                 marcarErro(document.getElementById("nome-cartao"));
@@ -264,7 +264,7 @@ async function adicionarTransacao() {
                 marcarErro(document.getElementById("parcelas"));
             }
 
-            if (!mesFatura) {
+            if (!mesFatura) { // Verificando se o mês da fatura foi preenchido
                 marcarErro(document.getElementById("mes-fatura"));
             }
 
@@ -306,25 +306,27 @@ async function adicionarTransacao() {
             }
         }
 
-        // Se for uma despesa no cartão, vamos processar a fatura e as parcelas
+        // Verificar se é despesa no cartão
         if (formaPagamento === "credito") {
             const dataCompra = data;  // Data da compra no cartão
-            const mesFatura = mesFatura;  // Mês da fatura do cartão
-
+            if (!mesFatura) {
+                console.log("Mês da fatura não definido");
+                return;
+            }
             // Se for parcelada, vamos dividir o valor pelas parcelas
             if (parcelas > 1) {
                 const valorParcela = valor / parcelas;
 
                 // Registrar cada parcela como despesa nos meses seguintes
                 for (let i = 0; i < parcelas; i++) {
-                    const mesPagamento = calcularMesPagamento(mesFatura, i);
+                    const mesPagamento = calcularMesPagamento(mesFatura, i); // Calculando o mês de pagamento da parcela
 
                     // Criar transações para cada parcela
                     const transacao = {
                         tipo: "despesa",
                         descricao: `Parcela ${i + 1} de ${cartao}`,
                         valor: valorParcela,
-                        data: dataCompra,
+                        data: dataCompra,  // Data da compra
                         formaPagamento: "credito",
                         cartao,
                         parcelas: i + 1,
