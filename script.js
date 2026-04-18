@@ -1999,7 +1999,7 @@ document
         this.classList.toggle("show");
 
         if (this.classList.contains("show")) {
-            await atualizarTudo();
+            await iniciarListenerSaldo();
         }
     });
 
