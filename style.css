@@ -1106,9 +1106,6 @@ button.modo-edicao:hover {
 
 /* ================= SWIPE HORIZONTAL ================= */
 
-body {
-    display: block;
-}
 
 .swipe-container {
     display: flex;
