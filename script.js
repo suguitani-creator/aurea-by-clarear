@@ -254,7 +254,7 @@ async function adicionarTransacao() {
         if (formaPagamento === "credito") {
             cartao = document.getElementById("nome-cartao")?.value || "";
             parcelas = document.getElementById("parcelas")?.value || "";
-            mesFatura = document.getElementById("mes-fatura")?.value || ""; 
+            mesFatura = document.getElementById("mes-fatura")?.value || "";
 
             if (!cartao) {
                 marcarErro(document.getElementById("nome-cartao"));
