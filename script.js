@@ -254,7 +254,7 @@ async function adicionarTransacao() {
         if (formaPagamento === "credito") {
             cartao = document.getElementById("nome-cartao")?.value || "";
             parcelas = document.getElementById("parcelas")?.value || "";
-            mesFatura = document.getElementById("mes-fatura")?.value || "";  // AQUI
+            mesFatura = document.getElementById("mes-fatura")?.value || ""; 
 
             if (!cartao) {
                 marcarErro(document.getElementById("nome-cartao"));
@@ -264,7 +264,7 @@ async function adicionarTransacao() {
                 marcarErro(document.getElementById("parcelas"));
             }
 
-            if (!mesFatura) { // Verificando se o mês da fatura foi preenchido
+            if (!mesFatura) {
                 marcarErro(document.getElementById("mes-fatura"));
             }
 
@@ -306,13 +306,14 @@ async function adicionarTransacao() {
             }
         }
 
-        // Verificar se é despesa no cartão
+        // Adicionar transações parceladas
         if (formaPagamento === "credito") {
             const dataCompra = data;  // Data da compra no cartão
             if (!mesFatura) {
                 console.log("Mês da fatura não definido");
                 return;
             }
+
             // Se for parcelada, vamos dividir o valor pelas parcelas
             if (parcelas > 1) {
                 const valorParcela = valor / parcelas;
@@ -324,7 +325,7 @@ async function adicionarTransacao() {
                     // Criar transações para cada parcela
                     const transacao = {
                         tipo: "despesa",
-                        descricao: `Parcela ${i + 1} de ${cartao}`,
+                        descricao: `Parcela ${i + 1} de ${categoria}`,
                         valor: valorParcela,
                         data: dataCompra,  // Data da compra
                         formaPagamento: "credito",
@@ -332,6 +333,8 @@ async function adicionarTransacao() {
                         parcelas: i + 1,
                         mesFatura,
                         mesPagamento,
+                        categoria, // Categoria correta
+                        subcategoria // Subcategoria correta
                     };
 
                     // Adiciona a transação no banco de dados
@@ -345,6 +348,8 @@ async function adicionarTransacao() {
                     mesFatura,
                     formaPagamento: "credito",
                     tipo: "despesa",
+                    categoria, // Categoria correta
+                    subcategoria // Subcategoria correta
                 };
 
                 // Registrar a despesa diretamente
@@ -356,6 +361,8 @@ async function adicionarTransacao() {
                 tipo: "despesa",
                 formaPagamento: formaPagamento,
                 cartao,
+                categoria, // Categoria correta
+                subcategoria // Subcategoria correta
             };
 
             // Registrar a despesa
