@@ -4,61 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Áurea by Clarear</title>
-
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="ui-improvements.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#3E2F23">
-
-    <script type="module" src="script.js"></script>
+    <meta name="theme-color" content="#3E2F23">  
+    <script  type="module" src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
 </head>
 
 <body>
-
 <div class="container">
-
     <h1>Áurea</h1>
     <p class="subtitle">by Clarear</p>
 
-    <!-- LOGIN DESKTOP -->
+    <!-- LOGIN: Versão Desktop -->
     <div id="auth-container-desktop">
         <h2>Acesse sua gestão patrimonial</h2>
         <p class="login-subtitle">Clareza financeira começa com organização.</p>
-
         <input type="email" id="email" placeholder="Seu email">
         <input type="password" id="senha" placeholder="Sua senha">
-
         <button id="btn-login">Entrar</button>
         <button id="btn-cadastro" class="secondary-btn">Criar conta</button>
     </div>
 
-    <!-- LOGIN MOBILE -->
+    <!-- LOGIN: Versão Mobile (visível em telas pequenas) -->
     <div id="auth-container-mobile">
         <h2>Acesse sua gestão patrimonial</h2>
-
         <input type="email" id="email-mobile" placeholder="Seu email">
         <input type="password" id="senha-mobile" placeholder="Sua senha">
-
         <button id="btn-login-mobile">Entrar</button>
         <button id="btn-cadastro-mobile" class="secondary-btn">Criar conta</button>
     </div>
 
-    <!-- APP -->
+    <!-- APP (aparece após o login) -->
     <div id="app-container" style="display:none;">
 
-        <!-- USUÁRIO -->
+        <!-- Info do usuário -->
         <div class="usuario-info">
             <span id="usuario-email"></span>
             <button id="btn-logout">Sair</button>
         </div>
 
-        <!-- FILTRO -->
+        <!-- Filtro de mês -->
         <div class="filtro-mes">
             <input type="month" id="mes-filtro">
         </div>
 
-        <!-- TOPO -->
         <div class="saldo-topo">
             <div class="saldo-header">
                 <span>Saldo disponível</span>
@@ -73,9 +65,8 @@
             </div>
         </div>
 
-        <!-- DASHBOARD -->
+        <!-- Dashboard -->
         <div class="dashboard">
-
             <div class="card">
                 <h4>Receitas</h4>
                 <p id="total-receitas">R$ 0.00</p>
@@ -102,33 +93,33 @@
             <div class="filtro-comparativo">
                 <div id="saldo-contas-container" class="comparativo-container">
                     <small>Saldo disponível</small>
-                    <div id="saldo-contas-detalhe"></div>
-                </div>
+                <div id="saldo-contas-detalhe"></div>
             </div>
 
             <div class="filtro-comparativo">
                 <div id="faturas-container" class="comparativo-container">
                     <small>Faturas dos cartões</small>
-                    <div id="faturas-detalhe"></div>
-                </div>
+                <div id="faturas-detalhe"></div>
             </div>
-
         </div>
-
-    </div> <!-- FIM app-container -->
-
-</div> <!-- FIM container -->
-
-<!-- INDICADOR -->
-<div id="indicador-edicao" class="indicador-edicao">
-    Editando Transação
+    </div>
 </div>
 
-<!-- FORMULÁRIO -->
+        <!-- Indicador de edição elegante -->
+        <div id="indicador-edicao" class="indicador-edicao">
+            <!--<svg width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+            <path d="M12.146 0l3.707 3.707a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.704.293h-2a1 1 0 0 1-1-1v-2a1 1 0 0 1 .293-.704l9-9a1 1 0 0 1 1.414 0L12.146 0zM11.207 3l-9 9V13h.293l9-9L11.207 3z"/>
+            </svg>-->
+            Editando Transação
+        </div>
+        
+
+        <!-- FORMULÁRIO -->
 <div id="form-transacao" class="form-container">
 
     <h3>Nova Transação</h3>
 
+    <!-- TIPO -->
     <div class="form-grid-2">
         <select id="tipo-teste" class="input full" required>
             <option value="">Selecione o tipo de transação...</option>
@@ -138,174 +129,208 @@
         <div></div>
     </div>
 
-    <!-- RECEITA -->
+    <!--BLOCO RECEITA-->
     <div id="bloco-receita">
 
-        <div class="form-grid-2">
-            <select id="fonte" class="input full" required>
-                <option value="">Fonte</option>
-                <option value="salario">Salário</option>
-                <option value="bolsa">Bolsa</option>
-                <option value="rendimentos">Rendimentos</option>
-            </select>
-        </div>
-
-        <div class="form-grid-2">
-            <input id="descricao-receita" class="input full" placeholder="Descrição (opcional)">
-        </div>
-
-        <div class="form-grid-2">
-            <input id="valor-receita" type="number" class="input" placeholder="Valor">
-            <input id="data-receita" type="date" class="input">
-        </div>
-
-        <div class="form-grid-2">
-            <select id="conta-bancaria-depositada" class="input full" required>
-                <option value="">Conta bancária</option>
-            </select>
-        </div>
-
+    <!-- Linha 1 -->
+    <div class="form-grid-2">
+        <select id="fonte" class="input full" required>
+            <option value="">Fonte</option>
+            <option value="salario">Salário</option>
+            <option value="bolsa">Bolsa</option>
+            <option value="rendimentos">Rendimentos</option>
+        </select>
     </div>
 
-    <!-- DESPESA -->
+    <!-- Linha 2 -->
+    <div class="form-grid-2">
+        <input id="descricao-receita" class="input full" placeholder="Descrição (opcional)">
+    </div>
+
+    <!-- Linha 3 -->
+    <div class="form-grid-2">
+        <input id="valor-receita" type="number" class="input" placeholder="Valor">
+        <input id="data-receita" type="date" class="input">
+    </div>
+
+    <!-- Linha 4 -->
+    <div class="form-grid-2">
+        <select id="conta-bancaria-depositada" class="input full" required>
+            <option value="">Conta bancária</option>
+        </select>
+    </div>
+
+</div>
+
+<!--BLOCO DESPESAS-->
     <div id="bloco-despesa" style="display:none;">
 
-        <div class="form-grid-2">
-            <select id="essencial" class="input" required>
-                <option value="">Tipo</option>
-                <option value="sim">Essencial</option>
-                <option value="nao">Não essencial</option>
-                <option value="investimento">Investimentos</option>
-            </select>
+    <!-- Linha 1 -->
+    <div class="form-grid-2">
+        <select id="essencial" class="input" required>
+            <option value="">Tipo</option>
+            <option value="sim">Essencial</option>
+            <option value="nao">Não essencial</option>
+            <option value="investimento">Investimentos</option>
+        </select>
 
-            <select id="categoria-teste" class="input">
-                <option value="">Categoria</option>
-            </select>
-        </div>
+        <select id="categoria-teste" class="input">
+            <option value="">Categoria</option>
+        </select>
+    </div>
 
-        <div class="form-grid-2">
-            <select id="subcategoria-teste" class="input">
-                <option value="">Subcategoria</option>
-            </select>
+    <!-- Linha 2 -->
+    <div class="form-grid-2">
+        <select id="subcategoria-teste" class="input">
+            <option value="">Subcategoria</option>
+        </select>
 
-            <select id="forma-pagamento-teste" class="input" required>
-                <option value="">Forma de Pagamento</option>
-                <option value="pix">Pix</option>
-                <option value="debito">Débito</option>
-                <option value="credito">Crédito</option>
-            </select>
-        </div>
+        <select id="forma-pagamento-teste" class="input" required>
+            <option value="">Forma de Pagamento</option>
+            <option value="pix">Pix</option>
+            <option value="debito">Débito</option>
+            <option value="credito">Crédito</option>
+        </select>
+    </div>
 
-        <div class="form-grid-2">
-            <input id="descricao-despesa" class="input full" placeholder="Descrição (opcional)">
-        </div>
+    <!-- Linha 3 -->
+    <div class="form-grid-2">
+        <input id="descricao-despesa" class="input full" placeholder="Descrição (opcional)">
+    </div>
 
-        <div class="form-grid-2">
-            <input id="valor-despesa" type="number" class="input" placeholder="Valor">
-            <input id="data-despesa" type="date" class="input">
-        </div>
+    <!-- Linha 4 -->
+    <div class="form-grid-2">
+        <input id="valor-despesa" type="number" class="input" placeholder="Valor">
+        <input id="data-despesa" type="date" class="input">
+    </div>
 
-        <div id="bloco-conta-debito" class="form-grid-2">
-            <select id="conta-bancaria-debitada" class="input full">
-                <option value="">Conta debitada</option>
-            </select>
-        </div>
+    <!-- Linha 5 PIX / DÉBITO -->
+    <div id="bloco-conta-debito" class="form-grid-2">
+        <select id="conta-bancaria-debitada" class="input full">
+            <option value="">Conta debitada</option>
+        </select>
+    </div>
 
-        <div id="bloco-cartao" class="form-grid-3" style="display:none;">
-            <select id="nome-cartao" class="input">
-                <option value="">Cartão</option>
-            </select>
+    <!-- Linha 5 CARTÃO -->
+    <div id="bloco-cartao" class="form-grid-3" style="display:none;">
 
-            <select id="parcelas" class="input" required>
-                <option value="">Parcelas</option>
-            </select>
+        <select id="nome-cartao" class="input">
+            <option value="">Cartão</option>
+        </select>
 
-            <input type="month" id="mes-fatura" class="input">
-        </div>
+        <select id="parcelas" class="input" required>
+            <option value="">Parcelas</option>
+            <option value="1">1x</option>
+            <option value="2">2x</option>
+            <option value="3">3x</option>
+            <option value="4">4x</option>
+            <option value="5">5x</option>
+            <option value="6">6x</option>
+            <option value="7">7x</option>
+            <option value="8">8x</option>
+            <option value="9">9x</option>
+            <option value="10">10x</option>
+            <option value="11">11x</option>
+            <option value="12">12x</option>
+        </select>
+
+        <input type="month" id="mes-fatura" class="input">
 
     </div>
 
+</div>
+
+    <!-- BOTÕES -->
     <div class="botoes-formulario">
-        <button id="btn-adicionar">Adicionar</button>
-        <button id="btn-cancelar-edicao-transacao" class="btn-cancelar">Cancelar</button>
+
+        <button id="btn-adicionar">
+            Adicionar
+        </button>
+
+        <button id="btn-cancelar-edicao-transacao" class="btn-cancelar">
+            Cancelar
+        </button>
+
     </div>
 
 </div>
 
-<!-- LISTA -->
-<h2>Fluxo Financeiro</h2>
-<ul id="lista-despesas"></ul>
+        <h2>Fluxo Financeiro</h2>
+        <ul id="lista-despesas"></ul>
+        <div class="grafico-container">
+            <canvas id="graficoCategorias"></canvas>
+        </div>
 
-<div class="grafico-container">
-    <canvas id="graficoCategorias"></canvas>
-</div>
+        <!-- Botão para Adicionar Conta ou Cartão -->
+            <button id="btn-abrir-form-conta" class="secondary-btn">Adicionar Conta ou Cartão</button>
+            <!-- Botão para alternar a exibição das contas e cartões -->
+            <button id="btn-exibir-contas" class="secondary-btn">Exibir Contas e Cartões</button>
 
-<!-- CONTAS -->
-<button id="btn-abrir-form-conta" class="secondary-btn">Adicionar Conta ou Cartão</button>
-<button id="btn-exibir-contas" class="secondary-btn">Exibir Contas e Cartões</button>
+        <div id="indicador-edicao-conta" class="indicador-edicao" style="display:none;">
+            Editando Conta
+        </div>
 
-<div id="indicador-edicao-conta" class="indicador-edicao" style="display:none;">
-    Editando Conta
-</div>
+        <!-- Formulário de Adicionar Conta ou Cartão (oculto inicialmente) -->
+        <div id="formulario-conta" style="display: none;">
+            <h3>Adicionar Conta ou Cartão</h3>
+            <select id="tipo-conta">
+                <option value="conta">Conta Corrente</option>
+                <option value="cartao">Cartão de Crédito</option>
+            </select>
 
-<div id="formulario-conta" style="display: none;">
-    <h3>Adicionar Conta ou Cartão</h3>
+            <input type="text" id="nome-conta" placeholder="Nome da conta ou cartão" />
+            <input type="number" id="saldo-conta" placeholder="Saldo ou limite" />
 
-    <select id="tipo-conta">
-        <option value="conta">Conta Corrente</option>
-        <option value="cartao">Cartão de Crédito</option>
-    </select>
+            <!-- Exibir campo de data de saldo para contas correntes -->
+            <input type="date" id="data-saldo-conta" placeholder="Data de atualização do saldo" style="display:none;" />
 
-    <input type="text" id="nome-conta" placeholder="Nome da conta ou cartão">
-    <input type="number" id="saldo-conta" placeholder="Saldo ou limite">
+            <!-- Exibir campos de vencimento e fechamento para cartão -->
+            <div id="datas-cartao" style="display:none;">
+                <label for="vencimento-cartao">Vencimento</label>
+                <input type="date" id="vencimento-cartao" placeholder="Selecione o dia de vencimento" />
+                <label for="fechamento-cartao">Fechamento</label>
+                <input type="date" id="fechamento-cartao" placeholder="Selecione o dia de fechamento" />
+            </div>
+            <div class="botoes-formulario">
+                <button id="btn-salvar-conta">Adicionar</button>
+                <button id="btn-cancelar-edicao-conta" class="btn-cancelar">Cancelar</button>
+            </div>
+        </div>
 
-    <input type="date" id="data-saldo-conta" style="display:none;">
 
-    <div id="datas-cartao" style="display:none;">
-        <label for="vencimento-cartao">Vencimento</label>
-        <input type="date" id="vencimento-cartao">
+       <!-- Exibir Contas e Cartões Cadastrados (inicialmente escondido) -->
+        <div id="contas-cartoes-container" style="display: none;">
 
-        <label for="fechamento-cartao">Fechamento</label>
-        <input type="date" id="fechamento-cartao">
+            <h3>�� Contas Cadastradas</h3>
+            <ul id="lista-contas"></ul>
+
+            <h3>�� Cartões Cadastrados</h3>
+            <ul id="lista-cartoes"></ul>
+
+        </div>
     </div>
-
-    <div class="botoes-formulario">
-        <button id="btn-salvar-conta">Adicionar</button>
-        <button id="btn-cancelar-edicao-conta" class="btn-cancelar">Cancelar</button>
-    </div>
 </div>
 
-<div id="contas-cartoes-container" style="display: none;">
-    <h3>Contas Cadastradas</h3>
-    <ul id="lista-contas"></ul>
-
-    <h3>Cartões Cadastrados</h3>
-    <ul id="lista-cartoes"></ul>
-</div>
-
-<!-- SCRIPTS -->
 <script type="module" src="firebase.js"></script>
 <script type="module" src="script.js"></script>
-
 <script>
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log("SW registrado com sucesso"))
+        .then(reg => console.log("SW registrado com sucesso"))
         .catch(err => console.log("Erro ao registrar SW:", err));
 }
 </script>
 
-<!-- UI -->
 <div id="toast" class="toast"></div>
 
 <div id="modal-confirmacao" class="modal-overlay">
-    <div class="modal-box">
-        <p id="texto-confirmacao">Deseja remover esta transação?</p>
-        <div class="modal-actions">
-            <button id="cancelar-exclusao" class="btn-secondary">Cancelar</button>
-            <button id="confirmar-exclusao" class="btn-primary">Remover</button>
-        </div>
+  <div class="modal-box">
+    <p id="texto-confirmacao">Deseja remover esta transação?</p>
+    <div class="modal-actions">
+      <button id="cancelar-exclusao" class="btn-secondary">Cancelar</button>
+      <button id="confirmar-exclusao" class="btn-primary">Remover</button>
     </div>
+  </div>
 </div>
 
 </body>
