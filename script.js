@@ -232,7 +232,7 @@ async function adicionarTransacao() {
         const essencial = document.getElementById("essencial")?.value || "";
         const categoria = document.getElementById("categoria-teste")?.value || "";
         const subcategoria = document.getElementById("subcategoria-teste")?.value || "";
-        let descricao = document.getElementById("descricao-despesa")?.value || "";
+        const descricao = document.getElementById("descricao-despesa")?.value || "";
         const valor = parseFloat(document.getElementById("valor-despesa")?.value);
         const data = document.getElementById("data-despesa")?.value || "";
         const formaPagamento = document.getElementById("forma-pagamento-teste")?.value || "";
@@ -306,9 +306,6 @@ async function adicionarTransacao() {
             }
         }
 
-        // Ajustando a descrição para que seja o nome da categoria
-        descricao = categoria;  // Usando o nome da categoria como descrição
-
         // Ajustando a data da despesa com base no mês da fatura (caso seja parcelada)
         if (formaPagamento === "credito" && parcelas > 0) {
             const [anoFatura, mesFaturaNumero] = mesFatura.split("-"); // "2023-06" => [2023, 06]
@@ -336,7 +333,6 @@ async function adicionarTransacao() {
                     valor: valor / parcelas, // Distribuindo o valor igualmente entre as parcelas
                     data: dataParcela, // A data da parcela é ajustada de acordo com o mês da fatura
                     parcelas: i + 1, // Indica o número da parcela
-                    descricao // Agora a descrição é o nome da categoria
                 };
 
                 // Salvar a parcela como uma nova transação
@@ -353,7 +349,6 @@ async function adicionarTransacao() {
             essencial,
             categoria,
             subcategoria,
-            descricao,  // Aqui já com o nome da categoria
             valor,
             data,
             formaPagamento,
@@ -540,7 +535,7 @@ function gerarDetalhesClean(t) {
     if (t.tipo === "receita") {
         return `
             <div>${t.conta || "-"}</div>
-            <div>${t.descricao || "-"}</div>  <!-- A descrição será a categoria para despesas -->
+            <div>${t.descricao || "-"}</div>
         `;
     }
 
@@ -550,11 +545,6 @@ function gerarDetalhesClean(t) {
             <div>${t.subcategoria || "-"}</div>
             <div>${t.formaPagamento || "-"}</div>
         `;
-
-        // Se a transação for uma despesa, o nome da categoria será exibido na descrição
-        if (t.descricao) {
-            detalhes += `<div>${t.descricao || "-"}</div>`;  // Exibe a categoria como descrição
-        }
 
         if (t.formaPagamento === "credito") {
             detalhes += `
