@@ -201,7 +201,6 @@ async function adicionarTransacao() {
 
     // ================= RECEITA =================
     if (tipo === "receita") {
-
         const fonte = document.getElementById("fonte")?.value || "";
         const descricao = document.getElementById("descricao-receita")?.value || "";
         const valor = parseFloat(document.getElementById("valor-receita")?.value);
@@ -209,28 +208,27 @@ async function adicionarTransacao() {
         const conta = document.getElementById("conta-bancaria-depositada")?.value || "";
 
         if (isNaN(valor)) {
-    marcarErro(document.getElementById("valor-receita"));
-}
+            marcarErro(document.getElementById("valor-receita"));
+        }
 
-if (!data) {
-    marcarErro(document.getElementById("data-receita"));
-}
+        if (!data) {
+            marcarErro(document.getElementById("data-receita"));
+        }
 
-if (!conta) {
-    marcarErro(document.getElementById("conta-bancaria-depositada"));
-}
+        if (!conta) {
+            marcarErro(document.getElementById("conta-bancaria-depositada"));
+        }
 
-if (isNaN(valor) || !data || !conta) {
-    showToast("Preencha os campos obrigatórios", "error");
-    return;
-}
+        if (isNaN(valor) || !data || !conta) {
+            showToast("Preencha os campos obrigatórios", "error");
+            return;
+        }
 
         dados = { ...dados, fonte, descricao, valor, data, conta };
     }
 
     // ================= DESPESA =================
     if (tipo === "despesa") {
-
         const essencial = document.getElementById("essencial")?.value || "";
         const categoria = document.getElementById("categoria-teste")?.value || "";
         const subcategoria = document.getElementById("subcategoria-teste")?.value || "";
@@ -247,10 +245,10 @@ if (isNaN(valor) || !data || !conta) {
         if (formaPagamento === "pix" || formaPagamento === "debito") {
             conta = document.getElementById("conta-bancaria-debitada")?.value || "";
             if (!conta) {
-    marcarErro(document.getElementById("conta-bancaria-debitada"));
-    showToast("Selecione a conta", "error");
-    return;
-}
+                marcarErro(document.getElementById("conta-bancaria-debitada"));
+                showToast("Selecione a conta", "error");
+                return;
+            }
         }
 
         if (formaPagamento === "credito") {
@@ -259,56 +257,80 @@ if (isNaN(valor) || !data || !conta) {
             mesFatura = document.getElementById("mes-fatura")?.value || "";
 
             if (!cartao) {
-    marcarErro(document.getElementById("nome-cartao"));
-}
+                marcarErro(document.getElementById("nome-cartao"));
+            }
 
-if (!parcelas) {
-    marcarErro(document.getElementById("parcelas"));
-}
+            if (!parcelas) {
+                marcarErro(document.getElementById("parcelas"));
+            }
 
-if (!mesFatura) {
-    marcarErro(document.getElementById("mes-fatura"));
-}
+            if (!mesFatura) {
+                marcarErro(document.getElementById("mes-fatura"));
+            }
 
-if (!cartao || !parcelas || !mesFatura) {
-    showToast("Preencha os dados do cartão", "error");
-    return;
-}
+            if (!cartao || !parcelas || !mesFatura) {
+                showToast("Preencha os dados do cartão", "error");
+                return;
+            }
         }
 
         if (isNaN(valor)) {
-    marcarErro(document.getElementById("valor-despesa"));
-}
+            marcarErro(document.getElementById("valor-despesa"));
+        }
 
-if (!data) {
-    marcarErro(document.getElementById("data-despesa"));
-}
+        if (!data) {
+            marcarErro(document.getElementById("data-despesa"));
+        }
 
-if (!formaPagamento) {
-    marcarErro(document.getElementById("forma-pagamento-teste"));
-}
+        if (!formaPagamento) {
+            marcarErro(document.getElementById("forma-pagamento-teste"));
+        }
 
-if (isNaN(valor) || !data || !formaPagamento) {
-    showToast("Preencha os campos obrigatórios", "error");
-    return;
-}
+        if (isNaN(valor) || !data || !formaPagamento) {
+            showToast("Preencha os campos obrigatórios", "error");
+            return;
+        }
 
         if (essencial !== "investimento") {
+            if (!categoria) {
+                marcarErro(document.getElementById("categoria-teste"));
+            }
 
-    if (!categoria) {
-        marcarErro(document.getElementById("categoria-teste"));
-    }
+            if (!subcategoria) {
+                marcarErro(document.getElementById("subcategoria-teste"));
+            }
 
-    if (!subcategoria) {
-        marcarErro(document.getElementById("subcategoria-teste"));
-    }
+            if (!categoria || !subcategoria) {
+                showToast("Preencha categoria e subcategoria", "error");
+                return;
+            }
+        }
 
-    if (!categoria || !subcategoria) {
-        showToast("Preencha categoria e subcategoria", "error");
-        return;
-    }
-}
+        // Ajustando a data da despesa com base no mês da fatura (caso seja parcelada)
+        if (formaPagamento === "credito" && parcelas > 0) {
+            let mesFaturaDate = new Date(mesFatura + "-01");
+            let mesInicial = mesFaturaDate.getMonth(); // mês da fatura (0-11)
 
+            for (let i = 0; i < parcelas; i++) {
+                let mesParcela = new Date(mesFaturaDate.setMonth(mesInicial + i));
+                let dataParcela = mesParcela.toISOString().split('T')[0]; // Convertendo para o formato YYYY-MM-DD
+
+                let transacaoParcela = {
+                    ...dados,
+                    valor: valor / parcelas, // Distribuindo o valor igualmente entre as parcelas
+                    data: dataParcela, // A data da parcela é ajustada de acordo com o mês da fatura
+                    parcelas: i + 1 // Indica o número da parcela
+                };
+
+                // Salvar a parcela como uma nova transação
+                await addDoc(collection(db, "users", user.uid, "transacoes"), transacaoParcela);
+            }
+
+            showToast("Despesas parceladas adicionadas!");
+            return;
+        }
+
+        // Caso a despesa não seja parcelada, salva normalmente
         dados = {
             ...dados,
             essencial,
@@ -323,9 +345,10 @@ if (isNaN(valor) || !data || !formaPagamento) {
             parcelas,
             mesFatura
         };
+
     }
 
-    // ================= �� LIMPEZA DE DADOS (CRÍTICO) =================
+    // ================= LIMPEZA DE DADOS (CRÍTICO) =================
     Object.keys(dados).forEach(key => {
         if (
             dados[key] === undefined ||
@@ -336,52 +359,36 @@ if (isNaN(valor) || !data || !formaPagamento) {
         }
     });
 
-    // ================= �� DEBUG =================
-    console.log("DADOS ENVIADOS:", dados);
-    console.log("UID:", user.uid);
-
-    try {
-
-        // ================= ✏️ EDIÇÃO =================
-        if (idEmEdicao !== null) {
-
-            console.log("ATUALIZANDO:", idEmEdicao);
-
-            await updateDoc(
-                doc(db, "users", user.uid, "transacoes", idEmEdicao),
-                dados
-            );
-
-            idEmEdicao = null;
-
-            showToast("Transação atualizada!");
-
-            document.getElementById("indicador-edicao").style.display = "none";
-
-            const btn = document.getElementById("btn-adicionar");
-            btn.textContent = "Adicionar";
-            btn.classList.remove("modo-edicao");
-
-            limparFormulario();
-
-            return;
-        }
-
-        // ================= ➕ NOVA =================
-        const docRef = await addDoc(
-            collection(db, "users", user.uid, "transacoes"),
+    // ================= EDIÇÃO =================
+    if (idEmEdicao !== null) {
+        await updateDoc(
+            doc(db, "users", user.uid, "transacoes", idEmEdicao),
             dados
         );
 
-        console.log("DOC CRIADO:", docRef.id);
+        idEmEdicao = null;
 
-        showToast("Transação adicionada!");
+        showToast("Transação atualizada!");
+
+        document.getElementById("indicador-edicao").style.display = "none";
+
+        const btn = document.getElementById("btn-adicionar");
+        btn.textContent = "Adicionar";
+        btn.classList.remove("modo-edicao");
+
         limparFormulario();
 
-    } catch (error) {
-        console.error("Erro ao salvar:", error);
-        showToast("Erro ao salvar transação", "error");
+        return;
     }
+
+    // ================= NOVA TRANSAÇÃO =================
+    const docRef = await addDoc(
+        collection(db, "users", user.uid, "transacoes"),
+        dados
+    );
+
+    showToast("Transação adicionada!");
+    limparFormulario();
 }
 
 function atualizarCategorias() {
@@ -483,7 +490,7 @@ function atualizarTela(listaTransacoes) {
                 </button>
 
                 <button class="btn-delete" onclick="confirmarExclusao('${t.id}')">
-                    ��️
+                    🗑️
                 </button>
             </div>
 
