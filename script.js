@@ -471,17 +471,16 @@ function atualizarTela(listaTransacoes) {
         // ================= RECEITA =================
         if (t.tipo === "receita") {
             principal = t.fonte || "Receita";
-            secundario = t.data ? formatarData(t.data) : "";
-        }
-
+            secundario = t.data ? formatarData(t.data) : "";}
+         else {
         // ================= DESPESA =================
         if (t.tipo === "despesa") {
             principal = t.categoria || "Despesa";}
         else {
                 principal = t.essencial || "Despesa";
                 secundario = t.data ? formatarData(t.data) : "";
-            }
-
+            }}
+        
         item.innerHTML = `
             <div class="item-info linha-clicavel">
                 <div class="linha-titulo">
