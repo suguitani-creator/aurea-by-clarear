@@ -532,7 +532,7 @@ function gerarDetalhesClean(t) {
 
     if (t.tipo === "receita") {
         return `
-            <div>${t.conta}</div>
+            <div>${t.conta || "-"}</div>
             <div>${t.descricao || "-"}</div>
         `;
     }
@@ -540,20 +540,22 @@ function gerarDetalhesClean(t) {
     if (t.tipo === "despesa") {
 
         let detalhes = `
-            <div>${t.subcategoria}</div>
-            <div>${t.formaPagamento}</div>
+            <div>${t.subcategoria || "-"}</div>
+            <div>${t.formaPagamento || "-"}</div>
         `;
 
-        if (t.formaPagamento === "credito") {
+        const forma = (t.formaPagamento || "").toLowerCase();
+
+        if (forma === "credito") {
             detalhes += `
-                <div>${t.cartao}</div>
-                <div>${t.parcelas}x</div>
+                <div>${t.cartao || "-"}</div>
+                <div>${t.parcelas ? t.parcelas + "x" : "-"}</div>
                 <div>${t.mesFatura ? formatarMesFatura(t.mesFatura) : "-"}</div>
             `;
         }
 
-        if (t.formaPagamento === "pix" || t.formaPagamento === "debito") {
-            detalhes += `<div>${t.conta}</div>`;
+        if (["pix", "debito"].includes(forma)) {
+            detalhes += `<div>${t.conta || "-"}</div>`;
         }
 
         return detalhes;
