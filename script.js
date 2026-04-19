@@ -256,18 +256,6 @@ async function adicionarTransacao() {
             parcelas = document.getElementById("parcelas")?.value || "";
             mesFatura = document.getElementById("mes-fatura")?.value || "";
 
-            if (!cartao) {
-                marcarErro(document.getElementById("nome-cartao"));
-            }
-
-            if (!parcelas) {
-                marcarErro(document.getElementById("parcelas"));
-            }
-
-            if (!mesFatura) {
-                marcarErro(document.getElementById("mes-fatura"));
-            }
-
             if (!cartao || !parcelas || !mesFatura) {
                 showToast("Preencha os dados do cartão", "error");
                 return;
@@ -291,125 +279,81 @@ async function adicionarTransacao() {
             return;
         }
 
+        // Verifica categoria e subcategoria
         if (essencial !== "investimento") {
-            if (!categoria) {
-                marcarErro(document.getElementById("categoria-teste"));
-            }
-
-            if (!subcategoria) {
-                marcarErro(document.getElementById("subcategoria-teste"));
-            }
-
             if (!categoria || !subcategoria) {
                 showToast("Preencha categoria e subcategoria", "error");
                 return;
             }
         }
 
-        // Adicionar transações parceladas
+        // Se for um pagamento no cartão, distribuir parcelas
         if (formaPagamento === "credito") {
-            const dataCompra = data;  // Data da compra no cartão
-            if (!mesFatura) {
-                console.log("Mês da fatura não definido");
-                return;
-            }
-
-            // Se for parcelada, vamos dividir o valor pelas parcelas
+            const dataCompra = data;
             if (parcelas > 1) {
-                const valorParcela = valor / parcelas;
-
-                // Registrar cada parcela como despesa nos meses seguintes
                 for (let i = 0; i < parcelas; i++) {
-                    const mesPagamento = calcularMesPagamento(mesFatura, i); // Calculando o mês de pagamento da parcela
-
-                    // Criar transações para cada parcela
-                    const transacao = {
+                    const mesPagamento = calcularMesPagamento(mesFatura, i);  // Calcula mês de pagamento da parcela
+                    await addDoc(collection(db, "users", user.uid, "transacoes"), {
                         tipo: "despesa",
                         descricao: `Parcela ${i + 1} de ${categoria}`,
-                        valor: valorParcela,
+                        valor: valor / parcelas,
                         data: dataCompra,  // Data da compra
                         formaPagamento: "credito",
                         cartao,
                         parcelas: i + 1,
                         mesFatura,
                         mesPagamento,
-                        categoria, // Categoria correta
-                        subcategoria // Subcategoria correta
-                    };
-
-                    // Adiciona a transação no banco de dados
-                    await addDoc(collection(db, "users", user.uid, "transacoes"), transacao);
+                        categoria,
+                        subcategoria
+                    });
                 }
             } else {
-                // Se não for parcelado, apenas registrar a despesa normalmente
-                dados = {
-                    ...dados,
+                await addDoc(collection(db, "users", user.uid, "transacoes"), {
+                    tipo: "despesa",
+                    descricao: categoria,
+                    valor,
+                    data: dataCompra,  // Data da compra
+                    formaPagamento: "credito",
                     cartao,
                     mesFatura,
-                    formaPagamento: "credito",
-                    tipo: "despesa",
-                    categoria, // Categoria correta
-                    subcategoria // Subcategoria correta
-                };
-
-                // Registrar a despesa diretamente
-                await addDoc(collection(db, "users", user.uid, "transacoes"), dados);
+                    categoria,
+                    subcategoria
+                });
             }
         } else {
-            dados = {
-                ...dados,
+            await addDoc(collection(db, "users", user.uid, "transacoes"), {
                 tipo: "despesa",
-                formaPagamento: formaPagamento,
-                cartao,
-                categoria, // Categoria correta
-                subcategoria // Subcategoria correta
-            };
-
-            // Registrar a despesa
-            await addDoc(collection(db, "users", user.uid, "transacoes"), dados);
+                descricao: categoria,
+                valor,
+                data,
+                formaPagamento,
+                categoria,
+                subcategoria
+            });
         }
     }
 
-    // ================= 🔥 LIMPEZA DE DADOS (CRÍTICO) =================
+    // Finaliza a limpeza
     Object.keys(dados).forEach(key => {
-        if (
-            dados[key] === undefined ||
-            dados[key] === null ||
-            dados[key] === ""
-        ) {
+        if (dados[key] === undefined || dados[key] === null || dados[key] === "") {
             delete dados[key];
         }
     });
 
-    // ================= 🔍 DEBUG =================
-    console.log("DADOS ENVIADOS:", dados);
-    console.log("UID:", user.uid);
-
     try {
-        // ================= ➕ NOVA =================
-        const docRef = await addDoc(
-            collection(db, "users", user.uid, "transacoes"),
-            dados
-        );
-
-        console.log("DOC CRIADO:", docRef.id);
-
         showToast("Transação adicionada!");
         limparFormulario();
-
     } catch (error) {
-        console.error("Erro ao salvar:", error);
         showToast("Erro ao salvar transação", "error");
     }
 }
 
-// Função que calcula o mês de pagamento das parcelas com base no mês da fatura
+// Função para calcular o mês de pagamento
 function calcularMesPagamento(mesFatura, parcelaIndex) {
     const mesFaturaDate = new Date(mesFatura);
-    mesFaturaDate.setMonth(mesFaturaDate.getMonth() + parcelaIndex);  // Soma o índice da parcela ao mês da fatura
+    mesFaturaDate.setMonth(mesFaturaDate.getMonth() + parcelaIndex);  // Incrementa o índice da parcela
 
-    const mesPagamento = mesFaturaDate.toISOString().split('T')[0]; // Retorna a data no formato YYYY-MM
-    return mesPagamento;
+    return mesFaturaDate.toISOString().split('T')[0];  // Formato YYYY-MM
 }
 
 function atualizarCategorias() {
