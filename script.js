@@ -201,6 +201,7 @@ async function adicionarTransacao() {
 
     // ================= RECEITA =================
     if (tipo === "receita") {
+
         const fonte = document.getElementById("fonte")?.value || "";
         const descricao = document.getElementById("descricao-receita")?.value || "";
         const valor = parseFloat(document.getElementById("valor-receita")?.value);
@@ -208,27 +209,28 @@ async function adicionarTransacao() {
         const conta = document.getElementById("conta-bancaria-depositada")?.value || "";
 
         if (isNaN(valor)) {
-            marcarErro(document.getElementById("valor-receita"));
-        }
+    marcarErro(document.getElementById("valor-receita"));
+}
 
-        if (!data) {
-            marcarErro(document.getElementById("data-receita"));
-        }
+if (!data) {
+    marcarErro(document.getElementById("data-receita"));
+}
 
-        if (!conta) {
-            marcarErro(document.getElementById("conta-bancaria-depositada"));
-        }
+if (!conta) {
+    marcarErro(document.getElementById("conta-bancaria-depositada"));
+}
 
-        if (isNaN(valor) || !data || !conta) {
-            showToast("Preencha os campos obrigatórios", "error");
-            return;
-        }
+if (isNaN(valor) || !data || !conta) {
+    showToast("Preencha os campos obrigatórios", "error");
+    return;
+}
 
         dados = { ...dados, fonte, descricao, valor, data, conta };
     }
 
     // ================= DESPESA =================
     if (tipo === "despesa") {
+
         const essencial = document.getElementById("essencial")?.value || "";
         const categoria = document.getElementById("categoria-teste")?.value || "";
         const subcategoria = document.getElementById("subcategoria-teste")?.value || "";
@@ -245,10 +247,10 @@ async function adicionarTransacao() {
         if (formaPagamento === "pix" || formaPagamento === "debito") {
             conta = document.getElementById("conta-bancaria-debitada")?.value || "";
             if (!conta) {
-                marcarErro(document.getElementById("conta-bancaria-debitada"));
-                showToast("Selecione a conta", "error");
-                return;
-            }
+    marcarErro(document.getElementById("conta-bancaria-debitada"));
+    showToast("Selecione a conta", "error");
+    return;
+}
         }
 
         if (formaPagamento === "credito") {
@@ -256,104 +258,130 @@ async function adicionarTransacao() {
             parcelas = document.getElementById("parcelas")?.value || "";
             mesFatura = document.getElementById("mes-fatura")?.value || "";
 
-            if (!cartao || !parcelas || !mesFatura) {
-                showToast("Preencha os dados do cartão", "error");
-                return;
-            }
+            if (!cartao) {
+    marcarErro(document.getElementById("nome-cartao"));
+}
+
+if (!parcelas) {
+    marcarErro(document.getElementById("parcelas"));
+}
+
+if (!mesFatura) {
+    marcarErro(document.getElementById("mes-fatura"));
+}
+
+if (!cartao || !parcelas || !mesFatura) {
+    showToast("Preencha os dados do cartão", "error");
+    return;
+}
         }
 
         if (isNaN(valor)) {
-            marcarErro(document.getElementById("valor-despesa"));
-        }
+    marcarErro(document.getElementById("valor-despesa"));
+}
 
-        if (!data) {
-            marcarErro(document.getElementById("data-despesa"));
-        }
+if (!data) {
+    marcarErro(document.getElementById("data-despesa"));
+}
 
-        if (!formaPagamento) {
-            marcarErro(document.getElementById("forma-pagamento-teste"));
-        }
+if (!formaPagamento) {
+    marcarErro(document.getElementById("forma-pagamento-teste"));
+}
 
-        if (isNaN(valor) || !data || !formaPagamento) {
-            showToast("Preencha os campos obrigatórios", "error");
-            return;
-        }
+if (isNaN(valor) || !data || !formaPagamento) {
+    showToast("Preencha os campos obrigatórios", "error");
+    return;
+}
 
-        // Verifica categoria e subcategoria
         if (essencial !== "investimento") {
-            if (!categoria || !subcategoria) {
-                showToast("Preencha categoria e subcategoria", "error");
-                return;
-            }
-        }
 
-        // Se for um pagamento no cartão, distribuir parcelas
-        if (formaPagamento === "credito") {
-            const dataCompra = data;
-            if (parcelas > 1) {
-                for (let i = 0; i < parcelas; i++) {
-                    const mesPagamento = calcularMesPagamento(mesFatura, i);  // Calcula mês de pagamento da parcela
-                    await addDoc(collection(db, "users", user.uid, "transacoes"), {
-                        tipo: "despesa",
-                        descricao: `Parcela ${i + 1} de ${categoria}`,
-                        valor: valor / parcelas,
-                        data: dataCompra,  // Data da compra
-                        formaPagamento: "credito",
-                        cartao,
-                        parcelas: i + 1,
-                        mesFatura,
-                        mesPagamento,
-                        categoria,
-                        subcategoria
-                    });
-                }
-            } else {
-                await addDoc(collection(db, "users", user.uid, "transacoes"), {
-                    tipo: "despesa",
-                    descricao: categoria,
-                    valor,
-                    data: dataCompra,  // Data da compra
-                    formaPagamento: "credito",
-                    cartao,
-                    mesFatura,
-                    categoria,
-                    subcategoria
-                });
-            }
-        } else {
-            await addDoc(collection(db, "users", user.uid, "transacoes"), {
-                tipo: "despesa",
-                descricao: categoria,
-                valor,
-                data,
-                formaPagamento,
-                categoria,
-                subcategoria
-            });
-        }
+    if (!categoria) {
+        marcarErro(document.getElementById("categoria-teste"));
     }
 
-    // Finaliza a limpeza
+    if (!subcategoria) {
+        marcarErro(document.getElementById("subcategoria-teste"));
+    }
+
+    if (!categoria || !subcategoria) {
+        showToast("Preencha categoria e subcategoria", "error");
+        return;
+    }
+}
+
+        dados = {
+            ...dados,
+            essencial,
+            categoria,
+            subcategoria,
+            descricao,
+            valor,
+            data,
+            formaPagamento,
+            conta,
+            cartao,
+            parcelas,
+            mesFatura
+        };
+    }
+
+    // ================= �� LIMPEZA DE DADOS (CRÍTICO) =================
     Object.keys(dados).forEach(key => {
-        if (dados[key] === undefined || dados[key] === null || dados[key] === "") {
+        if (
+            dados[key] === undefined ||
+            dados[key] === null ||
+            dados[key] === ""
+        ) {
             delete dados[key];
         }
     });
 
+    // ================= �� DEBUG =================
+    console.log("DADOS ENVIADOS:", dados);
+    console.log("UID:", user.uid);
+
     try {
+
+        // ================= ✏️ EDIÇÃO =================
+        if (idEmEdicao !== null) {
+
+            console.log("ATUALIZANDO:", idEmEdicao);
+
+            await updateDoc(
+                doc(db, "users", user.uid, "transacoes", idEmEdicao),
+                dados
+            );
+
+            idEmEdicao = null;
+
+            showToast("Transação atualizada!");
+
+            document.getElementById("indicador-edicao").style.display = "none";
+
+            const btn = document.getElementById("btn-adicionar");
+            btn.textContent = "Adicionar";
+            btn.classList.remove("modo-edicao");
+
+            limparFormulario();
+
+            return;
+        }
+
+        // ================= ➕ NOVA =================
+        const docRef = await addDoc(
+            collection(db, "users", user.uid, "transacoes"),
+            dados
+        );
+
+        console.log("DOC CRIADO:", docRef.id);
+
         showToast("Transação adicionada!");
         limparFormulario();
+
     } catch (error) {
+        console.error("Erro ao salvar:", error);
         showToast("Erro ao salvar transação", "error");
     }
-}
-
-// Função para calcular o mês de pagamento
-function calcularMesPagamento(mesFatura, parcelaIndex) {
-    const mesFaturaDate = new Date(mesFatura);
-    mesFaturaDate.setMonth(mesFaturaDate.getMonth() + parcelaIndex);  // Incrementa o índice da parcela
-
-    return mesFaturaDate.toISOString().split('T')[0];  // Formato YYYY-MM
 }
 
 function atualizarCategorias() {
@@ -415,7 +443,7 @@ function atualizarTela(listaTransacoes) {
     listaTransacoes.forEach((t) => {
         const item = document.createElement("li");
 
-        // 🔥 IMPORTANTE (cursor + estilo)
+        // �� IMPORTANTE (cursor + estilo)
         item.classList.add(t.tipo);
         item.classList.add("item-transacao");
 
@@ -455,7 +483,7 @@ function atualizarTela(listaTransacoes) {
                 </button>
 
                 <button class="btn-delete" onclick="confirmarExclusao('${t.id}')">
-                    🗑️
+                    ��️
                 </button>
             </div>
 
@@ -464,7 +492,7 @@ function atualizarTela(listaTransacoes) {
             </div>
         `;
 
-        // 🔥 clique só na parte esquerda (melhor UX)
+        // �� clique só na parte esquerda (melhor UX)
         const areaClicavel = item.querySelector(".linha-clicavel");
 
         areaClicavel.addEventListener("click", () => {
@@ -806,7 +834,7 @@ window.editarTransacao = function(id) {
         const essencial = document.getElementById("essencial");
         essencial.value = transacao.essencial || "";
 
-        // 🔥 ESSA LINHA RESOLVE TUDO
+        // �� ESSA LINHA RESOLVE TUDO
         essencial.dispatchEvent(new Event("change"));
         atualizarCategorias();
 
@@ -907,10 +935,10 @@ function calcularTotaisPorMes(mes, ano) {
 
         const data = converterDataFirestore(t.data);
 
-        // 🔥 IGNORA registros inválidos
+        // �� IGNORA registros inválidos
         if (!data) return;
 
-        // 🔥 garante que valor é número
+        // �� garante que valor é número
         const valor = Number(t.valor) || 0;
 
         if (data.getMonth() === mes && data.getFullYear() === ano) {
@@ -1413,7 +1441,7 @@ document.getElementById("btn-cancelar-edicao-transacao")
         // limpa campos
         limparFormulario();
 
-        // 🔥 limpa erros visuais
+        // �� limpa erros visuais
         limparErrosFormulario();
 
         // reseta modo edição
@@ -1981,7 +2009,7 @@ document
         ) {
             const valorParcela = t.valor / (parseInt(t.parcelas) || 1);
 
-            // 👉 chave: cartão + mês da fatura
+            // �� chave: cartão + mês da fatura
             const chave = `${t.cartao}__${t.mesFatura}`;
 
             faturas[chave] = (faturas[chave] || 0) + valorParcela;
@@ -2042,7 +2070,7 @@ let saldoVisivel = true;
 let saldoAtual = 0;
 let saldoAnterior = 0;
 
-// 🔥 Atualiza saldo
+// �� Atualiza saldo
 function atualizarSaldoTopoComDados(saldos) {
     let total = 0;
 
@@ -2056,7 +2084,7 @@ function atualizarSaldoTopoComDados(saldos) {
     renderSaldo();
 }
 
-// 🔥 Render correto
+// �� Render correto
 function renderSaldo() {
     const el = document.getElementById("saldo-valor");
 
@@ -2064,18 +2092,18 @@ function renderSaldo() {
     void el.offsetWidth;
 
     if (!saldoVisivel) {
-        // 🔒 Modo oculto
+        // �� Modo oculto
         el.textContent = "••••••";
         el.classList.add("saldo-oculto");
     } else {
-        // 👁️ Modo visível
+        // ��️ Modo visível
         el.classList.remove("saldo-oculto");
 
-        // 🔥 Se estava oculto antes, reinicia do zero
+        // �� Se estava oculto antes, reinicia do zero
         if (el.textContent === "••••••") {
             animarContagem(el, 0, saldoAtual);
         } else {
-            // 🔥 Atualização normal (valor mudou)
+            // �� Atualização normal (valor mudou)
             if (saldoAnterior !== saldoAtual) {
                 animarContagem(el, saldoAnterior, saldoAtual);
             }
@@ -2093,17 +2121,17 @@ function renderSaldo() {
     el.classList.add("animar");
 }
 
-// 🔥 Botão
+// �� Botão
 document.getElementById("toggle-saldo").addEventListener("click", () => {
     saldoVisivel = !saldoVisivel;
 
     const icone = document.getElementById("icone-olho");
-    icone.textContent = saldoVisivel ? "👁" : "🙈";
+    icone.textContent = saldoVisivel ? "��" : "��";
 
     renderSaldo();
 });
 
-// 🔥 Animação confiável
+// �� Animação confiável
 function animarContagem(elemento, inicio, fim, duracao = 800) {
     const start = performance.now();
 
@@ -2170,13 +2198,13 @@ function iniciarListenerSaldo() {
     }
 
     onSnapshot(contasRef, (snapshot) => {
-        console.log("🔥 Contas atualizadas");
+        console.log("�� Contas atualizadas");
         contas = snapshot.docs;
         recalcular();
     });
 
     onSnapshot(transacoesRef, (snapshot) => {
-        console.log("🔥 Transações atualizadas");
+        console.log("�� Transações atualizadas");
         transacoes = snapshot.docs;
         recalcular();
     });
