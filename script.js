@@ -308,20 +308,23 @@ async function adicionarTransacao() {
 
         // Ajustando a data da despesa com base no mês da fatura (caso seja parcelada)
         if (formaPagamento === "credito" && parcelas > 0) {
-            // Convertendo o mês da fatura para o formato correto (YYYY-MM-01)
-            let mesFaturaDate = new Date(mesFatura + "-01");
+            const [anoFatura, mesFaturaNumero] = mesFatura.split("-"); // "2023-06" => [2023, 06]
 
-            // Garantindo que a data seja configurada corretamente para o mês de fatura
-            // Não vamos usar setMonth() para evitar erro de mês anterior
-            let mesInicial = mesFaturaDate.getMonth(); // mês da fatura (0-11)
-            
-            // Agora, garantimos que o mês da fatura está sendo respeitado ao construir as parcelas
+            let ano = parseInt(anoFatura);
+            let mes = parseInt(mesFaturaNumero) - 1; // JavaScript usa 0 para janeiro, então subtrai 1
+
+            // Para cada parcela, ajusta a data
             for (let i = 0; i < parcelas; i++) {
-                let mesParcela = new Date(mesFaturaDate.getTime()); // Clonando a data da fatura
-                mesParcela.setMonth(mesInicial + i); // Ajusta o mês de cada parcela
+                let mesParcela = mes + i; // Ajusta o mês de cada parcela
 
-                // Garantir que a data da parcela sempre seja no primeiro dia do mês
-                let dataParcela = new Date(mesParcela.setDate(1)).toISOString().split('T')[0];
+                // Se o mês ultrapassar dezembro (11), ajusta o ano
+                if (mesParcela > 11) {
+                    mesParcela -= 12; // Volta para janeiro
+                    ano += 1; // Avança para o próximo ano
+                }
+
+                // Cria a data no primeiro dia do mês
+                let dataParcela = `${ano}-${String(mesParcela + 1).padStart(2, "0")}-01`; // Formato: "YYYY-MM-01"
 
                 let transacaoParcela = {
                     ...dados,
