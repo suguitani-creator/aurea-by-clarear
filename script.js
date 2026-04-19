@@ -232,7 +232,7 @@ async function adicionarTransacao() {
         const essencial = document.getElementById("essencial")?.value || "";
         const categoria = document.getElementById("categoria-teste")?.value || "";
         const subcategoria = document.getElementById("subcategoria-teste")?.value || "";
-        const descricao = document.getElementById("descricao-despesa")?.value || "";
+        let descricao = document.getElementById("descricao-despesa")?.value || "";
         const valor = parseFloat(document.getElementById("valor-despesa")?.value);
         const data = document.getElementById("data-despesa")?.value || "";
         const formaPagamento = document.getElementById("forma-pagamento-teste")?.value || "";
@@ -306,6 +306,9 @@ async function adicionarTransacao() {
             }
         }
 
+        // Ajuste no nome da transação (categoria como descrição)
+        descricao = categoria;  // A descrição da transação será o nome da categoria
+
         // Ajustando a data da despesa com base no mês da fatura (caso seja parcelada)
         if (formaPagamento === "credito" && parcelas > 0) {
             const [anoFatura, mesFaturaNumero] = mesFatura.split("-"); // "2023-06" => [2023, 06]
@@ -333,7 +336,7 @@ async function adicionarTransacao() {
                     valor: valor / parcelas, // Distribuindo o valor igualmente entre as parcelas
                     data: dataParcela, // A data da parcela é ajustada de acordo com o mês da fatura
                     parcelas: i + 1, // Indica o número da parcela
-                    descricao // Garantindo que a descrição seja a mesma para todas as parcelas
+                    descricao // Agora a descrição é o nome da categoria
                 };
 
                 // Salvar a parcela como uma nova transação
@@ -350,7 +353,7 @@ async function adicionarTransacao() {
             essencial,
             categoria,
             subcategoria,
-            descricao,
+            descricao,  // Aqui já com o nome da categoria
             valor,
             data,
             formaPagamento,
