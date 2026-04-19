@@ -312,14 +312,18 @@ async function adicionarTransacao() {
             let mesInicial = mesFaturaDate.getMonth(); // mês da fatura (0-11)
 
             for (let i = 0; i < parcelas; i++) {
-                let mesParcela = new Date(mesFaturaDate.setMonth(mesInicial + i));
+                let mesParcela = new Date(mesFaturaDate); // Clonando a data da fatura
+                mesParcela.setMonth(mesInicial + i); // Ajusta o mês de cada parcela
                 let dataParcela = mesParcela.toISOString().split('T')[0]; // Convertendo para o formato YYYY-MM-DD
 
                 let transacaoParcela = {
                     ...dados,
+                    categoria, // Garantindo que a categoria e subcategoria sejam incluídas
+                    subcategoria,
                     valor: valor / parcelas, // Distribuindo o valor igualmente entre as parcelas
                     data: dataParcela, // A data da parcela é ajustada de acordo com o mês da fatura
-                    parcelas: i + 1 // Indica o número da parcela
+                    parcelas: i + 1, // Indica o número da parcela
+                    descricao // Garantindo que a descrição seja a mesma para todas as parcelas
                 };
 
                 // Salvar a parcela como uma nova transação
@@ -345,7 +349,6 @@ async function adicionarTransacao() {
             parcelas,
             mesFatura
         };
-
     }
 
     // ================= LIMPEZA DE DADOS (CRÍTICO) =================
