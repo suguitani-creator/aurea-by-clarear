@@ -308,7 +308,10 @@ async function adicionarTransacao() {
 
         // Ajustando a data da despesa com base no mês da fatura (caso seja parcelada)
         if (formaPagamento === "credito" && parcelas > 0) {
+            // Convertendo o mês da fatura para o formato correto (YYYY-MM-01)
             let mesFaturaDate = new Date(mesFatura + "-01");
+
+            // A primeira parcela deve ser no mês da fatura, então garantimos que seja o primeiro dia
             let mesInicial = mesFaturaDate.getMonth(); // mês da fatura (0-11)
 
             // A primeira parcela será no mês da fatura
