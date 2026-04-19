@@ -306,8 +306,8 @@ async function adicionarTransacao() {
             }
         }
 
-        // Ajuste no nome da transação (categoria como descrição)
-        descricao = categoria;  // A descrição da transação será o nome da categoria
+        // Ajustando a descrição para que seja o nome da categoria
+        descricao = categoria;  // Usando o nome da categoria como descrição
 
         // Ajustando a data da despesa com base no mês da fatura (caso seja parcelada)
         if (formaPagamento === "credito" && parcelas > 0) {
@@ -540,7 +540,7 @@ function gerarDetalhesClean(t) {
     if (t.tipo === "receita") {
         return `
             <div>${t.conta || "-"}</div>
-            <div>${t.descricao || "-"}</div>
+            <div>${t.descricao || "-"}</div>  <!-- A descrição será a categoria para despesas -->
         `;
     }
 
@@ -550,6 +550,11 @@ function gerarDetalhesClean(t) {
             <div>${t.subcategoria || "-"}</div>
             <div>${t.formaPagamento || "-"}</div>
         `;
+
+        // Se a transação for uma despesa, o nome da categoria será exibido na descrição
+        if (t.descricao) {
+            detalhes += `<div>${t.descricao || "-"}</div>`;  // Exibe a categoria como descrição
+        }
 
         if (t.formaPagamento === "credito") {
             detalhes += `
