@@ -483,7 +483,7 @@ function atualizarTela(listaTransacoes) {
                 </button>
 
                 <button class="btn-delete" onclick="confirmarExclusao('${t.id}')">
-                    🗑️
+                    ��️
                 </button>
             </div>
 
