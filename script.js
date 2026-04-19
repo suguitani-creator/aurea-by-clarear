@@ -475,7 +475,8 @@ function atualizarTela(listaTransacoes) {
          else {
         // ================= DESPESA =================
         if (t.tipo === "despesa") {
-            principal = t.categoria || "Despesa";}
+            principal = t.categoria || "Despesa";
+            secundario = t.data ? formatarData(t.data) : "";}
         else {
                 principal = t.essencial || "Despesa";
                 secundario = t.data ? formatarData(t.data) : "";
