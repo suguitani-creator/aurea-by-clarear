@@ -232,7 +232,7 @@ async function adicionarTransacao() {
         const essencial = document.getElementById("essencial")?.value || "";
         const categoria = document.getElementById("categoria-teste")?.value || "";
         const subcategoria = document.getElementById("subcategoria-teste")?.value || "";
-        let descricao = document.getElementById("descricao-despesa")?.value || "";
+        const descricao = document.getElementById("descricao-despesa")?.value || "";
         const valor = parseFloat(document.getElementById("valor-despesa")?.value);
         const data = document.getElementById("data-despesa")?.value || "";
         const formaPagamento = document.getElementById("forma-pagamento-teste")?.value || "";
@@ -306,11 +306,47 @@ async function adicionarTransacao() {
             }
         }
 
-        // Alteração importante: Manter a `descricao` como está, e criar um novo campo `categoriaNome` para armazenar o nome da categoria
+        // Ajustando a data da despesa com base no mês da fatura (caso seja parcelada)
+        if (formaPagamento === "credito" && parcelas > 0) {
+            const [anoFatura, mesFaturaNumero] = mesFatura.split("-"); // "2023-06" => [2023, 06]
+
+            let ano = parseInt(anoFatura);
+            let mes = parseInt(mesFaturaNumero) - 1; // JavaScript usa 0 para janeiro, então subtrai 1
+
+            // Para cada parcela, ajusta a data
+            for (let i = 0; i < parcelas; i++) {
+                let mesParcela = mes + i; // Ajusta o mês de cada parcela
+
+                // Se o mês ultrapassar dezembro (11), ajusta o ano
+                if (mesParcela > 11) {
+                    mesParcela -= 12; // Volta para janeiro
+                    ano += 1; // Avança para o próximo ano
+                }
+
+                // Cria a data no primeiro dia do mês
+                let dataParcela = `${ano}-${String(mesParcela + 1).padStart(2, "0")}-01`; // Formato: "YYYY-MM-01"
+
+                let transacaoParcela = {
+                    ...dados,
+                    categoria, // Garantindo que a categoria e subcategoria sejam incluídas
+                    subcategoria,
+                    valor: valor / parcelas, // Distribuindo o valor igualmente entre as parcelas
+                    data: dataParcela, // A data da parcela é ajustada de acordo com o mês da fatura
+                    parcelas: i + 1, // Indica o número da parcela
+                };
+
+                // Salvar a parcela como uma nova transação
+                await addDoc(collection(db, "users", user.uid, "transacoes"), transacaoParcela);
+            }
+
+            showToast("Despesas parceladas adicionadas!");
+            return;
+        }
+
+        // Caso a despesa não seja parcelada, salva normalmente
         dados = {
             ...dados,
-            descricao,  // Mantendo a descrição original
-            categoriaNome: categoria,  // Agora temos um campo específico para a categoria
+            essencial,
             categoria,
             subcategoria,
             valor,
@@ -425,7 +461,7 @@ function atualizarTela(listaTransacoes) {
     listaTransacoes.forEach((t) => {
         const item = document.createElement("li");
 
-        // IMPORTANTE (cursor + estilo)
+        // �� IMPORTANTE (cursor + estilo)
         item.classList.add(t.tipo);
         item.classList.add("item-transacao");
 
@@ -440,8 +476,11 @@ function atualizarTela(listaTransacoes) {
 
         // ================= DESPESA =================
         if (t.tipo === "despesa") {
-            // Exibe a categoria no título da despesa
-            principal = t.categoriaNome || t.essencial || "Despesa";  // Exibe o nome da categoria no título
+            if (t.essencial === "sim" || t.essencial === "nao") {
+                principal = t.categoria || "Despesa";
+            } else {
+                principal = t.essencial || "Despesa";
+            }
             secundario = t.data ? formatarData(t.data) : "";
         }
 
@@ -467,11 +506,11 @@ function atualizarTela(listaTransacoes) {
             </div>
 
             <div class="detalhes-expandido" style="display:none;">
-                ${gerarDetalhesClean(t)} <!-- Aqui vamos remover a categoria dos detalhes -->
+                ${gerarDetalhesClean(t)}
             </div>
         `;
 
-        // Clique só na parte esquerda (melhor UX)
+        // �� clique só na parte esquerda (melhor UX)
         const areaClicavel = item.querySelector(".linha-clicavel");
 
         areaClicavel.addEventListener("click", () => {
@@ -507,7 +546,6 @@ function gerarDetalhesClean(t) {
             <div>${t.formaPagamento || "-"}</div>
         `;
 
-        // Remover a exibição da categoria dos detalhes
         if (t.formaPagamento === "credito") {
             detalhes += `
                 <div>${t.cartao || "-"}</div>
