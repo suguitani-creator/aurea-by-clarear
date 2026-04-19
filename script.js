@@ -476,13 +476,11 @@ function atualizarTela(listaTransacoes) {
 
         // ================= DESPESA =================
         if (t.tipo === "despesa") {
-            if (t.essencial === "sim" || t.essencial === "nao") {
-                principal = t.categoria || "Despesa";
-            } else {
+            principal = t.categoria || "Despesa";}
+        else {
                 principal = t.essencial || "Despesa";
+                secundario = t.data ? formatarData(t.data) : "";
             }
-            secundario = t.data ? formatarData(t.data) : "";
-        }
 
         item.innerHTML = `
             <div class="item-info linha-clicavel">
