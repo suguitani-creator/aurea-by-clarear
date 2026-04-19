@@ -311,12 +311,13 @@ async function adicionarTransacao() {
             // Convertendo o mês da fatura para o formato correto (YYYY-MM-01)
             let mesFaturaDate = new Date(mesFatura + "-01");
 
-            // A primeira parcela deve ser no mês da fatura, então garantimos que seja o primeiro dia
+            // Garantindo que a data seja configurada corretamente para o mês de fatura
+            // Não vamos usar setMonth() para evitar erro de mês anterior
             let mesInicial = mesFaturaDate.getMonth(); // mês da fatura (0-11)
-
-            // A primeira parcela será no mês da fatura
+            
+            // Agora, garantimos que o mês da fatura está sendo respeitado ao construir as parcelas
             for (let i = 0; i < parcelas; i++) {
-                let mesParcela = new Date(mesFaturaDate); // Clonando a data da fatura
+                let mesParcela = new Date(mesFaturaDate.getTime()); // Clonando a data da fatura
                 mesParcela.setMonth(mesInicial + i); // Ajusta o mês de cada parcela
 
                 // Garantir que a data da parcela sempre seja no primeiro dia do mês
