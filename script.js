@@ -306,44 +306,7 @@ async function adicionarTransacao() {
             }
         }
 
-        // Ajustando a data da despesa com base no mês da fatura (caso seja parcelada)
-        if (formaPagamento === "credito" && parcelas > 0) {
-            const [anoFatura, mesFaturaNumero] = mesFatura.split("-"); // "2023-06" => [2023, 06]
-
-            let ano = parseInt(anoFatura);
-            let mes = parseInt(mesFaturaNumero) - 1; // JavaScript usa 0 para janeiro, então subtrai 1
-
-            // Para cada parcela, ajusta a data
-            for (let i = 0; i < parcelas; i++) {
-                let mesParcela = mes + i; // Ajusta o mês de cada parcela
-
-                // Se o mês ultrapassar dezembro (11), ajusta o ano
-                if (mesParcela > 11) {
-                    mesParcela -= 12; // Volta para janeiro
-                    ano += 1; // Avança para o próximo ano
-                }
-
-                // Cria a data no primeiro dia do mês
-                let dataParcela = `${ano}-${String(mesParcela + 1).padStart(2, "0")}-01`; // Formato: "YYYY-MM-01"
-
-                let transacaoParcela = {
-                    ...dados,
-                    categoria, // Garantindo que a categoria e subcategoria sejam incluídas
-                    subcategoria,
-                    valor: valor / parcelas, // Distribuindo o valor igualmente entre as parcelas
-                    data: dataParcela, // A data da parcela é ajustada de acordo com o mês da fatura
-                    parcelas: i + 1, // Indica o número da parcela
-                };
-
-                // Salvar a parcela como uma nova transação
-                await addDoc(collection(db, "users", user.uid, "transacoes"), transacaoParcela);
-            }
-
-            showToast("Despesas parceladas adicionadas!");
-            return;
-        }
-
-        // Caso a despesa não seja parcelada, salva normalmente
+        // Salvando a forma de pagamento (crédito ou outro)
         dados = {
             ...dados,
             essencial,
@@ -351,7 +314,7 @@ async function adicionarTransacao() {
             subcategoria,
             valor,
             data,
-            formaPagamento,
+            formaPagamento,  // A forma de pagamento será salva corretamente
             conta,
             cartao,
             parcelas,
@@ -365,7 +328,7 @@ async function adicionarTransacao() {
         if (["cartao", "parcelas", "mesFatura"].includes(key)) {
             // Se o campo for vazio, podemos deixar com um valor padrão ou mantê-lo vazio
             if (dados[key] === undefined || dados[key] === null) {
-                dados[key] = ""; // ou você pode usar algum valor padrão como "Não informado"
+                dados[key] = ""; // ou valor padrão
             }
         } else if (
             dados[key] === undefined ||
