@@ -552,6 +552,7 @@ function gerarDetalhesClean(t) {
 
         const forma = (t.formaPagamento || "").toLowerCase();
 
+        // Detalhes para transações no cartão de crédito
         if (forma === "credito") {
             detalhes += `
                 <div>${t.cartao || "-"}</div>
@@ -560,6 +561,7 @@ function gerarDetalhesClean(t) {
             `;
         }
 
+        // Detalhes para transações de pix ou débito
         if (["pix", "debito"].includes(forma)) {
             detalhes += `<div>${t.conta || "-"}</div>`;
         }
