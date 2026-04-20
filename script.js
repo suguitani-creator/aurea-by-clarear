@@ -361,14 +361,20 @@ async function adicionarTransacao() {
 
     // ================= LIMPEZA DE DADOS (CRÍTICO) =================
     Object.keys(dados).forEach(key => {
-        if (
-            dados[key] === undefined ||
-            dados[key] === null ||
-            dados[key] === ""
-        ) {
-            delete dados[key];
+    // Não deletar campos importantes como 'cartao', 'parcelas' ou 'mesFatura' mesmo que estejam vazios
+    if (["cartao", "parcelas", "mesFatura"].includes(key)) {
+        // Se o campo for vazio, podemos deixar com um valor padrão ou mantê-lo vazio
+        if (dados[key] === undefined || dados[key] === null) {
+            dados[key] = ""; // ou você pode usar algum valor padrão como "Não informado"
         }
-    });
+    } else if (
+        dados[key] === undefined ||
+        dados[key] === null ||
+        dados[key] === ""
+    ) {
+        delete dados[key];  // Deleta apenas os campos realmente desnecessários
+    }
+});
 
     // ================= EDIÇÃO =================
     if (idEmEdicao !== null) {
