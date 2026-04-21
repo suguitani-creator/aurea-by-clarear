@@ -2038,18 +2038,40 @@ document
         if (
             t.tipo === "despesa" &&
             t.formaPagamento === "credito" &&
-            t.cartao
+            t.cartao &&
+            t.data
         ) {
+            // ✅ NÃO dividir novamente — o valor já é da parcela
             const valorParcela = t.valor;
 
-            const mes = t.data?.slice(0, 7); // YYYY-MM
-            const chave = `${t.cartao}__${mes}`;
+            // 🔥 usa a DATA da parcela (não mesFatura)
+            const mesRaw = t.data.slice(0, 7); // "2025-05"
+
+            // 🎨 formata para "Mai/25"
+            const mesFormatado = formatarMesAno(mesRaw);
+
+            const chave = `${t.cartao}__${mesFormatado}`;
 
             faturas[chave] = (faturas[chave] || 0) + valorParcela;
         }
     });
 
     return faturas;
+}
+
+function formatarMesAno(data) {
+    if (!data) return "-";
+
+    const [ano, mes] = data.split("-");
+
+    const meses = [
+        "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+        "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+    ];
+
+    const nomeMes = meses[parseInt(mes) - 1];
+
+    return `${nomeMes}/${ano.slice(2)}`;
 }
 
 async function renderizarFaturas() {
