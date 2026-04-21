@@ -313,6 +313,9 @@ async function adicionarTransacao() {
             let ano = parseInt(anoFatura);
             let mes = parseInt(mesFaturaNumero) - 1; // JavaScript usa 0 para janeiro, então subtrai 1
 
+            // Pegar o dia da data de compra
+            const diaCompra = new Date(data).getDate(); // Obtém o dia da data da compra
+
             // Para cada parcela, ajusta a data
             for (let i = 0; i < parcelas; i++) {
                 let mesParcela = mes + i; // Ajusta o mês de cada parcela
@@ -323,8 +326,9 @@ async function adicionarTransacao() {
                     ano += 1; // Avança para o próximo ano
                 }
 
-                // Cria a data no primeiro dia do mês
-                let dataParcela = `${ano}-${String(mesParcela + 1).padStart(2, "0")}-01`; // Formato: "YYYY-MM-01"
+                // Cria a data usando o dia da compra e o mês da fatura
+                let dataParcela = `${ano}-${String(mesParcela + 1).padStart(2, "0")}-${String(diaCompra).padStart(2, "0")}`; // Formato: "YYYY-MM-DD"
+
 
                 let transacaoParcela = {
                     ...dados,
