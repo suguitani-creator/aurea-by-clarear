@@ -2159,7 +2159,7 @@ document.getElementById("toggle-saldo").addEventListener("click", () => {
     saldoVisivel = !saldoVisivel;
 
     const icone = document.getElementById("icone-olho");
-    icone.textContent = saldoVisivel ? "��" : "��";
+    icone.textContent = saldoVisivel ? "👁️" : "🙈";
 
     renderSaldo();
 });
