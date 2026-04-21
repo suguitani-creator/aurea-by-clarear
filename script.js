@@ -253,7 +253,7 @@ async function adicionarTransacao() {
 
         if (formaPagamento === "credito") {
             cartao = document.getElementById("nome-cartao")?.value || "";
-            parcelas = document.getElementById("parcelas")?.value.replace("x", "") || "";  // Remover "x" das parcelas
+            parcelas = document.getElementById("parcelas")?.value.replace("x", "") || "";
             mesFatura = document.getElementById("mes-fatura")?.value || "";
 
             if (!cartao) {
@@ -306,43 +306,37 @@ async function adicionarTransacao() {
             }
         }
 
-        // Ajustando a data da despesa com base no mês da fatura (caso seja parcelada)
+        // Parcelamento
         if (formaPagamento === "credito" && parcelas > 0) {
-            const [anoFatura, mesFaturaNumero] = mesFatura.split("-"); // "2023-06" => [2023, 06]
+            const [anoFatura, mesFaturaNumero] = mesFatura.split("-");
 
             let ano = parseInt(anoFatura);
-            let mes = parseInt(mesFaturaNumero) - 1; // JavaScript usa 0 para janeiro, então subtrai 1
+            let mes = parseInt(mesFaturaNumero) - 1;
 
-            // Pegar o dia da data de compra
-            const diaCompra = new Date(data).getDate(); // Obtém o dia da data da compra
+            const diaCompra = new Date(data).getDate();
 
-            // Para cada parcela, ajusta a data
             for (let i = 0; i < parcelas; i++) {
-                let mesParcela = mes + i; // Ajusta o mês de cada parcela
+                let mesParcela = mes + i;
 
-                // Se o mês ultrapassar dezembro (11), ajusta o ano
                 if (mesParcela > 11) {
-                    mesParcela -= 12; // Volta para janeiro
-                    ano += 1; // Avança para o próximo ano
+                    mesParcela -= 12;
+                    ano += 1;
                 }
 
-                // Cria a data usando o dia da compra e o mês da fatura
-                let dataParcela = `${ano}-${String(mesParcela + 1).padStart(2, "0")}-${String(diaCompra).padStart(2, "0")}`; // Formato: "YYYY-MM-DD"
-
+                let dataParcela = `${ano}-${String(mesParcela + 1).padStart(2, "0")}-${String(diaCompra).padStart(2, "0")}`;
 
                 let transacaoParcela = {
                     ...dados,
                     formaPagamento,
                     cartao,
                     mesFatura,
-                    categoria, // Garantindo que a categoria e subcategoria sejam incluídas
+                    categoria,
                     subcategoria,
-                    valor: valor / parcelas, // Distribuindo o valor igualmente entre as parcelas
-                    data: dataParcela, // A data da parcela é ajustada de acordo com o mês da fatura
-                    parcelas: i + 1, // Indica o número da parcela
+                    valor: valor / parcelas,
+                    data: dataParcela,
+                    parcelas: i + 1,
                 };
 
-                // Salvar a parcela como uma nova transação
                 await addDoc(collection(db, "users", user.uid, "transacoes"), transacaoParcela);
             }
 
@@ -350,7 +344,6 @@ async function adicionarTransacao() {
             return;
         }
 
-        // Caso a despesa não seja parcelada, salva normalmente
         dados = {
             ...dados,
             essencial,
@@ -366,20 +359,61 @@ async function adicionarTransacao() {
         };
     }
 
-    // ================= LIMPEZA DE DADOS (CRÍTICO) =================
+    // ================= PAGAMENTO DE FATURA =================
+    if (tipo === "pagamento_fatura") {
+        const cartao = document.getElementById("cartao-fatura")?.value || "";
+        const mesFatura = document.getElementById("mes-fatura-pagamento")?.value || "";
+        const valor = parseFloat(document.getElementById("valor-fatura")?.value);
+        const data = document.getElementById("data-fatura")?.value || "";
+        const conta = document.getElementById("conta-pagamento-fatura")?.value || "";
+
+        if (!cartao) {
+            marcarErro(document.getElementById("cartao-fatura"));
+        }
+
+        if (!mesFatura) {
+            marcarErro(document.getElementById("mes-fatura-pagamento"));
+        }
+
+        if (isNaN(valor)) {
+            marcarErro(document.getElementById("valor-fatura"));
+        }
+
+        if (!data) {
+            marcarErro(document.getElementById("data-fatura"));
+        }
+
+        if (!conta) {
+            marcarErro(document.getElementById("conta-pagamento-fatura"));
+        }
+
+        if (!cartao || !mesFatura || isNaN(valor) || !data || !conta) {
+            showToast("Preencha todos os campos da fatura", "error");
+            return;
+        }
+
+        dados = {
+            ...dados,
+            cartao,
+            mesFatura,
+            valor,
+            data,
+            conta
+        };
+    }
+
+    // ================= LIMPEZA =================
     Object.keys(dados).forEach(key => {
-        // Não deletar campos importantes como 'cartao', 'parcelas' ou 'mesFatura' mesmo que estejam vazios
         if (["cartao", "parcelas", "mesFatura"].includes(key)) {
-            // Se o campo for vazio, podemos deixar com um valor padrão ou mantê-lo vazio
             if (dados[key] === undefined || dados[key] === null) {
-                dados[key] = ""; // ou valor padrão
+                dados[key] = "";
             }
         } else if (
             dados[key] === undefined ||
             dados[key] === null ||
             dados[key] === ""
         ) {
-            delete dados[key];  // Deleta apenas os campos realmente desnecessários
+            delete dados[key];
         }
     });
 
@@ -405,8 +439,8 @@ async function adicionarTransacao() {
         return;
     }
 
-    // ================= NOVA TRANSAÇÃO =================
-    const docRef = await addDoc(
+    // ================= NOVA =================
+    await addDoc(
         collection(db, "users", user.uid, "transacoes"),
         dados
     );
@@ -1488,17 +1522,25 @@ document.getElementById("btn-cancelar-edicao-transacao")
     });
 
 
-// Alternar entre receita e despesa
-document.getElementById("tipo-teste").addEventListener("change", () => {
+// Alternar entre receita, despesa e pagar fatura de cartão
+document.getElementById("tipo-teste").addEventListener("change", function () {
+    const tipo = this.value;
 
-    const tipo = document.getElementById("tipo-teste").value;
+    document.getElementById("bloco-receita").style.display = "none";
+    document.getElementById("bloco-despesa").style.display = "none";
+    document.getElementById("bloco-pagamento-fatura").style.display = "none";
 
-    document.getElementById("bloco-receita").style.display =
-        tipo === "receita" ? "block" : "none";
+    if (tipo === "receita") {
+        document.getElementById("bloco-receita").style.display = "block";
+    }
 
-    document.getElementById("bloco-despesa").style.display =
-        tipo === "despesa" ? "block" : "none";
+    if (tipo === "despesa") {
+        document.getElementById("bloco-despesa").style.display = "block";
+    }
 
+    if (tipo === "pagamento_fatura") {
+        document.getElementById("bloco-pagamento-fatura").style.display = "block";
+    }
 });
 
 document.getElementById("forma-pagamento-teste").addEventListener("change", () => {
