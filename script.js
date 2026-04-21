@@ -1602,70 +1602,44 @@ function capturarDadosFormularioTeste(){
     return dados;
 }
 
-async function carregarContasTeste(){
+function preencherSelectContas(selectIds, contas) {
+    selectIds.forEach(selectId => {
+        const select = document.getElementById(selectId);
+        if (!select) return;
 
-    const user = auth.currentUser;
-    if (!user) return;
+        let placeholder = "Conta";
 
-    const snapshot = await getDocs(
-        collection(db, "users", user.uid, "contas")
-    );
+        if (selectId.includes("depositada")) placeholder = "Conta Depositada";
+        if (selectId.includes("debitada")) placeholder = "Conta Debitada";
+        if (selectId.includes("pagamento")) placeholder = "Conta de Pagamento";
 
-    const selectReceita = document.getElementById("conta-bancaria-depositada");
-    const selectDespesa = document.getElementById("conta-bancaria-debitada");
+        select.innerHTML = `<option value="" disabled selected>${placeholder}</option>`;
 
-    if (selectReceita) {
-        selectReceita.innerHTML = `
-            <option value="" disabled selected>Conta Depositada</option>
-        `;
-    }
-
-    if (selectDespesa) {
-        selectDespesa.innerHTML = `
-            <option value="" disabled selected>Conta Debitada</option>
-        `;
-    }
-
-    snapshot.forEach(doc => {
-        const conta = doc.data();
-
-        const option1 = document.createElement("option");
-        option1.value = conta.nome;
-        option1.textContent = conta.nome;
-
-        const option2 = option1.cloneNode(true);
-
-        if (selectReceita) selectReceita.appendChild(option1);
-        if (selectDespesa) selectDespesa.appendChild(option2);
+        contas.forEach(conta => {
+            const option = document.createElement("option");
+            option.value = conta.nome;
+            option.textContent = conta.nome;
+            select.appendChild(option);
+        });
     });
 }
 
-async function carregarCartoesTeste(){
+function preencherSelectCartoes(selectIds, cartoes) {
+    selectIds.forEach(selectId => {
+        const select = document.getElementById(selectId);
+        if (!select) return;
 
-    const user = auth.currentUser;
-    if (!user) return;
+        select.innerHTML = `<option value="" disabled selected>Cartão</option>`;
 
-    const snapshot = await getDocs(
-        collection(db, "users", user.uid, "cartoes")
-    );
-
-    const select = document.getElementById("nome-cartao");
-
-    if (!select) return;
-
-    select.innerHTML = "";
-
-    snapshot.forEach(doc => {
-        const cartao = doc.data();
-
-        const option = document.createElement("option");
-        option.value = cartao.nome;
-        option.textContent = cartao.nome;
-
-        select.appendChild(option);
+        cartoes.forEach(cartao => {
+            const option = document.createElement("option");
+            option.value = cartao.nome;
+            option.textContent = cartao.nome;
+            select.appendChild(option);
+        });
     });
-
 }
+
 
 function escutarContasTempoReal() {
     const user = auth.currentUser;
@@ -1674,14 +1648,20 @@ function escutarContasTempoReal() {
     const ref = collection(db, "users", user.uid, "contas");
 
     onSnapshot(ref, (snapshot) => {
-
         const contas = [];
 
         snapshot.forEach(doc => {
             contas.push(doc.data());
         });
 
-        atualizarSelectContas(contas);
+        preencherSelectContas(
+            [
+                "conta-bancaria-depositada",
+                "conta-bancaria-debitada",
+                "conta-pagamento-fatura"
+            ],
+            contas
+        );
     });
 }
 
@@ -1692,63 +1672,22 @@ function escutarCartoesTempoReal() {
     const ref = collection(db, "users", user.uid, "cartoes");
 
     onSnapshot(ref, (snapshot) => {
-
         const cartoes = [];
 
         snapshot.forEach(doc => {
             cartoes.push(doc.data());
         });
 
-        atualizarSelectCartoes(cartoes);
+        preencherSelectCartoes(
+            [
+                "nome-cartao",
+                "cartao-fatura"
+            ],
+            cartoes
+        );
     });
 }
 
-function atualizarSelectContas(contas) {
-
-    const selectReceita = document.getElementById("conta-bancaria-depositada");
-    const selectDespesa = document.getElementById("conta-bancaria-debitada");
-
-    if (selectReceita) {
-        selectReceita.innerHTML = `
-            <option value="" disabled selected>Conta Depositada</option>
-        `;
-    }
-
-    if (selectDespesa) {
-        selectDespesa.innerHTML = `
-            <option value="" disabled selected>Conta Debitada</option>
-        `;
-    }
-
-    contas.forEach(conta => {
-        const option1 = document.createElement("option");
-        option1.value = conta.nome;
-        option1.textContent = conta.nome;
-
-        const option2 = option1.cloneNode(true);
-
-        if (selectReceita) selectReceita.appendChild(option1);
-        if (selectDespesa) selectDespesa.appendChild(option2);
-    });
-}
-function atualizarSelectCartoes(cartoes) {
-
-    const selectCartao = document.getElementById("nome-cartao");
-
-    if (!selectCartao) return;
-
-    selectCartao.innerHTML = `
-        <option value="" disabled selected>Cartão</option>
-    `;
-
-    cartoes.forEach(cartao => {
-        const option = document.createElement("option");
-        option.value = cartao.nome;
-        option.textContent = cartao.nome;
-
-        selectCartao.appendChild(option);
-    });
-}
 
 // ================= CATEGORIAS E SUBCATEGORIAS (TESTE) =================
 
