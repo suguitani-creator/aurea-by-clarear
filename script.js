@@ -2040,10 +2040,10 @@ document
             t.formaPagamento === "credito" &&
             t.cartao
         ) {
-            const valorParcela = t.valor / (parseInt(t.parcelas) || 1);
+            const valorParcela = t.valor;
 
-            // �� chave: cartão + mês da fatura
-            const chave = `${t.cartao}__${t.mesFatura}`;
+            const mes = t.data?.slice(0, 7); // YYYY-MM
+            const chave = `${t.cartao}__${mes}`;
 
             faturas[chave] = (faturas[chave] || 0) + valorParcela;
         }
