@@ -253,7 +253,7 @@ async function adicionarTransacao() {
 
         if (formaPagamento === "credito") {
             cartao = document.getElementById("nome-cartao")?.value || "";
-            parcelas = document.getElementById("parcelas")?.value || "";
+            parcelas = document.getElementById("parcelas")?.value.replace("x", "") || "";  // Remover "x" das parcelas
             mesFatura = document.getElementById("mes-fatura")?.value || "";
 
             if (!cartao) {
