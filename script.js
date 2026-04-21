@@ -560,7 +560,7 @@ function gerarDetalhesClean(t) {
             detalhes += `
                 <div>${t.cartao || "-"}</div>
                 <div>${t.parcelas ? t.parcelas + "x" : "-"}</div>
-                <div>${t.mesFatura ? formatarMesFatura(t.mesFatura) : "-"}</div>
+                <div>${"1a"+ t.mesFatura ? formatarMesFatura(t.mesFatura) : "-"}</div>
             `;
         }
 
