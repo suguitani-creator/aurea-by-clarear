@@ -365,7 +365,7 @@ async function adicionarTransacao() {
         if (["cartao", "parcelas", "mesFatura"].includes(key)) {
             // Se o campo for vazio, podemos deixar com um valor padrão ou mantê-lo vazio
             if (dados[key] === undefined || dados[key] === null) {
-                dados[key] = ""; // ou você pode usar algum valor padrão como "Não informado"
+                dados[key] = ""; // ou valor padrão
             }
         } else if (
             dados[key] === undefined ||
