@@ -329,6 +329,8 @@ async function adicionarTransacao() {
                 let transacaoParcela = {
                     ...dados,
                     formaPagamento,
+                    cartao,
+                    mesFatura,
                     categoria, // Garantindo que a categoria e subcategoria sejam incluídas
                     subcategoria,
                     valor: valor / parcelas, // Distribuindo o valor igualmente entre as parcelas
