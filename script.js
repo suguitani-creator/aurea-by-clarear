@@ -2306,3 +2306,36 @@ function iniciarListenerSaldo() {
         recalcular();
     });
 }
+
+async function pagarFatura(cartaoId, mesFatura, valorPago) {
+    // Atualiza o saldo do mês no dashboard
+    const saldoDoMes = await calcularSaldoMes(); // Calcular saldo do mês atual
+    saldoDoMes.valor -= valorPago;
+    await updateDoc(doc(db, "users", user.uid, "dashboard", "saldo_mes"), {
+        valor: saldoDoMes.valor
+    });
+
+    // Atualiza o saldo da fatura no cartão
+    const fatura = await getFaturaCartao(cartaoId, mesFatura);
+    fatura.saldo = 0; // Marca como pago
+    await updateDoc(doc(db, "users", user.uid, "faturas", fatura.id), {
+        saldo: fatura.saldo
+    });
+
+    // Atualizar o status das transações das parcelas
+    const transacoes = await getTransacoesFatura(cartaoId, mesFatura); // Pega todas as transações da fatura
+    for (let transacao of transacoes) {
+        if (transacao.status !== "pago") {
+            await updateDoc(doc(db, "users", user.uid, "transacoes", transacao.id), {
+                status: "pago"
+            });
+        }
+    }
+
+    // Atualizar o saldo disponível da conta bancária
+    const conta = await getContaAssociada(fatura.conta);
+    conta.saldoDisponivel -= valorPago;  // Deduz o valor do pagamento
+    await updateDoc(doc(db, "users", user.uid, "contas", conta.id), {
+        saldoDisponivel: conta.saldoDisponivel
+    });
+}
