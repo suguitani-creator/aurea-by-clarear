@@ -1104,5 +1104,15 @@ button.modo-edicao:hover {
     display: block;
 }
 
+/* Estilo para transações pendentes */
+.transacao-pendente {
+    background-color: #fff3cd;  /* Cor amarela clara */
+    border-left: 4px solid #ffec3d;  /* Borda amarela */
+}
 
+/* Estilo para transações pagas */
+.transacao-paga {
+    background-color: #d4edda;  /* Cor verde clara */
+    border-left: 4px solid #28a745;  /* Borda verde */
+}
 
