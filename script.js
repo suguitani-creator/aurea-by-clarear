@@ -508,7 +508,7 @@ function atualizarTela(listaTransacoes) {
     listaTransacoes.forEach((t) => {
         const item = document.createElement("li");
 
-        // �� IMPORTANTE (cursor + estilo)
+        // Classificação de tipo de transação
         item.classList.add(t.tipo);
         item.classList.add("item-transacao");
 
@@ -518,17 +518,19 @@ function atualizarTela(listaTransacoes) {
         // ================= RECEITA =================
         if (t.tipo === "receita") {
             principal = t.fonte || "Receita";
-            secundario = t.data ? formatarData(t.data) : "";}
-         else {
+            secundario = t.data ? formatarData(t.data) : "";
+        }
         // ================= DESPESA =================
-        if (t.tipo === "despesa") {
+        else if (t.tipo === "despesa") {
             principal = t.categoria || "Despesa";
-            secundario = t.data ? formatarData(t.data) : "";}
-        else {
-                principal = t.essencial || "Despesa";
-                secundario = t.data ? formatarData(t.data) : "";
-            }}
-        
+            secundario = t.data ? formatarData(t.data) : "";
+        }
+        // ================= PAGAMENTO DE FATURA =================
+        else if (t.tipo === "pagamento_fatura") {
+            principal = `Pagamento de Fatura - ${t.cartao || "Cartão"}`;
+            secundario = t.data ? formatarData(t.data) : "";
+        }
+
         item.innerHTML = `
             <div class="item-info linha-clicavel">
                 <div class="linha-titulo">
@@ -555,7 +557,7 @@ function atualizarTela(listaTransacoes) {
             </div>
         `;
 
-        // �� clique só na parte esquerda (melhor UX)
+        // Clique só na parte esquerda (melhor UX)
         const areaClicavel = item.querySelector(".linha-clicavel");
 
         areaClicavel.addEventListener("click", () => {
@@ -576,7 +578,6 @@ function atualizarTela(listaTransacoes) {
 }
 
 function gerarDetalhesClean(t) {
-
     if (t.tipo === "receita") {
         return `
             <div>${t.conta || "-"}</div>
@@ -585,7 +586,6 @@ function gerarDetalhesClean(t) {
     }
 
     if (t.tipo === "despesa") {
-
         let detalhes = `
             <div>${t.subcategoria || "-"}</div>
             <div>${t.formaPagamento || "-"}</div>
@@ -598,7 +598,7 @@ function gerarDetalhesClean(t) {
             detalhes += `
                 <div>${t.cartao || "-"}</div>
                 <div>${t.parcelas ? t.parcelas + "x" : "-"}</div>
-                <div>${"1a"+ t.mesFatura ? formatarMesFatura(t.mesFatura) : "-"}</div>
+                <div>${t.mesFatura ? formatarMesFatura(t.mesFatura) : "-"}</div>
             `;
         }
 
@@ -608,6 +608,15 @@ function gerarDetalhesClean(t) {
         }
 
         return detalhes;
+    }
+
+    // ================= PAGAMENTO DE FATURA =================
+    if (t.tipo === "pagamento_fatura") {
+        return `
+            <div>${t.cartao || "-"}</div>
+            <div>${t.mesFatura ? formatarMesFatura(t.mesFatura) : "-"}</div>
+            <div>${t.conta || "-"}</div>
+        `;
     }
 
     return "";
@@ -721,7 +730,7 @@ function carregarTransacoesTempoReal() {
 
 function limparFormulario() {
     // Limpar campos de receita
-    document.getElementById("tipo-teste").value = ""; // Tipo (Receita/Despesa)
+    document.getElementById("tipo-teste").value = ""; // Tipo (Receita/Despesa/Pagamento Fatura)
     document.getElementById("fonte").value = ""; // Fonte da receita
     document.getElementById("descricao-receita").value = ""; // Descrição da receita
     document.getElementById("valor-receita").value = ""; // Valor da receita
@@ -741,9 +750,17 @@ function limparFormulario() {
     document.getElementById("parcelas").value = ""; // Parcelas do cartão
     document.getElementById("mes-fatura").value = ""; // Mês da fatura
 
+    // Limpar campos de pagamento de fatura
+    document.getElementById("cartao-fatura").value = ""; // Cartão para pagamento de fatura
+    document.getElementById("mes-fatura-pagamento").value = ""; // Mês da fatura para pagamento
+    document.getElementById("valor-fatura").value = ""; // Valor da fatura
+    document.getElementById("data-fatura").value = ""; // Data do pagamento da fatura
+    document.getElementById("conta-pagamento-fatura").value = ""; // Conta para pagamento da fatura
+
     // Resetando a visibilidade dos campos
     document.getElementById("bloco-receita").style.display = "none"; // Esconde o bloco de receita
     document.getElementById("bloco-despesa").style.display = "none"; // Esconde o bloco de despesa
+    document.getElementById("bloco-pagamento-fatura").style.display = "none"; // Esconde o bloco de pagamento de fatura
     document.getElementById("indicador-edicao").style.display = "none"; // Esconde o indicador de edição
 
     // Limpar outras variáveis de estado
@@ -901,7 +918,7 @@ window.editarTransacao = function(id) {
         const essencial = document.getElementById("essencial");
         essencial.value = transacao.essencial || "";
 
-        // �� ESSA LINHA RESOLVE TUDO
+        // ESSA LINHA RESOLVE TUDO
         essencial.dispatchEvent(new Event("change"));
         atualizarCategorias();
 
@@ -931,7 +948,16 @@ window.editarTransacao = function(id) {
         }   
     }
 
-     // ================= UI (IGUAL AO ORIGINAL) =================
+    // ================= PAGAMENTO DE FATURA =================
+    if (transacao.tipo === "pagamento_fatura") {
+        document.getElementById("cartao-fatura").value = transacao.cartao || "";
+        document.getElementById("mes-fatura-pagamento").value = transacao.mesFatura || "";
+        document.getElementById("valor-fatura").value = transacao.valor || "";
+        document.getElementById("data-fatura").value = transacao.data || "";
+        document.getElementById("conta-pagamento-fatura").value = transacao.conta || "";
+    }
+
+    // ================= UI (IGUAL AO ORIGINAL) =================
     document.getElementById("indicador-edicao").style.display = "flex";
 
     idEmEdicao = id;
@@ -1771,7 +1797,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-function validarFormularioTeste(dados){
+function validarFormularioTeste(dados) {
 
     // VALOR E DATA
     if (!dados.valor || dados.valor <= 0) {
@@ -1782,7 +1808,7 @@ function validarFormularioTeste(dados){
         return "Informe a data";
     }
 
-    // RECEITA
+    // ================= RECEITA =================
     if (dados.tipo === "receita") {
 
         if (!dados.fonte) {
@@ -1796,7 +1822,7 @@ function validarFormularioTeste(dados){
         return null;
     }
 
-    // DESPESA
+    // ================= DESPESA =================
     if (dados.tipo === "despesa") {
 
         if (!dados.essencial) {
@@ -1805,36 +1831,36 @@ function validarFormularioTeste(dados){
 
         // INVESTIMENTO / FINANCEIRO
         if (
-    dados.essencial === "investimento" ||
-    dados.essencial === "financeiro"
-) {
+            dados.essencial === "investimento" ||
+            dados.essencial === "financeiro"
+        ) {
 
-    if (!dados.formaPagamento) {
-        return "Selecione a forma de pagamento";
-    }
+            if (!dados.formaPagamento) {
+                return "Selecione a forma de pagamento";
+            }
 
-    // PIX ou DÉBITO → precisa conta
-    if (
-        (dados.formaPagamento === "pix" || dados.formaPagamento === "debito") &&
-        !dados.contaDebitada
-    ) {
-        return "Selecione a conta para débito";
-    }
+            // PIX ou DÉBITO → precisa conta
+            if (
+                (dados.formaPagamento === "pix" || dados.formaPagamento === "debito") &&
+                !dados.contaDebitada
+            ) {
+                return "Selecione a conta para débito";
+            }
 
-    // CRÉDITO → precisa cartão
-    if (dados.formaPagamento === "credito") {
+            // CRÉDITO → precisa cartão
+            if (dados.formaPagamento === "credito") {
 
-        if (!dados.cartao) {
-            return "Selecione o cartão";
+                if (!dados.cartao) {
+                    return "Selecione o cartão";
+                }
+
+                if (!dados.parcelas) {
+                    return "Informe as parcelas";
+                }
+            }
+
+            return null;
         }
-
-        if (!dados.parcelas) {
-            return "Informe as parcelas";
-        }
-    }
-
-    return null;
-}
 
         // ESSENCIAL / NÃO ESSENCIAL
         if (!dados.categoria) {
@@ -1869,6 +1895,32 @@ function validarFormularioTeste(dados){
             }
 
         }
+    }
+
+    // ================= PAGAMENTO DE FATURA =================
+    if (dados.tipo === "pagamento_fatura") {
+        
+        if (!dados.cartao) {
+            return "Selecione o cartão para o pagamento da fatura";
+        }
+
+        if (!dados.mesFatura) {
+            return "Informe o mês da fatura";
+        }
+
+        if (!dados.valor || dados.valor <= 0) {
+            return "Informe um valor válido para o pagamento";
+        }
+
+        if (!dados.data) {
+            return "Informe a data do pagamento da fatura";
+        }
+
+        if (!dados.conta) {
+            return "Selecione a conta de pagamento";
+        }
+
+        return null;
     }
 
     return null;
