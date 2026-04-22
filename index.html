@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="ui-improvements.css">
         <link rel="manifest" href="manifest.json">
         <meta name="theme-color" content="#3E2F23">  
-        <script  type="module" src="script.js"></script>
+        <script type="module" src="script.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
 
@@ -122,6 +122,15 @@
                             <option value="pagamento_fatura">Pagar Fatura de Cartão</option>
                         </select>
                         <div></div>
+                    </div>
+
+                    <!-- Status (novo campo) -->
+                    <div class="form-grid-2" id="bloco-status" style="display:none;">
+                        <select id="status" class="input full">
+                            <option value="">Selecione o status</option>
+                            <option value="pendente">Pendente</option>
+                            <option value="pago">Pago</option>
+                        </select>
                     </div>
 
                     <!--BLOCO RECEITA-->
