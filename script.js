@@ -508,7 +508,7 @@ function atualizarTela(listaTransacoes) {
     listaTransacoes.forEach((t) => {
         const item = document.createElement("li");
 
-        // Classificação de tipo de transação
+        // Adiciona classe para tipo de transação (pode ser 'receita', 'despesa' ou 'pagamento_fatura')
         item.classList.add(t.tipo);
         item.classList.add("item-transacao");
 
@@ -531,8 +531,17 @@ function atualizarTela(listaTransacoes) {
             secundario = t.data ? formatarData(t.data) : "";
         }
 
+        // ============================================
+        // Definindo o status da transação (pendente ou paga)
+        let statusClass = "";  // classe para indicar o status
+        if (t.status === "pago") {
+            statusClass = "transacao-paga";  // classe para transação paga
+        } else {
+            statusClass = "transacao-pendente";  // classe para transação pendente
+        }
+
         item.innerHTML = `
-            <div class="item-info linha-clicavel">
+            <div class="item-info linha-clicavel ${statusClass}">
                 <div class="linha-titulo">
                     <strong>${principal}</strong>
                     <span class="setinha">▼</span>
