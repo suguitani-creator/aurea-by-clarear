@@ -925,7 +925,7 @@ window.editarTransacao = function(id) {
     const tipo = document.getElementById("tipo-teste");
     tipo.value = transacao.tipo;
 
-    tipo.dispatchEvent(new Event("change"));
+    tipo.dispatchEvent(new Event("change")); // Isso vai ativar a lógica para mostrar/ocultar o status
 
     // ================= RECEITA =================
     if (transacao.tipo === "receita") {
@@ -969,11 +969,6 @@ window.editarTransacao = function(id) {
             document.getElementById("parcelas").value = transacao.parcelas || "";
             document.getElementById("mes-fatura").value = transacao.mesFatura || "";
         }   
-
-        // Se for cartão de crédito, garantir que o status seja "pendente"
-        if (transacao.formaPagamento === "credito" && !transacao.status) {
-            transacao.status = "pendente";  // Adiciona "pendente" se não houver status
-        }
     }
 
     // ================= PAGAMENTO DE FATURA =================
@@ -983,9 +978,6 @@ window.editarTransacao = function(id) {
         document.getElementById("valor-fatura").value = transacao.valor || "";
         document.getElementById("data-fatura").value = transacao.data || "";
         document.getElementById("conta-pagamento-fatura").value = transacao.conta || "";
-
-        // O status de pagamento de fatura deve ser "pago"
-        transacao.status = "pago";
     }
 
     // ================= UI (IGUAL AO ORIGINAL) =================
@@ -1599,6 +1591,26 @@ document.getElementById("tipo-teste").addEventListener("change", function () {
         document.getElementById("bloco-pagamento-fatura").style.display = "block";
     }
 });
+
+document.getElementById("tipo-teste").addEventListener("change", function() {
+    const tipoTransacao = this.value;
+    
+    // Mostrar/Esconder o campo de status baseado no tipo de transação
+    if (tipoTransacao === "credito" || tipoTransacao === "pagamento_fatura") {
+        document.getElementById("bloco-status").style.display = "block"; // Exibe o campo status
+    } else {
+        document.getElementById("bloco-status").style.display = "none"; // Esconde o campo status
+    }
+});
+
+// Atualizar a visibilidade do campo de status quando o tipo de transação for editado ou carregado
+function atualizarVisibilidadeStatus(tipoTransacao) {
+    if (tipoTransacao === "credito" || tipoTransacao === "pagamento_fatura") {
+        document.getElementById("bloco-status").style.display = "block"; // Exibe o campo status
+    } else {
+        document.getElementById("bloco-status").style.display = "none"; // Esconde o campo status
+    }
+}
 
 document.getElementById("forma-pagamento-teste").addEventListener("change", () => {
 
