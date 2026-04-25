@@ -449,6 +449,13 @@ async function adicionarTransacao() {
         dados
     );
 
+    // 🔥 AQUI entra a mágica
+    await quitarFatura({
+        userId: user.uid,
+        cartao: dados.cartao,
+        mesFatura: dados.mesFatura
+    });
+
     showToast("Transação adicionada!");
     limparFormulario();
 }
@@ -2379,3 +2386,34 @@ async function pagarFatura(cartaoId, mesFatura, valorPago) {
     });
 }
 
+async function quitarFatura({ userId, cartao, mesFatura }) {
+
+    const ref = collection(db, "users", userId, "transacoes");
+
+    const q = query(
+        ref,
+        where("tipo", "==", "despesa"),
+        where("formaPagamento", "==", "credito"),
+        where("cartao", "==", cartao),
+        where("mesFatura", "==", mesFatura),
+        where("status", "==", "pendente")
+    );
+
+    const snapshot = await getDocs(q);
+
+    const promises = [];
+
+    snapshot.forEach(docSnap => {
+        const docRef = doc(db, "users", userId, "transacoes", docSnap.id);
+
+        promises.push(
+            updateDoc(docRef, {
+                status: "pago"
+            })
+        );
+    });
+
+    await Promise.all(promises);
+
+    console.log(`Fatura quitada: ${cartao} - ${mesFatura}`);
+}
