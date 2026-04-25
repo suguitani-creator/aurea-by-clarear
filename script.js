@@ -682,12 +682,20 @@ async function removerTransacao(id) {
     const user = auth.currentUser;
     if (!user) return;
 
-    // 🔥 BUSCAR A TRANSAÇÃO CORRETA
-    const transacao = transacoes.find(t => t.id === id);
-    if (!transacao) return;
+    // 🔥 BUSCA DIRETO DO FIRESTORE (100% confiável)
+    const docRef = doc(db, "users", user.uid, "transacoes", id);
+    const docSnap = await getDoc(docRef);
 
-    // 🔥 SE FOR PAGAMENTO DE FATURA → REVERTER STATUS
+    if (!docSnap.exists()) return;
+
+    const transacao = docSnap.data();
+
+    console.log("Transação a remover:", transacao);
+
+    // 🔥 AGORA SIM: SEMPRE FUNCIONA
     if (transacao.tipo === "pagamento_fatura") {
+        console.log("Chamando reabrirFatura");
+
         await reabrirFatura({
             userId: user.uid,
             cartao: transacao.cartao,
@@ -706,7 +714,7 @@ async function removerTransacao(id) {
     }
 
     setTimeout(async () => {
-        await deleteDoc(doc(db, "users", user.uid, "transacoes", id));
+        await deleteDoc(docRef);
         carregarTransacoesTempoReal();
         showToast("Transação removida", "delete");
     }, 300);
