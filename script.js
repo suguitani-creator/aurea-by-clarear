@@ -2333,35 +2333,51 @@ function iniciarListenerSaldo() {
     let transacoes = [];
 
     function recalcular() {
-        const saldos = {};
+    const saldos = {};
 
-        // Contas
-        contas.forEach(doc => {
-            const data = doc.data();
-            if (data.nome && data.saldo !== undefined) {
-                saldos[data.nome] = Number(data.saldo) || 0;
-            }
-        });
+    // ================= CONTAS =================
+    contas.forEach(doc => {
+        const data = doc.data();
+        if (data.nome && data.saldo !== undefined) {
+            saldos[data.nome] = Number(data.saldo) || 0;
+        }
+    });
 
-        // Transações
-        transacoes.forEach(doc => {
-            const t = doc.data();
-            const valor = Number(t.valor);
+    // ================= TRANSAÇÕES =================
+    transacoes.forEach(doc => {
+        const t = doc.data();
+        const valor = Number(t.valor);
 
-            if (!t.conta || isNaN(valor)) return;
+        if (!t.conta || isNaN(valor)) return;
 
-            if (t.tipo === "receita") {
-                saldos[t.conta] = (saldos[t.conta] || 0) + valor;
-            }
+        // ===== RECEITA =====
+        if (t.tipo === "receita") {
+            saldos[t.conta] = (saldos[t.conta] || 0) + valor;
+        }
 
-            if (t.tipo === "despesa") {
+        // ===== DESPESA =====
+        if (t.tipo === "despesa") {
+
+            // PIX ou DÉBITO → sempre impacta
+            if (t.formaPagamento === "pix" || t.formaPagamento === "debito") {
                 saldos[t.conta] = (saldos[t.conta] || 0) - valor;
             }
-        });
 
-        atualizarSaldoTopoComDados(saldos);
-        renderizarSaldoContasComDados(saldos);
-    }
+            // CRÉDITO → só impacta quando estiver pago
+            if (t.formaPagamento === "credito" && t.status === "pago") {
+                saldos[t.conta] = (saldos[t.conta] || 0) - valor;
+            }
+        }
+
+        // ===== PAGAMENTO DE FATURA =====
+        if (t.tipo === "pagamento_fatura") {
+            saldos[t.conta] = (saldos[t.conta] || 0) - valor;
+        }
+    });
+
+    atualizarSaldoTopoComDados(saldos);
+    renderizarSaldoContasComDados(saldos);
+}
 
     onSnapshot(contasRef, (snapshot) => {
         console.log("�� Contas atualizadas");
