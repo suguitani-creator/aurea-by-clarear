@@ -274,7 +274,7 @@ async function adicionarTransacao() {
             }
 
             // Adiciona o status "pendente" para as transações com cartão de crédito
-            dados.status = "pendente";
+            dados.status = "pendente"; // A transação de crédito começa como "pendente"
         }
 
         if (isNaN(valor)) {
@@ -403,7 +403,6 @@ async function adicionarTransacao() {
             valor,
             data,
             conta,
-            status: "pago"  // Quando for pagamento de fatura, o status é "pago"
         };
     }
 
@@ -537,12 +536,14 @@ function atualizarTela(listaTransacoes) {
         }
 
         // ============================================
-        // Definindo o status da transação (pendente ou paga)
+        // Definindo o status da transação (pendente ou paga) somente para "despesa" com "crédito"
         let statusClass = "";  // classe para indicar o status
-        if (t.status === "pago") {
-            statusClass = "transacao-paga";  // classe para transação paga
-        } else {
-            statusClass = "transacao-pendente";  // classe para transação pendente
+        if (t.tipo === "despesa" && t.formaPagamento === "credito") {
+            if (t.status === "pago") {
+                statusClass = "transacao-paga";  // classe para transação paga
+            } else {
+                statusClass = "transacao-pendente";  // classe para transação pendente
+            }
         }
 
         item.innerHTML = `
@@ -623,8 +624,10 @@ function gerarDetalhesClean(t) {
             detalhes += `<div>${t.conta || "-"}</div>`;
         }
 
-        // Exibir status da transação (pendente ou pago)
-        detalhes += `<div>Status: ${t.status === "pago" ? "Pago" : "Pendente"}</div>`;
+        // Exibir status da transação (pendente ou pago) apenas para despesas com cartão de crédito
+        if (t.formaPagamento === "credito") {
+            detalhes += `<div>Status: ${t.status === "pago" ? "Pago" : "Pendente"}</div>`;
+        }
 
         return detalhes;
     }
@@ -635,7 +638,6 @@ function gerarDetalhesClean(t) {
             <div>${t.cartao || "-"}</div>
             <div>${t.mesFatura ? formatarMesFatura(t.mesFatura) : "-"}</div>
             <div>${t.conta || "-"}</div>
-            <div>Status: ${t.status === "pago" ? "Pago" : "Pendente"}</div>  <!-- Exibe o status -->
         `;
     }
 
@@ -777,7 +779,7 @@ function limparFormulario() {
     document.getElementById("data-fatura").value = ""; // Data do pagamento da fatura
     document.getElementById("conta-pagamento-fatura").value = ""; // Conta para pagamento da fatura
 
-    // Limpar o campo de status
+    // Limpar o campo de status (somente para despesas com cartão de crédito)
     document.getElementById("status").value = ""; // Limpa o campo status
 
     // Resetando a visibilidade dos campos
@@ -941,7 +943,7 @@ window.editarTransacao = function(id) {
         const essencial = document.getElementById("essencial");
         essencial.value = transacao.essencial || "";
 
-        // ESSA LINHA RESOLVE TUDO
+        // Essa linha resolve tudo
         essencial.dispatchEvent(new Event("change"));
         atualizarCategorias();
 
@@ -963,12 +965,14 @@ window.editarTransacao = function(id) {
 
         if (transacao.formaPagamento === "pix" || transacao.formaPagamento === "debito") {
             document.getElementById("conta-bancaria-debitada").value = transacao.conta || "";
-        } 
+        }
+
         if (transacao.formaPagamento === "credito") {
             document.getElementById("nome-cartao").value = transacao.cartao || "";
             document.getElementById("parcelas").value = transacao.parcelas || "";
             document.getElementById("mes-fatura").value = transacao.mesFatura || "";
-        }   
+            document.getElementById("status").value = transacao.status || "";  // Preenche o status apenas para forma de pagamento "crédito"
+        }
     }
 
     // ================= PAGAMENTO DE FATURA =================
@@ -1571,13 +1575,14 @@ document.getElementById("btn-cancelar-edicao-transacao")
     });
 
 
-// Alternar entre receita, despesa e pagar fatura de cartão
 document.getElementById("tipo-teste").addEventListener("change", function () {
     const tipo = this.value;
 
+    // Esconde todos os blocos inicialmente
     document.getElementById("bloco-receita").style.display = "none";
     document.getElementById("bloco-despesa").style.display = "none";
     document.getElementById("bloco-pagamento-fatura").style.display = "none";
+    document.getElementById("bloco-status").style.display = "none";  // Esconde o bloco de status ao mudar tipo
 
     if (tipo === "receita") {
         document.getElementById("bloco-receita").style.display = "block";
@@ -1592,37 +1597,27 @@ document.getElementById("tipo-teste").addEventListener("change", function () {
     }
 });
 
-document.getElementById("tipo-teste").addEventListener("change", function() {
-    const tipoTransacao = this.value;
-    
-    // Mostrar/Esconder o campo de status baseado no tipo de transação
-    if (tipoTransacao === "credito" || tipoTransacao === "pagamento_fatura") {
-        document.getElementById("bloco-status").style.display = "block"; // Exibe o campo status
-    } else {
-        document.getElementById("bloco-status").style.display = "none"; // Esconde o campo status
-    }
+document.getElementById("forma-pagamento-teste").addEventListener("change", () => {
+    const forma = document.getElementById("forma-pagamento-teste").value;
+
+    // Exibe/esconde o campo de cartão dependendo da forma de pagamento
+    document.getElementById("bloco-cartao").style.display =
+        forma === "credito" ? "block" : "none";
+
+    // Exibe/esconde a conta para pix ou débito
+    document.getElementById("bloco-conta-debito").style.display =
+        (forma === "pix" || forma === "debito") ? "block" : "none";
 });
 
 // Atualizar a visibilidade do campo de status quando o tipo de transação for editado ou carregado
 function atualizarVisibilidadeStatus(tipoTransacao) {
-    if (tipoTransacao === "credito" || tipoTransacao === "pagamento_fatura") {
+    // Exibe o campo de status apenas para "despesa" com cartão de crédito ou "pagamento_fatura"
+    if (tipoTransacao === "despesa" && document.getElementById("forma-pagamento-teste").value === "credito") {
         document.getElementById("bloco-status").style.display = "block"; // Exibe o campo status
     } else {
         document.getElementById("bloco-status").style.display = "none"; // Esconde o campo status
     }
 }
-
-document.getElementById("forma-pagamento-teste").addEventListener("change", () => {
-
-    const forma = document.getElementById("forma-pagamento-teste").value;
-
-    document.getElementById("bloco-cartao").style.display =
-        forma === "credito" ? "block" : "none";
-
-    document.getElementById("bloco-conta-debito").style.display =
-        (forma === "pix" || forma === "debito") ? "block" : "none";
-
-});
 
 
 function capturarDadosFormularioTeste(){
@@ -1879,7 +1874,7 @@ function validarFormularioTeste(dados) {
                 return "Selecione a forma de pagamento";
             }
 
-            // PIX ou DÉBITO → precisa conta
+            // PIX ou DÉBITO
             if (
                 (dados.formaPagamento === "pix" || dados.formaPagamento === "debito") &&
                 !dados.contaDebitada
@@ -1887,7 +1882,7 @@ function validarFormularioTeste(dados) {
                 return "Selecione a conta para débito";
             }
 
-            // CRÉDITO → precisa cartão
+            // CRÉDITO
             if (dados.formaPagamento === "credito") {
 
                 if (!dados.cartao) {
@@ -1896,6 +1891,11 @@ function validarFormularioTeste(dados) {
 
                 if (!dados.parcelas) {
                     return "Informe as parcelas";
+                }
+
+                // 👉 STATUS só existe aqui
+                if (!dados.status) {
+                    return "Selecione o status da despesa";
                 }
             }
 
@@ -1923,7 +1923,7 @@ function validarFormularioTeste(dados) {
             return "Selecione a conta";
         }
 
-        // CARTÃO
+        // CRÉDITO
         if (dados.formaPagamento === "credito") {
 
             if (!dados.cartao) {
@@ -1934,7 +1934,13 @@ function validarFormularioTeste(dados) {
                 return "Informe as parcelas";
             }
 
+            // 👉 STATUS só aqui também
+            if (!dados.status) {
+                return "Selecione o status da despesa";
+            }
         }
+
+        return null;
     }
 
     // ================= PAGAMENTO DE FATURA =================
@@ -1960,10 +1966,7 @@ function validarFormularioTeste(dados) {
             return "Selecione a conta de pagamento";
         }
 
-        // Verificar se o status da fatura não está vazio ou incorreto (se for relevante para validação)
-        if (dados.status && dados.status !== "pendente" && dados.status !== "pago") {
-            return "Status inválido para o pagamento da fatura";
-        }
+        // 🚫 NÃO EXISTE STATUS AQUI
 
         return null;
     }
