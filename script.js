@@ -924,11 +924,8 @@ document.getElementById("confirmar-exclusao").addEventListener("click", async ()
 
         } else {
 
-            await deleteDoc(
-                doc(db, "users", user.uid, "transacoes", idParaExcluir)
-            );
-
-            showToast("Transação removida", "delete");
+            // 🔥 AGORA SIM PASSA PELA LÓGICA COMPLETA
+            await removerTransacao(idParaExcluir);
 
         }
 
