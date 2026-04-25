@@ -333,7 +333,7 @@ async function adicionarTransacao() {
                     ...dados,
                     formaPagamento,
                     cartao,
-                    mesFatura,
+                    mesFatura: `${ano}-${String(mesParcela + 1).padStart(2, "0")}`,
                     categoria,
                     subcategoria,
                     valor: valor / parcelas,
@@ -681,6 +681,14 @@ function calcularSaldo(listaTransacoes) {
 async function removerTransacao(id) {
     const user = auth.currentUser;
     if (!user) return;
+
+    if (transacao.tipo === "pagamento_fatura") {
+    await reabrirFatura({
+        userId: user.uid,
+        cartao: transacao.cartao,
+        mesFatura: transacao.mesFatura
+    });
+}
 
     const elemento = document.querySelector(`button[onclick*="${id}"]`).closest("li");
 
@@ -2417,4 +2425,36 @@ async function quitarFatura({ userId, cartao, mesFatura }) {
     await Promise.all(promises);
 
     console.log(`Fatura quitada: ${cartao} - ${mesFatura}`);
+}
+
+async function reabrirFatura({ userId, cartao, mesFatura }) {
+
+    const ref = collection(db, "users", userId, "transacoes");
+
+    const q = query(
+        ref,
+        where("tipo", "==", "despesa"),
+        where("formaPagamento", "==", "credito"),
+        where("cartao", "==", cartao),
+        where("mesFatura", "==", mesFatura),
+        where("status", "==", "pago")
+    );
+
+    const snapshot = await getDocs(q);
+
+    const promises = [];
+
+    snapshot.forEach(docSnap => {
+        const docRef = doc(db, "users", userId, "transacoes", docSnap.id);
+
+        promises.push(
+            updateDoc(docRef, {
+                status: "pendente"
+            })
+        );
+    });
+
+    await Promise.all(promises);
+
+    console.log(`Fatura reaberta: ${cartao} - ${mesFatura}`);
 }
