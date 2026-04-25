@@ -657,10 +657,30 @@ function calcularSaldo(listaTransacoes) {
     let totalDespesas = 0;
 
     listaTransacoes.forEach(t => {
+        const valor = Number(t.valor) || 0;
+
+        // ===== RECEITA =====
         if (t.tipo === "receita") {
-            totalReceitas += t.valor;
-        } else {
-            totalDespesas += t.valor;
+            totalReceitas += valor;
+        }
+
+        // ===== DESPESA REAL =====
+        if (t.tipo === "despesa") {
+
+            // PIX / DÉBITO → sempre entra
+            if (t.formaPagamento === "pix" || t.formaPagamento === "debito") {
+                totalDespesas += valor;
+            }
+
+            // CRÉDITO → só entra se estiver pago
+            if (t.formaPagamento === "credito" && t.status === "pago") {
+                totalDespesas += valor;
+            }
+        }
+
+        // ===== PAGAMENTO DE FATURA =====
+        if (t.tipo === "pagamento_fatura") {
+            totalDespesas += valor;
         }
     });
 
