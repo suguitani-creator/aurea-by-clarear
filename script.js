@@ -2440,27 +2440,30 @@ async function reabrirFatura({ userId, cartao, mesFatura }) {
 
     const ref = collection(db, "users", userId, "transacoes");
 
-    const q = query(
-        ref,
-        where("tipo", "==", "despesa"),
-        where("formaPagamento", "==", "credito"),
-        where("cartao", "==", cartao),
-        where("mesFatura", "==", mesFatura),
-        where("status", "==", "pago")
-    );
-
-    const snapshot = await getDocs(q);
+    const snapshot = await getDocs(ref);
 
     const promises = [];
 
     snapshot.forEach(docSnap => {
-        const docRef = doc(db, "users", userId, "transacoes", docSnap.id);
+        const t = docSnap.data();
 
-        promises.push(
-            updateDoc(docRef, {
-                status: "pendente"
-            })
-        );
+        if (
+            t.tipo === "despesa" &&
+            t.formaPagamento === "credito" &&
+            t.cartao === cartao &&
+            t.mesFatura === mesFatura &&
+            t.status === "pago"
+        ) {
+            console.log("Revertendo:", docSnap.id);
+
+            const docRef = doc(db, "users", userId, "transacoes", docSnap.id);
+
+            promises.push(
+                updateDoc(docRef, {
+                    status: "pendente"
+                })
+            );
+        }
     });
 
     await Promise.all(promises);
