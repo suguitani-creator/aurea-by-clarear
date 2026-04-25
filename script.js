@@ -682,19 +682,28 @@ async function removerTransacao(id) {
     const user = auth.currentUser;
     if (!user) return;
 
+    // 🔥 BUSCAR A TRANSAÇÃO CORRETA
+    const transacao = transacoes.find(t => t.id === id);
+    if (!transacao) return;
+
+    // 🔥 SE FOR PAGAMENTO DE FATURA → REVERTER STATUS
     if (transacao.tipo === "pagamento_fatura") {
-    await reabrirFatura({
-        userId: user.uid,
-        cartao: transacao.cartao,
-        mesFatura: transacao.mesFatura
-    });
-}
+        await reabrirFatura({
+            userId: user.uid,
+            cartao: transacao.cartao,
+            mesFatura: transacao.mesFatura
+        });
+    }
 
-    const elemento = document.querySelector(`button[onclick*="${id}"]`).closest("li");
+    const elemento = document
+        .querySelector(`button[onclick*="${id}"]`)
+        ?.closest("li");
 
-    elemento.style.transition = "all 0.3s ease";
-    elemento.style.opacity = "0";
-    elemento.style.transform = "translateX(10px)";
+    if (elemento) {
+        elemento.style.transition = "all 0.3s ease";
+        elemento.style.opacity = "0";
+        elemento.style.transform = "translateX(10px)";
+    }
 
     setTimeout(async () => {
         await deleteDoc(doc(db, "users", user.uid, "transacoes", id));
