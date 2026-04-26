@@ -1769,6 +1769,57 @@ const CATEGORIAS = {
     }
 };
 
+function carregarCategoriasTeste() {
+    const select = document.getElementById("categoria-teste");
+
+    select.innerHTML = '<option value="" disabled selected>Categoria</option>';
+
+    CATEGORIAS.receita.forEach(cat => {
+        const option = document.createElement("option");
+        option.value = cat.toLowerCase();
+        option.textContent = cat;
+        select.appendChild(option);
+    });
+
+    Object.keys(CATEGORIAS.despesa).forEach(cat => {
+        const option = document.createElement("option");
+        option.value = cat.toLowerCase();
+        option.textContent =
+            cat.charAt(0).toUpperCase() + cat.slice(1);
+        select.appendChild(option);
+    });
+}
+
+function atualizarSubcategoriasTeste() {
+    const categoria = document.getElementById("categoria-teste");
+    const subcategoria = document.getElementById("subcategoria-teste");
+
+    if (!categoria || !subcategoria) return;
+
+    const selecionada = categoria.value;
+
+    subcategoria.innerHTML = "";
+
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Subcategoria";
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    subcategoria.appendChild(defaultOption);
+
+    if (!selecionada) return;
+
+    const subcategorias = CATEGORIAS.despesa[selecionada];
+
+    if (subcategorias) {
+        subcategorias.forEach(sub => {
+            const option = document.createElement("option");
+            option.value = sub.toLowerCase();
+            option.textContent = sub;
+            subcategoria.appendChild(option);
+        });
+    }
+}
 
 // Inicialização correta
 document.addEventListener("DOMContentLoaded", () => {
