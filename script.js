@@ -2166,6 +2166,7 @@ document
         if (
             t.tipo === "despesa" &&
             t.formaPagamento === "credito" &&
+            t.status !== "pago" && // 🔥 ESSA LINHA É A CHAVE
             t.cartao &&
             t.data
         ) {
@@ -2231,8 +2232,8 @@ async function renderizarFaturas() {
     const totalDiv = document.createElement("div");
     totalDiv.className = "saldo-total";
     totalDiv.innerHTML = `
-        <span>Total</span>
-        <span>R$ ${total.toFixed(2)}</span>
+    <span>💳 Comprometido</span>
+    <span>R$ ${total.toFixed(2)}</span>
     `;
 
     container.appendChild(totalDiv);
