@@ -2232,7 +2232,7 @@ async function renderizarFaturas() {
     const totalDiv = document.createElement("div");
     totalDiv.className = "saldo-total";
     totalDiv.innerHTML = `
-    <span>💳 Comprometido</span>
+    <span> Comprometido</span>
     <span>R$ ${total.toFixed(2)}</span>
     `;
 
