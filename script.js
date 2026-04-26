@@ -1770,6 +1770,19 @@ const CATEGORIAS = {
 };
 
 
+// Inicialização correta
+document.addEventListener("DOMContentLoaded", () => {
+
+    carregarCategoriasTeste();
+    atualizarSubcategoriasTeste();
+
+    const categoria = document.getElementById("categoria-teste");
+
+    if (categoria) {
+        categoria.addEventListener("change", atualizarSubcategoriasTeste);
+    }
+
+});
 
 function validarFormularioTeste(dados) {
 
