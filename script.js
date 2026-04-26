@@ -667,15 +667,12 @@ function calcularSaldo(listaTransacoes) {
         // ===== DESPESA REAL =====
         if (t.tipo === "despesa") {
 
-            // PIX / DÉBITO → sempre entra
+            // Apenas PIX e DÉBITO entram
             if (t.formaPagamento === "pix" || t.formaPagamento === "debito") {
                 totalDespesas += valor;
             }
 
-            // CRÉDITO → só entra se estiver pago
-            if (t.formaPagamento === "credito" && t.status === "pago") {
-                totalDespesas += valor;
-            }
+            // 🚫 crédito NUNCA entra aqui
         }
 
         // ===== PAGAMENTO DE FATURA =====
