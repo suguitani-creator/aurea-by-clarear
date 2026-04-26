@@ -1,4 +1,3 @@
-
 let idEmEdicao = null;
 let contaEmEdicao = null;
 let cartaoEmEdicao = null;
@@ -1667,7 +1666,7 @@ function atualizarVisibilidadeStatus(tipoTransacao) {
 }
 
 
-function capturarDadosFormularioTeste(){
+function remover_capturarDadosFormularioTeste(){
 
     const tipo = document.getElementById("tipo-teste").value;
 
