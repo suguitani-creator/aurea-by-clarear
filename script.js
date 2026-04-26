@@ -1666,49 +1666,6 @@ function atualizarVisibilidadeStatus(tipoTransacao) {
 }
 
 
-function remover_capturarDadosFormularioTeste(){
-
-    const tipo = document.getElementById("tipo-teste").value;
-
-    let dados = { tipo };
-
-    if(tipo === "receita"){
-
-        dados.fonte = document.getElementById("fonte").value;
-        dados.descricao = document.getElementById("descricao-receita").value;
-        dados.valor = parseFloat(document.getElementById("valor-receita").value);
-        dados.data = document.getElementById("data-receita").value;
-        dados.conta = document.getElementById("conta-bancaria-depositada").value;
-
-    }
-
-    if(tipo === "despesa"){
-
-        dados.essencial = document.getElementById("essencial").value;
-        dados.categoria = document.getElementById("categoria-teste").value;
-        dados.subcategoria = document.getElementById("subcategoria-teste").value;
-        dados.descricao = document.getElementById("descricao-despesa").value;
-        dados.valor = parseFloat(document.getElementById("valor-despesa").value);
-        dados.data = document.getElementById("data-despesa").value;
-
-        const forma = document.getElementById("forma-pagamento-teste").value;
-        dados.formaPagamento = forma;
-
-        if(forma === "pix" || forma === "debito"){
-            dados.contaDebitada =
-            document.getElementById("conta-bancaria-debitada").value;
-        }
-
-        if(forma === "credito"){
-            dados.cartao = document.getElementById("nome-cartao").value;
-            dados.parcelas = document.getElementById("parcelas").value;
-            dados.mesFatura = document.getElementById("mes-fatura").value;
-        }
-    }
-
-    return dados;
-}
-
 function preencherSelectContas(selectIds, contas) {
     selectIds.forEach(selectId => {
         const select = document.getElementById(selectId);
@@ -1812,7 +1769,7 @@ const CATEGORIAS = {
     }
 };
 
-function carregarCategoriasTeste() {
+function remover_carregarCategoriasTeste() {
     const select = document.getElementById("categoria-teste");
 
     select.innerHTML = '<option value="" disabled selected>Categoria</option>';
@@ -1833,7 +1790,7 @@ function carregarCategoriasTeste() {
     });
 }
 
-function atualizarSubcategoriasTeste() {
+function remover_atualizarSubcategoriasTeste() {
     const categoria = document.getElementById("categoria-teste");
     const subcategoria = document.getElementById("subcategoria-teste");
 
