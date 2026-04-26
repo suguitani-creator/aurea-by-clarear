@@ -1769,26 +1769,7 @@ const CATEGORIAS = {
     }
 };
 
-function carregarCategoriasTeste() {
-    const select = document.getElementById("categoria-teste");
 
-    select.innerHTML = '<option value="" disabled selected>Categoria</option>';
-
-    CATEGORIAS.receita.forEach(cat => {
-        const option = document.createElement("option");
-        option.value = cat.toLowerCase();
-        option.textContent = cat;
-        select.appendChild(option);
-    });
-
-    Object.keys(CATEGORIAS.despesa).forEach(cat => {
-        const option = document.createElement("option");
-        option.value = cat.toLowerCase();
-        option.textContent =
-            cat.charAt(0).toUpperCase() + cat.slice(1);
-        select.appendChild(option);
-    });
-}
 
 function atualizarSubcategoriasTeste() {
     const categoria = document.getElementById("categoria-teste");
