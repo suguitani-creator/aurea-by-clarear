@@ -51,6 +51,26 @@ const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
     categoria.addEventListener("change", atualizarSubcategorias);
     }   
 
+    const tipoContaEl = document.getElementById("tipo-conta");
+
+    if (tipoContaEl) {
+        const atualizarCamposConta = () => {
+        const tipoConta = tipoContaEl.value;
+
+        document.getElementById("datas-cartao").style.display =
+            tipoConta === "cartao" ? "block" : "none";
+
+        document.getElementById("data-saldo-conta").style.display =
+            tipoConta === "cartao" ? "none" : "block";
+    };
+
+    // Executa ao carregar
+    atualizarCamposConta();
+
+    // Executa quando mudar
+    tipoContaEl.addEventListener("change", atualizarCamposConta);
+}
+
     const hoje = new Date().toISOString().slice(0,7);
     document.getElementById("mes-filtro").value = hoje;
 
@@ -354,7 +374,7 @@ async function adicionarTransacao() {
             showToast("Despesas parceladas adicionadas!");
 
             limparFormulario(); 
-            
+
             return;
         }
 
@@ -1225,19 +1245,6 @@ document.getElementById("btn-abrir-form-conta").addEventListener("click", () => 
     atualizarPlaceholderSaldo();
 
 });
-
-// Chama a função para garantir que o campo certo seja exibido ao carregar o formulário
-document.addEventListener("DOMContentLoaded", function() {
-    const tipoConta = document.getElementById("tipo-conta").value;
-    if (tipoConta === "cartao") {
-        document.getElementById("datas-cartao").style.display = "block"; // Exibe os campos para cartão
-        document.getElementById("data-saldo-conta").style.display = "none"; // Esconde o campo de data para conta corrente
-    } else {
-        document.getElementById("datas-cartao").style.display = "none"; // Esconde os campos para cartão
-        document.getElementById("data-saldo-conta").style.display = "block"; // Exibe o campo de data para conta corrente
-    }
-});
-
 
 document.getElementById("btn-salvar-conta").addEventListener("click", async () => {
     await adicionarConta();  // Chama a função para adicionar a conta
