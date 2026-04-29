@@ -29,32 +29,41 @@ import {
 let transacoes = [];
 let grafico;
 
-// �� GARANTE QUE TUDO SÓ RODE APÓS O DOM CARREGAR
-window.addEventListener("DOMContentLoaded", () => {
-const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
+function aplicarLayoutResponsivo() {
+    const isMobile = window.innerWidth <= 768;
 
-    if (isMobile) {
-        document.getElementById("auth-container-desktop").style.display = "none";  // Esconde a versão desktop
-        document.getElementById("auth-container-mobile").style.display = "block";  // Exibe a versão mobile
-    } else {
-        document.getElementById("auth-container-desktop").style.display = "block";  // Exibe a versão desktop
-        document.getElementById("auth-container-mobile").style.display = "none";  // Esconde a versão mobile
-    }
+    document.getElementById("auth-container-desktop").style.display =
+        isMobile ? "none" : "block";
 
+    document.getElementById("auth-container-mobile").style.display =
+        isMobile ? "block" : "none";
+}
+
+function inicializarFormulario() {
     atualizarCategorias();
     atualizarSubcategorias();
     atualizarPlaceholderSaldo();
 
     const categoria = document.getElementById("categoria-teste");
-
     if (categoria) {
-    categoria.addEventListener("change", atualizarSubcategorias);
-    }   
+        categoria.addEventListener("change", atualizarSubcategorias);
+    }
 
+    document
+        .getElementById("tipo-teste")
+        .addEventListener("change", atualizarCategorias);
+
+    document
+        .getElementById("btn-adicionar")
+        .addEventListener("click", adicionarTransacao);
+}
+
+function inicializarTipoConta() {
     const tipoContaEl = document.getElementById("tipo-conta");
 
-    if (tipoContaEl) {
-        const atualizarCamposConta = () => {
+    if (!tipoContaEl) return;
+
+    const atualizarCamposConta = () => {
         const tipoConta = tipoContaEl.value;
 
         document.getElementById("datas-cartao").style.display =
@@ -64,28 +73,33 @@ const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
             tipoConta === "cartao" ? "none" : "block";
     };
 
-    // Executa ao carregar
     atualizarCamposConta();
-
-    // Executa quando mudar
     tipoContaEl.addEventListener("change", atualizarCamposConta);
 }
 
-    const hoje = new Date().toISOString().slice(0,7);
+function inicializarFiltro() {
+    const hoje = new Date().toISOString().slice(0, 7);
+
     document.getElementById("mes-filtro").value = hoje;
 
-    document.getElementById("mes-filtro")
+    document
+        .getElementById("mes-filtro")
         .addEventListener("change", aplicarFiltro);
+}
 
-    document.getElementById("tipo-teste")
-        .addEventListener("change", atualizarCategorias);
 
-    document.getElementById("btn-adicionar")
-    .addEventListener("click", adicionarTransacao);
+// �� GARANTE QUE TUDO SÓ RODE APÓS O DOM CARREGAR
+window.addEventListener("DOMContentLoaded", () => {
 
-    // AUTH ELEMENTOS
-    //const authContainer = document.getElementById("auth-container");
-    const appContainer = document.getElementById("app-container");
+    // ================= INICIALIZAÇÃO =================
+    aplicarLayoutResponsivo();
+    inicializarFormulario();
+    inicializarTipoConta();
+    inicializarFiltro();
+
+    window.addEventListener("resize", aplicarLayoutResponsivo);
+
+    // ================= AUTH ELEMENTOS =================
     const emailInput = document.getElementById("email");
     const senhaInput = document.getElementById("senha");
 
@@ -98,116 +112,106 @@ const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
         }
     });
 
-   document.getElementById("btn-login").addEventListener("click", async () => {
-    const email = document.getElementById("email").value;
-    const senha = document.getElementById("senha").value;
+    document.getElementById("btn-login").addEventListener("click", async () => {
+        const email = document.getElementById("email").value;
+        const senha = document.getElementById("senha").value;
 
-    try {
-        await signInWithEmailAndPassword(auth, email, senha);
-        showToast("Login bem-sucedido!");
+        try {
+            await signInWithEmailAndPassword(auth, email, senha);
+            showToast("Login bem-sucedido!");
 
-        // Esconde o login e exibe o app
-        document.getElementById("auth-container-desktop").style.display = "none";  // Esconde a versão desktop
-        document.getElementById("auth-container-mobile").style.display = "none";  // Esconde a versão mobile
-        document.getElementById("app-container").style.display = "block";  // Exibe o app
+            document.getElementById("auth-container-desktop").style.display = "none";
+            document.getElementById("auth-container-mobile").style.display = "none";
+            document.getElementById("app-container").style.display = "block";
 
-    } catch (error) {
-        console.log("Erro no login: ", error);
-        let errorMessage = "Erro ao entrar";
+        } catch (error) {
+            console.log("Erro no login: ", error);
 
-        if (error.code === 'auth/user-not-found') {
-            errorMessage = "Usuário não encontrado";
-        } else if (error.code === 'auth/wrong-password') {
-            errorMessage = "Senha incorreta";
-        } else if (error.code === 'auth/invalid-email') {
-            errorMessage = "Email inválido";
+            let errorMessage = "Erro ao entrar";
+
+            if (error.code === 'auth/user-not-found') {
+                errorMessage = "Usuário não encontrado";
+            } else if (error.code === 'auth/wrong-password') {
+                errorMessage = "Senha incorreta";
+            } else if (error.code === 'auth/invalid-email') {
+                errorMessage = "Email inválido";
+            }
+
+            showToast(errorMessage, "error");
         }
+    });
 
-        showToast(errorMessage, "error");
-    }
-});
+    // ================= LOGIN MOBILE =================
+    document.getElementById("btn-login-mobile").addEventListener("click", async () => {
+        const email = document.getElementById("email-mobile").value;
+        const senha = document.getElementById("senha-mobile").value;
 
-window.addEventListener("resize", () => {
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile) {
-        document.getElementById("auth-container-desktop").style.display = "none";  // Esconde a versão desktop
-        document.getElementById("auth-container-mobile").style.display = "block";  // Exibe a versão mobile
-    } else {
-        document.getElementById("auth-container-desktop").style.display = "block";  // Exibe a versão desktop
-        document.getElementById("auth-container-mobile").style.display = "none";  // Esconde a versão mobile
-    }
-});
+        try {
+            await signInWithEmailAndPassword(auth, email, senha);
+            showToast("Login bem-sucedido!");
 
-// Para a versão mobile
-document.getElementById("btn-login-mobile").addEventListener("click", async () => {
-    const email = document.getElementById("email-mobile").value;
-    const senha = document.getElementById("senha-mobile").value;
+            document.getElementById("auth-container-mobile").style.display = "none";
+            document.getElementById("app-container").style.display = "block";
 
-    try {
-        await signInWithEmailAndPassword(auth, email, senha);
-        showToast("Login bem-sucedido!");
+        } catch (error) {
+            console.log("Erro no login: ", error);
 
-        // Esconde o login mobile e exibe o app
-        document.getElementById("auth-container-mobile").style.display = "none";  // Esconde o login mobile
-        document.getElementById("app-container").style.display = "block";  // Exibe o app
+            let errorMessage = "Erro ao entrar";
 
-    } catch (error) {
-        console.log("Erro no login: ", error);
-        let errorMessage = "Erro ao entrar";
-        
-        if (error.code === 'auth/user-not-found') {
-            errorMessage = "Usuário não encontrado";
-        } else if (error.code === 'auth/wrong-password') {
-            errorMessage = "Senha incorreta";
-        } else if (error.code === 'auth/invalid-email') {
-            errorMessage = "Email inválido";
+            if (error.code === 'auth/user-not-found') {
+                errorMessage = "Usuário não encontrado";
+            } else if (error.code === 'auth/wrong-password') {
+                errorMessage = "Senha incorreta";
+            } else if (error.code === 'auth/invalid-email') {
+                errorMessage = "Email inválido";
+            }
+
+            showToast(errorMessage, "error");
         }
+    });
 
-        showToast(errorMessage, "error");
-    }
-});
-
-
+    // ================= LOGOUT =================
     document.getElementById("btn-logout").addEventListener("click", async () => {
-    try {
-        await signOut(auth);
-        showToast("Logout bem-sucedido!");
+        try {
+            await signOut(auth);
+            showToast("Logout bem-sucedido!");
 
-        // Mostrar login e esconder app após logout
-        document.getElementById("auth-container-desktop").style.display = "block";
-        document.getElementById("app-container").style.display = "none";
+            document.getElementById("auth-container-desktop").style.display = "block";
+            document.getElementById("app-container").style.display = "none";
 
-    } catch (error) {
-        console.log("Erro ao fazer logout: ", error); // Exibe o erro no console para depuração
-        showToast("Erro ao fazer logout", "error");
-    }
-});
+        } catch (error) {
+            console.log("Erro ao fazer logout: ", error);
+            showToast("Erro ao fazer logout", "error");
+        }
+    });
 
+    // ================= AUTH STATE =================
     onAuthStateChanged(auth, (user) => {
-    const authContainer = document.getElementById("auth-container-desktop");
-    const appContainer = document.getElementById("app-container");
 
-    // Esconde o box de "editando transação" quando o app é carregado (sem edição)
-    document.getElementById("indicador-edicao").style.display = "none";  // Esconde o indicador no login
+        const authContainer = document.getElementById("auth-container-desktop");
+        const appContainer = document.getElementById("app-container");
 
-    if (user) {
-        document.getElementById("usuario-email").textContent = user.email;
+        document.getElementById("indicador-edicao").style.display = "none";
 
-        authContainer.style.display = "none";
-        appContainer.style.display = "block";
+        if (user) {
+            document.getElementById("usuario-email").textContent = user.email;
 
-        carregarTransacoesTempoReal();  // Carregar transações após o login
-        carregarContasECartoes();  // Carregar contas e cartões após o login
-        escutarContasTempoReal();
-        escutarCartoesTempoReal();
-        iniciarListenerSaldo();
+            authContainer.style.display = "none";
+            appContainer.style.display = "block";
 
-    } else {
-        authContainer.style.display = "block";
-        appContainer.style.display = "none";
-        limparFormulario();
-    }
-});
+            carregarTransacoesTempoReal();
+            carregarContasECartoes();
+            escutarContasTempoReal();
+            escutarCartoesTempoReal();
+            iniciarListenerSaldo();
+
+        } else {
+            authContainer.style.display = "block";
+            appContainer.style.display = "none";
+            limparFormulario();
+        }
+    });
+
 });
 
 // ================= FINANÇAS =================
