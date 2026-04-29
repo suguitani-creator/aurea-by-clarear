@@ -42,6 +42,7 @@ const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
     }
 
     atualizarCategorias();
+    atualizarSubcategorias();
     atualizarPlaceholderSaldo();
 
     const hoje = new Date().toISOString().slice(0,7);
@@ -1769,9 +1770,28 @@ const CATEGORIAS = {
     }
 };
 
+function carregarCategoriasTeste() {
+    const select = document.getElementById("categoria-teste");
 
+    select.innerHTML = '<option value="" disabled selected>Categoria</option>';
 
-function atualizarSubcategoriasTeste() {
+    CATEGORIAS.receita.forEach(cat => {
+        const option = document.createElement("option");
+        option.value = cat.toLowerCase();
+        option.textContent = cat;
+        select.appendChild(option);
+    });
+
+    Object.keys(CATEGORIAS.despesa).forEach(cat => {
+        const option = document.createElement("option");
+        option.value = cat.toLowerCase();
+        option.textContent =
+            cat.charAt(0).toUpperCase() + cat.slice(1);
+        select.appendChild(option);
+    });
+}
+
+function atualizarSubcategorias() {
     const categoria = document.getElementById("categoria-teste");
     const subcategoria = document.getElementById("subcategoria-teste");
 
@@ -1802,19 +1822,6 @@ function atualizarSubcategoriasTeste() {
     }
 }
 
-// Inicialização correta
-document.addEventListener("DOMContentLoaded", () => {
-
-    carregarCategoriasTeste();
-    atualizarSubcategoriasTeste();
-
-    const categoria = document.getElementById("categoria-teste");
-
-    if (categoria) {
-        categoria.addEventListener("change", atualizarSubcategoriasTeste);
-    }
-
-});
 
 function validarFormularioTeste(dados) {
 
@@ -1967,7 +1974,7 @@ document.getElementById("essencial").addEventListener("change", () => {
 
     if (!categoria || !subcategoria) return;
 
-    if (tipo === "investimento" || tipo === "financeiro") {
+    if (tipo === "investimento") {
 
         categoria.value = "";
 
@@ -1983,7 +1990,7 @@ document.getElementById("essencial").addEventListener("change", () => {
         categoria.disabled = false;
         subcategoria.disabled = false;
 
-        atualizarSubcategoriasTeste();
+        atualizarSubcategorias();
 
     }
 
