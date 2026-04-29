@@ -352,6 +352,9 @@ async function adicionarTransacao() {
             }
 
             showToast("Despesas parceladas adicionadas!");
+
+            limparFormulario(); 
+            
             return;
         }
 
