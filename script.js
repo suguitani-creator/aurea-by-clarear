@@ -45,6 +45,12 @@ const isMobile = window.innerWidth <= 768;  // Verifica se a tela é mobile
     atualizarSubcategorias();
     atualizarPlaceholderSaldo();
 
+    const categoria = document.getElementById("categoria-teste");
+
+    if (categoria) {
+    categoria.addEventListener("change", atualizarSubcategorias);
+    }   
+
     const hoje = new Date().toISOString().slice(0,7);
     document.getElementById("mes-filtro").value = hoje;
 
