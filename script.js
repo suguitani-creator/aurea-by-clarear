@@ -1764,7 +1764,6 @@ function escutarCartoesTempoReal() {
 
 // Categorias de Receita e Despesa
 const CATEGORIAS = {
-    receita: ["Salário", "Prólabore", "Investimentos", "Dividendos", "Outros"],
     despesa: {
         alimentacao: ["Supermercado", "Restaurante", "Delivery"],
         moradia: ["Aluguel", "Condomínio", "Energia"],
