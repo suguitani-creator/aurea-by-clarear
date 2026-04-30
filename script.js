@@ -1730,8 +1730,9 @@ function preencherSelectContas(selectIds, contas) {
         let placeholder = "Conta";
 
         if (selectId.includes("depositada")) placeholder = "Conta Depositada";
-        if (selectId.includes("debitada")) placeholder = "Conta Debitada";
-        if (selectId.includes("pagamento")) placeholder = "Conta de Pagamento";
+        else if (selectId.includes("debitada")) placeholder = "Conta Debitada";
+        else if (selectId.includes("pagamento")) placeholder = "Conta de Pagamento";
+        else if (selectId.includes("investimento")) placeholder = "Conta de Origem";
 
         select.innerHTML = `<option value="" disabled selected>${placeholder}</option>`;
 
@@ -1775,12 +1776,12 @@ function escutarContasTempoReal() {
         });
 
         preencherSelectContas(
-            [
-                "conta-bancaria-depositada",
-                "conta-bancaria-debitada",
-                "conta-pagamento-fatura"
-            ],
-            contas
+        [
+        "conta-bancaria-depositada",
+        "conta-bancaria-debitada",
+        "conta-pagamento-fatura"
+        ],
+        contas
         );
     });
 }
