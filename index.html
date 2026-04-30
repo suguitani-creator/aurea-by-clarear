@@ -120,6 +120,7 @@
                             <option value="receita">Receita</option>
                             <option value="despesa">Despesa</option>
                             <option value="pagamento_fatura">Pagar Fatura de Cartão</option>
+                            <option value="investimento">Investimento</option>
                         </select>
                         <div></div>
                     </div>
@@ -268,6 +269,33 @@
                             </select>
                         </div>
 
+                    </div>
+
+                    <!-- BLOCO INVESTIMENTO -->
+                    <div id="bloco-investimento" style="display:none;">
+
+                        <div class="form-grid-2">
+                            <input id="nome-investimento" class="input full" placeholder="Nome do investimento">
+                        </div>
+
+                        <div class="form-grid-2">
+                            <select id="tipo-investimento" class="input">
+                                <option value="">Tipo</option>
+                                <option value="renda_fixa">Renda fixa</option>
+                                <option value="renda_variavel">Renda variável</option>
+                            </select>
+                        </div>
+
+                        <div class="form-grid-2">
+                            <input id="valor-investimento" type="number" class="input" placeholder="Valor">
+                            <input id="data-investimento" type="date" class="input">
+                        </div>
+
+                        <div class="form-grid-2">
+                            <select id="conta-investimento" class="input full">
+                                <option value="">Conta de origem</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- BOTÕES -->

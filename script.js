@@ -440,6 +440,30 @@ async function adicionarTransacao() {
         };
     }
 
+    // ================= INVESTIMENTO =================
+    if (tipo === "investimento") {
+
+        const nome = document.getElementById("nome-investimento")?.value || "";
+        const tipoInvestimento = document.getElementById("tipo-investimento")?.value || "";
+        const valor = parseFloat(document.getElementById("valor-investimento")?.value);
+        const data = document.getElementById("data-investimento")?.value || "";
+        const conta = document.getElementById("conta-investimento")?.value || "";
+
+        if (!nome || !tipoInvestimento || isNaN(valor) || !data || !conta) {
+            showToast("Preencha todos os campos do investimento", "error");
+            return;
+        }
+
+        dados = {
+        ...dados,
+        nomeInvestimento: nome,
+        tipoInvestimento,
+        valor,
+        data,
+        conta
+        };
+    }
+
     // ================= LIMPEZA =================
     Object.keys(dados).forEach(key => {
         if (["cartao", "parcelas", "mesFatura"].includes(key)) {
@@ -865,10 +889,18 @@ function limparFormulario() {
     // Limpar o campo de status (somente para despesas com cartão de crédito)
     document.getElementById("status").value = ""; // Limpa o campo status
 
+    // Limpar o campo de investimento
+    document.getElementById("nome-investimento").value = "";
+    document.getElementById("tipo-investimento").value = "";
+    document.getElementById("valor-investimento").value = "";
+    document.getElementById("data-investimento").value = "";
+    document.getElementById("conta-investimento").value = "";
+
     // Resetando a visibilidade dos campos
     document.getElementById("bloco-receita").style.display = "none"; // Esconde o bloco de receita
     document.getElementById("bloco-despesa").style.display = "none"; // Esconde o bloco de despesa
     document.getElementById("bloco-pagamento-fatura").style.display = "none"; // Esconde o bloco de pagamento de fatura
+    document.getElementById("bloco-investimento").style.display = "none"; // Esconde o bloco de investimento
     document.getElementById("indicador-edicao").style.display = "none"; // Esconde o indicador de edição
 
     // Limpar outras variáveis de estado
@@ -1645,11 +1677,10 @@ document.getElementById("btn-cancelar-edicao-transacao")
 document.getElementById("tipo-teste").addEventListener("change", function () {
     const tipo = this.value;
 
-    // Esconde todos os blocos inicialmente
     document.getElementById("bloco-receita").style.display = "none";
     document.getElementById("bloco-despesa").style.display = "none";
     document.getElementById("bloco-pagamento-fatura").style.display = "none";
-    document.getElementById("bloco-status").style.display = "none";  // Esconde o bloco de status ao mudar tipo
+    document.getElementById("bloco-investimento").style.display = "none";
 
     if (tipo === "receita") {
         document.getElementById("bloco-receita").style.display = "block";
@@ -1661,6 +1692,10 @@ document.getElementById("tipo-teste").addEventListener("change", function () {
 
     if (tipo === "pagamento_fatura") {
         document.getElementById("bloco-pagamento-fatura").style.display = "block";
+    }
+
+    if (tipo === "investimento") {
+        document.getElementById("bloco-investimento").style.display = "block";
     }
 });
 
@@ -2133,6 +2168,11 @@ function iniciarListenerSaldo() {
 
         // ===== PAGAMENTO DE FATURA =====
         if (t.tipo === "pagamento_fatura") {
+            saldos[t.conta] = (saldos[t.conta] || 0) - valor;
+        }
+
+        // ===== INVESTIMENTO =====
+        if (t.tipo === "investimento") {
             saldos[t.conta] = (saldos[t.conta] || 0) - valor;
         }
     });
