@@ -1779,10 +1779,11 @@ function escutarContasTempoReal() {
         [
         "conta-bancaria-depositada",
         "conta-bancaria-debitada",
-        "conta-pagamento-fatura"
+        "conta-pagamento-fatura",
+        "conta-investimento" // 👈 NOVO
         ],
         contas
-        );
+    );
     });
 }
 
