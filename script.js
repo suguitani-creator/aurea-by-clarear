@@ -600,6 +600,12 @@ function atualizarTela(listaTransacoes) {
             secundario = t.data ? formatarData(t.data) : "";
         }
 
+        // ================= INVESTIMENTO =================
+        else if (t.tipo === "investimento") {
+            principal = t.nomeInvestimento || "Investimento";
+            secundario = t.data ? formatarData(t.data) : "";
+        }
+
         // ============================================
         // Definindo o status da transação (pendente ou paga) somente para "despesa" com "crédito"
         let statusClass = "";  // classe para indicar o status
@@ -706,8 +712,18 @@ function gerarDetalhesClean(t) {
         `;
     }
 
+    // ================= INVESTIMENTO =================
+    if (t.tipo === "investimento") {
+        return `
+            <div>${t.nomeInvestimento || "-"}</div>
+            <div>${t.tipoInvestimento || "-"}</div>
+            <div>${t.conta || "-"}</div>
+        `;
+    }
+
     return "";
-}
+
+    }
 
 function calcularSaldo(listaTransacoes) {
     let totalReceitas = 0;
@@ -1094,6 +1110,15 @@ window.editarTransacao = function(id) {
         document.getElementById("valor-fatura").value = transacao.valor || "";
         document.getElementById("data-fatura").value = transacao.data || "";
         document.getElementById("conta-pagamento-fatura").value = transacao.conta || "";
+    }
+
+    // ================= INVESTIMENTO =================
+    if (transacao.tipo === "investimento") {
+        document.getElementById("nome-investimento").value = transacao.nomeInvestimento || "";
+        document.getElementById("tipo-investimento").value = transacao.tipoInvestimento || "";
+        document.getElementById("valor-investimento").value = transacao.valor || "";
+        document.getElementById("data-investimento").value = transacao.data || "";
+        document.getElementById("conta-investimento").value = transacao.conta || "";
     }
 
     // ================= UI (IGUAL AO ORIGINAL) =================
@@ -2361,9 +2386,13 @@ document
     .getElementById("investimentos-container")
     .addEventListener("click", async function () {
 
-        this.classList.toggle("show");
+        const aberto = this.classList.contains("show");
 
-        if (this.classList.contains("show")) {
-            await renderizarInvestimentos();
+        if (aberto) {
+            this.classList.remove("show");
+            return;
         }
+
+        this.classList.add("show");
+        await renderizarInvestimentos();
     });
