@@ -2386,13 +2386,17 @@ document
     .getElementById("investimentos-container")
     .addEventListener("click", async function () {
 
+        const container = document.getElementById("investimentos-detalhe");
         const aberto = this.classList.contains("show");
 
+        // 🔴 FECHAR
         if (aberto) {
             this.classList.remove("show");
+            container.innerHTML = ""; // limpa conteúdo
             return;
         }
 
+        // 🟢 ABRIR
         this.classList.add("show");
         await renderizarInvestimentos();
     });
