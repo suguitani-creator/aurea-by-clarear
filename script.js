@@ -1867,39 +1867,6 @@ function atualizarSubcategorias() {
     }
 }
 
-
-document.getElementById("essencial").addEventListener("change", () => {
-
-    const tipo = document.getElementById("essencial").value;
-
-    const categoria = document.getElementById("categoria-teste");
-    const subcategoria = document.getElementById("subcategoria-teste");
-
-    if (!categoria || !subcategoria) return;
-
-    if (tipo === "investimento") {
-
-        categoria.value = "";
-
-        subcategoria.innerHTML = `
-            <option value="" disabled selected>Subcategoria</option>
-        `;
-
-        categoria.disabled = true;
-        subcategoria.disabled = true;
-
-    } else {
-
-        categoria.disabled = false;
-        subcategoria.disabled = false;
-
-        atualizarSubcategorias();
-
-    }
-
-});
-
-
 function renderizarSaldoContasComDados(saldos) {
     const container = document.getElementById("saldo-contas-detalhe");
 
