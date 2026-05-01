@@ -325,21 +325,6 @@ async function adicionarTransacao() {
             return;
         }
 
-        if (essencial !== "investimento") {
-            if (!categoria) {
-                marcarErro(document.getElementById("categoria-teste"));
-            }
-
-            if (!subcategoria) {
-                marcarErro(document.getElementById("subcategoria-teste"));
-            }
-
-            if (!categoria || !subcategoria) {
-                showToast("Preencha categoria e subcategoria", "error");
-                return;
-            }
-        }
-
         // Parcelamento
         if (formaPagamento === "credito" && parcelas > 0) {
             const [anoFatura, mesFaturaNumero] = mesFatura.split("-");
