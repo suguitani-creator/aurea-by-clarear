@@ -2295,3 +2295,75 @@ async function reabrirFatura({ userId, cartao, mesFatura }) {
 
     console.log(`Fatura reaberta: ${cartao} - ${mesFatura}`);
 }
+
+async function calcularInvestimentos() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const snapshot = await getDocs(
+        collection(db, "users", user.uid, "transacoes")
+    );
+
+    const investimentos = {};
+
+    snapshot.forEach(doc => {
+        const t = doc.data();
+
+        if (t.tipo === "investimento") {
+
+            const nome = t.nomeInvestimento || "Sem nome";
+            const valor = Number(t.valor) || 0;
+
+            investimentos[nome] = (investimentos[nome] || 0) + valor;
+        }
+    });
+
+    return investimentos;
+}
+
+async function renderizarInvestimentos() {
+    const container = document.getElementById("investimentos-detalhe");
+
+    const investimentos = await calcularInvestimentos();
+
+    container.innerHTML = "";
+
+    let total = 0;
+
+    Object.entries(investimentos).forEach(([nome, valor]) => {
+        total += valor;
+
+        const div = document.createElement("div");
+        div.className = "saldo-item";
+
+        div.innerHTML = `
+            <span>${nome}</span>
+            <span class="valor receita">
+                R$ ${valor.toFixed(2)}
+            </span>
+        `;
+
+        container.appendChild(div);
+    });
+
+    const totalDiv = document.createElement("div");
+    totalDiv.className = "saldo-total";
+
+    totalDiv.innerHTML = `
+        <span>Total Investido</span>
+        <span>R$ ${total.toFixed(2)}</span>
+    `;
+
+    container.appendChild(totalDiv);
+}
+
+document
+    .getElementById("investimentos-container")
+    .addEventListener("click", async function () {
+
+        this.classList.toggle("show");
+
+        if (this.classList.contains("show")) {
+            await renderizarInvestimentos();
+        }
+    });
