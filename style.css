@@ -593,10 +593,10 @@ li.despesa {
 
 .filtro-comparativo {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
     flex-direction: column;
-    gap: 10px;
+    gap: 14px;
+
+    align-items: stretch; /* 🔥 importante */
 }
 
 .comparativo-container {
@@ -615,6 +615,9 @@ li.despesa {
 
     text-align: left;       /* 🔥 importante pro layout */
     margin: 0;
+
+    height: auto;
+    overflow: visible;
 }
 
 .comparativo-container:hover {
@@ -1159,4 +1162,7 @@ button.modo-edicao:hover {
     gap: 6px;
 }
 
+.filtro-comparativo > div {
+    width: 100%;
+}
 
