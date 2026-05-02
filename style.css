@@ -1126,8 +1126,7 @@ button.modo-edicao:hover {
 .extrato-investimento {
     margin-top: 8px;
     padding-top: 8px;
-
-    border-top: 1px solid #eee;
+    border-top: 1px solid #ddd;
 
     display: flex;
     flex-direction: column;
@@ -1141,17 +1140,20 @@ button.modo-edicao:hover {
 }
 
 .saldo-total {
-    margin-top: 15px;
+    margin-top: 12px;
     padding-top: 10px;
-    border-top: 2px solid #ddd;
+    border-top: 2px solid #ccc;
+
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 #investimentos-detalhe {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 
-    height: auto;
     overflow: visible;
 }
 
