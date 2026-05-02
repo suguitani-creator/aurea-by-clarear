@@ -35,119 +35,121 @@
                 <button id="btn-cadastro-mobile" class="secondary-btn">Criar conta</button>
             </div>
         </div>
-            <!-- APP (aparece após o login) -->
-            <div id="app-container" style="display:none;">
-                <!-- Info do usuário -->
-                <div class="usuario-info">
-                    <span id="usuario-email"></span>
-                    <button id="btn-logout">Sair</button>
-                </div>
-                
-                <!-- Filtro de mês -->
-                <div class="filtro-mes">
-                    <input type="month" id="mes-filtro">
-                </div>
 
-                <div class="saldo-topo">
-                    <div class="saldo-header">
-                        <span>Saldo disponível</span>
-                        <button id="toggle-saldo" class="btn-olho">
-                            <span id="icone-olho">👁</span>
-                        </button>
-                    </div>
-                </div>        
-                <div id="saldo-valor" class="saldo-valor">
-                    R$ 0,00
-                </div>
-
-                <!-- Dashboard (APENAS OS 3 CARDS PRINCIPAIS) -->
-                <div class="dashboard">
-                    <div class="card">
-                        <h4>Receitas</h4>
-                        <p id="total-receitas">R$ 0.00</p>
-                    </div>
-
-                    <div class="card">
-                        <h4>Despesas</h4>
-                        <p id="total-despesas">R$ 0.00</p>
-                    </div>
-
-                    <div class="card saldo-card">
-                        <h4>Saldo do mês</h4>
-                        <p id="saldo">R$ 0.00</p>
-                    </div>  
-                </div>
-
-                <!-- COMPARATIVOS (AGORA FORA DA DASHBOARD) -->
-                <div class="filtro-comparativo">
-                    <div id="comparativo-container" class="comparativo-container">
-                        <small>Comparativo com mês anterior</small>
-                        <p id="comparativo-receita">—</p>
-                        <p id="comparativo-despesa">—</p>
-                    </div>
-                </div>
-
-                <div id="saldo-contas-container" class="comparativo-container">
-                    <small>Saldo disponível</small>
-                    <div id="saldo-contas-detalhe"></div>
-                </div>
-
-                <div id="faturas-container" class="comparativo-container">
-                    <small>Faturas dos cartões</small>
-                    <div id="faturas-detalhe"></div>
-                </div>
-
-                <div id="investimentos-container" class="comparativo-container">
-                    <small>Carteira de Investimentos</small>
-                    <div id="investimentos-detalhe"></div>
-                </div>
-
-                <!-- Indicador de edição elegante -->
-                <div id="indicador-edicao" class="indicador-edicao">
-                    Editando Transação
-                </div>
-
-                <!-- FORMULÁRIO -->
-                <div id="form-transacao" class="form-container">
-                    <h3>Nova Transação</h3>
-                    <!-- O FORMULÁRIO AQUI -->
-                </div>
-        
-                <!-- Fluxo Financeiro -->
-                <div id="fluxo-financeiro">
-                    <h2>Fluxo Financeiro</h2>
-                    <ul id="lista-despesas"></ul>
-                </div>
-                <div class="grafico-container">
-                    <canvas id="graficoCategorias"></canvas>
-                </div>
-
-                <!-- Botão para Adicionar Conta ou Cartão -->
-                <button id="btn-abrir-form-conta" class="secondary-btn">Adicionar Conta ou Cartão</button>
-                <!-- Botão para alternar a exibição das contas e cartões -->
-                <button id="btn-exibir-contas" class="secondary-btn">Exibir Contas e Cartões</button>
+        <!-- APP (aparece após o login) -->
+        <div id="app-container" style="display:none;">
+            <!-- Info do usuário -->
+            <div class="usuario-info">
+                <span id="usuario-email"></span>
+                <button id="btn-logout">Sair</button>
             </div>
-            <script type="module" src="firebase.js"></script>
-            <script type="module" src="script.js"></script>
-            <script>
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log("SW registrado com sucesso"))
-                    .catch(err => console.log("Erro ao registrar SW:", err));
-                }
-            </script>
+            
+            <!-- Filtro de mês -->
+            <div class="filtro-mes">
+                <input type="month" id="mes-filtro">
+            </div>
 
-            <div id="toast" class="toast"></div>
+            <div class="saldo-topo">
+                <div class="saldo-header">
+                    <span>Saldo disponível</span>
+                    <button id="toggle-saldo" class="btn-olho">
+                        <span id="icone-olho">👁</span>
+                    </button>
+                </div>
+            </div>        
+            <div id="saldo-valor" class="saldo-valor">
+                R$ 0,00
+            </div>
 
-            <div id="modal-confirmacao" class="modal-overlay">
-                <div class="modal-box">
-                    <p id="texto-confirmacao">Deseja remover esta transação?</p>
-                    <div class="modal-actions">
-                        <button id="cancelar-exclusao" class="btn-secondary">Cancelar</button>
-                        <button id="confirmar-exclusao" class="btn-primary">Remover</button>
-                    </div>
+            <!-- Dashboard (APENAS OS 3 CARDS PRINCIPAIS) -->
+            <div class="dashboard">
+                <div class="card">
+                    <h4>Receitas</h4>
+                    <p id="total-receitas">R$ 0.00</p>
+                </div>
+
+                <div class="card">
+                    <h4>Despesas</h4>
+                    <p id="total-despesas">R$ 0.00</p>
+                </div>
+
+                <div class="card saldo-card">
+                    <h4>Saldo do mês</h4>
+                    <p id="saldo">R$ 0.00</p>
+                </div>  
+            </div>
+
+            <!-- COMPARATIVOS (AGORA FORA DA DASHBOARD) -->
+            <div class="filtro-comparativo">
+                <div id="comparativo-container" class="comparativo-container">
+                    <small>Comparativo com mês anterior</small>
+                    <p id="comparativo-receita">—</p>
+                    <p id="comparativo-despesa">—</p>
+                </div>
+            </div>
+
+            <div id="saldo-contas-container" class="comparativo-container">
+                <small>Saldo disponível</small>
+                <div id="saldo-contas-detalhe"></div>
+            </div>
+
+            <div id="faturas-container" class="comparativo-container">
+                <small>Faturas dos cartões</small>
+                <div id="faturas-detalhe"></div>
+            </div>
+
+            <div id="investimentos-container" class="comparativo-container">
+                <small>Carteira de Investimentos</small>
+                <div id="investimentos-detalhe"></div>
+            </div>
+
+            <!-- Indicador de edição elegante -->
+            <div id="indicador-edicao" class="indicador-edicao">
+                Editando Transação
+            </div>
+
+            <!-- FORMULÁRIO -->
+            <div id="form-transacao" class="form-container">
+                <h3>Nova Transação</h3>
+                <!-- O FORMULÁRIO AQUI -->
+            </div>
+    
+            <!-- Fluxo Financeiro -->
+            <div id="fluxo-financeiro">
+                <h2>Fluxo Financeiro</h2>
+                <ul id="lista-despesas"></ul>
+            </div>
+            <div class="grafico-container">
+                <canvas id="graficoCategorias"></canvas>
+            </div>
+
+            <!-- Botão para Adicionar Conta ou Cartão -->
+            <button id="btn-abrir-form-conta" class="secondary-btn">Adicionar Conta ou Cartão</button>
+            <!-- Botão para alternar a exibição das contas e cartões -->
+            <button id="btn-exibir-contas" class="secondary-btn">Exibir Contas e Cartões</button>
+        </div>
+
+        <script type="module" src="firebase.js"></script>
+        <script type="module" src="script.js"></script>
+        <script>
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log("SW registrado com sucesso"))
+                .catch(err => console.log("Erro ao registrar SW:", err));
+            }
+        </script>
+
+        <div id="toast" class="toast"></div>
+
+        <div id="modal-confirmacao" class="modal-overlay">
+            <div class="modal-box">
+                <p id="texto-confirmacao">Deseja remover esta transação?</p>
+                <div class="modal-actions">
+                    <button id="cancelar-exclusao" class="btn-secondary">Cancelar</button>
+                    <button id="confirmar-exclusao" class="btn-primary">Remover</button>
                 </div>
             </div>
         </div>
+
     </body>
 </html>
