@@ -1110,6 +1110,7 @@ button.modo-edicao:hover {
 
 #faturas-container.show #faturas-detalhe {
     display: block;
+    height: auto;
 }
 
 /* Estilo para transações pendentes */
