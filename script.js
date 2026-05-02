@@ -382,6 +382,8 @@ async function adicionarTransacao() {
     }
 
     // ================= FINAL PADRÃO =================
+    try {
+
     if (idEmEdicao !== null) {
         await updateDoc(
             doc(db, "users", user.uid, "transacoes", idEmEdicao),
@@ -389,16 +391,34 @@ async function adicionarTransacao() {
         );
 
         idEmEdicao = null;
+
         showToast("Transação atualizada!");
-        limparFormulario();
-        return;
+    } else {
+
+        await addDoc(
+            collection(db, "users", user.uid, "transacoes"),
+            dados
+        );
+
+        // 🔥 só roda para pagamento de fatura
+        if (tipo === "pagamento_fatura") {
+            await quitarFatura({
+                userId: user.uid,
+                cartao: dados.cartao,
+                mesFatura: dados.mesFatura
+            });
+        }
+
+        showToast("Transação adicionada!");
     }
 
-    await finalizarTransacao({
-        user,
-        dados,
-        mensagem: "Transação adicionada!"
-    });
+    // ✅ SEMPRE executa
+    limparFormulario();
+
+} catch (error) {
+    console.error("Erro ao salvar:", error);
+    showToast("Erro ao salvar transação", "error");
+}
 }
 
 function atualizarCategorias() {
@@ -2308,21 +2328,3 @@ document
         await renderizarInvestimentos();
     });
 
-async function finalizarTransacao({ user, dados, mensagem }) {
-    await addDoc(
-        collection(db, "users", user.uid, "transacoes"),
-        dados
-    );
-
-    // Só tenta quitar se fizer sentido
-    if (dados.tipo === "pagamento_fatura") {
-        await quitarFatura({
-            userId: user.uid,
-            cartao: dados.cartao,
-            mesFatura: dados.mesFatura
-        });
-    }
-
-    showToast(mensagem || "Transação adicionada!");
-    limparFormulario();
-}
