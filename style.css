@@ -1124,13 +1124,12 @@ button.modo-edicao:hover {
 .extrato-investimento {
     margin-top: 8px;
     padding-top: 8px;
+
     border-top: 1px solid #eee;
 
     display: flex;
     flex-direction: column;
     gap: 6px;
-
-    animation: fadeIn 0.2s ease;
 }
 
 .linha-extrato {
@@ -1140,12 +1139,23 @@ button.modo-edicao:hover {
 }
 
 .saldo-total {
-    margin-top: 12px;
+    margin-top: 15px;
     padding-top: 10px;
     border-top: 2px solid #ddd;
 }
 
 #investimentos-detalhe {
-    max-height: 400px;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    height: auto;
+    overflow: visible;
+}
+
+.card,
+.card-container,
+#investimentos-container {
+    height: auto !important;
+    overflow: visible !important;
 }
