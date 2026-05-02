@@ -40,6 +40,7 @@ function aplicarLayoutResponsivo() {
 }
 
 function inicializarFormulario() {
+    // Atualiza categorias, subcategorias e o placeholder
     atualizarCategorias();
     atualizarSubcategorias();
     atualizarPlaceholderSaldo();
@@ -47,15 +48,23 @@ function inicializarFormulario() {
     const categoria = document.getElementById("categoria-teste");
     if (categoria) {
         categoria.addEventListener("change", atualizarSubcategorias);
+    } else {
+        console.log("Elemento 'categoria-teste' não encontrado!");
     }
 
-    document
-        .getElementById("tipo-teste")
-        .addEventListener("change", atualizarCategorias);
+    const tipoTesteEl = document.getElementById("tipo-teste");
+    if (tipoTesteEl) {
+        tipoTesteEl.addEventListener("change", atualizarCategorias);
+    } else {
+        console.log("Elemento 'tipo-teste' não encontrado!");
+    }
 
-    document
-        .getElementById("btn-adicionar")
-        .addEventListener("click", adicionarTransacao);
+    const btnAdicionarEl = document.getElementById("btn-adicionar");
+    if (btnAdicionarEl) {
+        btnAdicionarEl.addEventListener("click", adicionarTransacao);
+    } else {
+        console.log("Elemento 'btn-adicionar' não encontrado!");
+    }
 }
 
 function inicializarTipoConta() {
@@ -422,8 +431,18 @@ async function adicionarTransacao() {
 }
 
 function atualizarCategorias() {
-    const tipo = document.getElementById("tipo-teste").value;
+    const tipoEl = document.getElementById("tipo-teste");
+    if (!tipoEl) {
+        console.log("Elemento 'tipo-teste' não encontrado!");
+        return;
+    }
+
+    const tipo = tipoEl.value;
     const selectCategoria = document.getElementById("categoria-teste");
+    if (!selectCategoria) {
+        console.log("Elemento 'categoria-teste' não encontrado!");
+        return;
+    }
 
     selectCategoria.innerHTML = "";
 
@@ -447,7 +466,6 @@ function atualizarCategorias() {
     categoriasLista.forEach(cat => {
         const option = document.createElement("option");
         option.value = cat.toLowerCase();
-
         option.textContent =
             tipo === "receita"
                 ? cat
@@ -1197,20 +1215,33 @@ document.getElementById("btn-abrir-form-conta").addEventListener("click", () => 
     //document.getElementById("btn-abrir-form-conta").style.display = "none";
 });
 
-    document.getElementById("tipo-conta").addEventListener("change", function() {
+    document.addEventListener("DOMContentLoaded", function() {
+    const tipoContaEl = document.getElementById("tipo-conta");
+    if (tipoContaEl) {
+        tipoContaEl.addEventListener("change", function() {
+            const tipo = this.value;
 
-    const tipo = this.value;
+            if (tipo === "cartao") {
+                const datasCartao = document.getElementById("datas-cartao");
+                const dataSaldoConta = document.getElementById("data-saldo-conta");
+                if (datasCartao && dataSaldoConta) {
+                    datasCartao.style.display = "block";
+                    dataSaldoConta.style.display = "none";
+                }
+            } else {
+                const datasCartao = document.getElementById("datas-cartao");
+                const dataSaldoConta = document.getElementById("data-saldo-conta");
+                if (datasCartao && dataSaldoConta) {
+                    datasCartao.style.display = "none";
+                    dataSaldoConta.style.display = "block";
+                }
+            }
 
-    if (tipo === "cartao") {
-        document.getElementById("datas-cartao").style.display = "block";
-        document.getElementById("data-saldo-conta").style.display = "none";
+            atualizarPlaceholderSaldo();
+        });
     } else {
-        document.getElementById("datas-cartao").style.display = "none";
-        document.getElementById("data-saldo-conta").style.display = "block";
+        console.log("Elemento 'tipo-conta' não encontrado!");
     }
-
-    atualizarPlaceholderSaldo();
-
 });
 
 document.getElementById("btn-salvar-conta").addEventListener("click", async () => {
