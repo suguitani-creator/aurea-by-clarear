@@ -1116,3 +1116,36 @@ button.modo-edicao:hover {
     border-left: 4px solid #28a745;  /* Borda verde */
 }
 
+.investimento-item {
+    display: block;
+    width: 100%;
+}
+
+.extrato-investimento {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #eee;
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    animation: fadeIn 0.2s ease;
+}
+
+.linha-extrato {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+}
+
+.saldo-total {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 2px solid #ddd;
+}
+
+#investimentos-detalhe {
+    max-height: 400px;
+    overflow-y: auto;
+}
