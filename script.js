@@ -2243,7 +2243,8 @@ async function renderizarInvestimentos() {
             investimentos[nome] = {
                 tipo: t.tipoInvestimento || "-",
                 totalInvestido: 0,
-                totalAtual: 0
+                totalAtual: 0,
+                transacoes: [] // 🔥 CORREÇÃO AQUI
             };
         }
 
@@ -2252,6 +2253,9 @@ async function renderizarInvestimentos() {
 
         investimentos[nome].totalInvestido += valor;
         investimentos[nome].totalAtual += valorAtual;
+
+        // 🔥 GUARDA HISTÓRICO
+        investimentos[nome].transacoes.push(t);
     });
 
     container.innerHTML = "";
@@ -2268,21 +2272,51 @@ async function renderizarInvestimentos() {
         totalAtualGeral += inv.totalAtual;
 
         const div = document.createElement("div");
-        div.className = "saldo-item";
+        div.className = "saldo-item investimento-item";
 
         div.innerHTML = `
-            <div>
-                <strong>${nome}</strong><br>
-                <small>${inv.tipo}</small>
+            <div class="linha-investimento">
+                <div>
+                    <strong>${nome}</strong><br>
+                    <small>${inv.tipo}</small>
+                </div>
+
+                <div style="text-align:right">
+                    <div>R$ ${inv.totalAtual.toFixed(2)}</div>
+                    <small style="color:${lucro >= 0 ? '#4A7C59' : '#A94442'}">
+                        ${lucro >= 0 ? "+" : ""}R$ ${lucro.toFixed(2)}
+                    </small>
+                </div>
             </div>
 
-            <div style="text-align:right">
-                <div>R$ ${inv.totalAtual.toFixed(2)}</div>
-                <small style="color:${lucro >= 0 ? '#4A7C59' : '#A94442'}">
-                    ${lucro >= 0 ? "+" : ""}R$ ${lucro.toFixed(2)}
-                </small>
-            </div>
+            <div class="extrato-investimento" style="display:none;"></div>
         `;
+
+        const linha = div.querySelector(".linha-investimento");
+        const extrato = div.querySelector(".extrato-investimento");
+
+        linha.addEventListener("click", () => {
+
+            const aberto = extrato.style.display === "block";
+
+            if (aberto) {
+                extrato.style.display = "none";
+                extrato.innerHTML = "";
+                return;
+            }
+
+            extrato.style.display = "block";
+
+            extrato.innerHTML = inv.transacoes
+                .sort((a, b) => new Date(b.data) - new Date(a.data))
+                .map(t => `
+                    <div class="linha-extrato">
+                        <span>${formatarData(t.data)}</span>
+                        <span>R$ ${Number(t.valor).toFixed(2)}</span>
+                    </div>
+                `)
+                .join("");
+        });
 
         container.appendChild(div);
     });

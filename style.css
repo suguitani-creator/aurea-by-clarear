@@ -1116,3 +1116,18 @@ button.modo-edicao:hover {
     border-left: 4px solid #28a745;  /* Borda verde */
 }
 
+.linha-investimento {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 8px 0;
+}
+
+.linha-extrato {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 4px 0;
+    border-top: 1px solid #eee;
+}
+
