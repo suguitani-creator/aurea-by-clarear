@@ -593,10 +593,10 @@ li.despesa {
 
 .filtro-comparativo {
     display: flex;
-    flex-direction: column;
+    flex-direction: column;   /* 🔥 ESSENCIAL */
     gap: 14px;
 
-    align-items: stretch; /* 🔥 importante */
+    align-items: stretch;     /* 🔥 ESSENCIAL */
 }
 
 .comparativo-container {
@@ -1165,5 +1165,6 @@ button.modo-edicao:hover {
 
 .filtro-comparativo > div {
     width: 100%;
+    display: block;
 }
 
