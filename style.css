@@ -601,18 +601,20 @@ li.despesa {
 
 .comparativo-container {
     display: block;
-    width: 100%;
-    max-width: 200px; /* mantém seu tamanho */
+    width: 100%;            /* 🔥 ocupa espaço disponível */
+    max-width: 100%;        /* 🔥 remove limitação */
+
     background: #F0E7DA;
-    padding: 10px 16px;
-    border-radius: 10px;
-    cursor: pointer;
+    padding: 12px 16px;
+    border-radius: 12px;
+
     font-size: 13px;
     color: #8B6F4E;
+
     transition: all 0.3s ease;
-    width: 200px;
-    text-align: center;
-    margin: 0; /* importante */
+
+    text-align: left;       /* 🔥 importante pro layout */
+    margin: 0;
 }
 
 .comparativo-container:hover {
