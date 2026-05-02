@@ -127,6 +127,45 @@
             <button id="btn-abrir-form-conta" class="secondary-btn">Adicionar Conta ou Cartão</button>
             <!-- Botão para alternar a exibição das contas e cartões -->
             <button id="btn-exibir-contas" class="secondary-btn">Exibir Contas e Cartões</button>
+            <div id="indicador-edicao-conta" class="indicador-edicao" style="display:none;">
+                    Editando Conta
+                </div>
+
+                <!-- Formulário de Adicionar Conta ou Cartão (oculto inicialmente) -->
+                <div id="formulario-conta" style="display: none;">
+                    <h3>Adicionar Conta ou Cartão</h3>
+                    <select id="tipo-conta">
+                        <option value="conta">Conta Corrente</option>
+                        <option value="cartao">Cartão de Crédito</option>
+                    </select>
+
+                    <input type="text" id="nome-conta" placeholder="Nome da conta ou cartão" />
+                    <input type="number" id="saldo-conta" placeholder="Saldo ou limite" />
+
+                    <!-- Exibir campo de data de saldo para contas correntes -->
+                    <input type="date" id="data-saldo-conta" placeholder="Data de atualização do saldo" style="display:none;" />
+
+                    <!-- Exibir campos de vencimento e fechamento para cartão -->
+                    <div id="datas-cartao" style="display:none;">
+                        <label for="vencimento-cartao">Vencimento</label>
+                        <input type="date" id="vencimento-cartao" placeholder="Selecione o dia de vencimento" />
+                        <label for="fechamento-cartao">Fechamento</label>
+                        <input type="date" id="fechamento-cartao" placeholder="Selecione o dia de fechamento" />
+                    </div>
+                    <div class="botoes-formulario">
+                        <button id="btn-salvar-conta">Adicionar</button>
+                        <button id="btn-cancelar-edicao-conta" class="btn-cancelar">Cancelar</button>
+                    </div>
+                </div>
+        
+                <!-- Exibir Contas e Cartões Cadastrados (inicialmente escondido) -->
+                <div id="contas-cartoes-container" style="display: none;">
+                    <h3>�� Contas Cadastradas</h3>
+                    <ul id="lista-contas"></ul>
+
+                    <h3>�� Cartões Cadastrados</h3>
+                    <ul id="lista-cartoes"></ul>
+                </div>
         </div>
 
         <script type="module" src="firebase.js"></script>
