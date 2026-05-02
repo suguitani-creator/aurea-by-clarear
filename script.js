@@ -40,7 +40,6 @@ function aplicarLayoutResponsivo() {
 }
 
 function inicializarFormulario() {
-    // Atualiza categorias, subcategorias e o placeholder
     atualizarCategorias();
     atualizarSubcategorias();
     atualizarPlaceholderSaldo();
@@ -48,23 +47,15 @@ function inicializarFormulario() {
     const categoria = document.getElementById("categoria-teste");
     if (categoria) {
         categoria.addEventListener("change", atualizarSubcategorias);
-    } else {
-        console.log("Elemento 'categoria-teste' não encontrado!");
     }
 
-    const tipoTesteEl = document.getElementById("tipo-teste");
-    if (tipoTesteEl) {
-        tipoTesteEl.addEventListener("change", atualizarCategorias);
-    } else {
-        console.log("Elemento 'tipo-teste' não encontrado!");
-    }
+    document
+        .getElementById("tipo-teste")
+        .addEventListener("change", atualizarCategorias);
 
-    const btnAdicionarEl = document.getElementById("btn-adicionar");
-    if (btnAdicionarEl) {
-        btnAdicionarEl.addEventListener("click", adicionarTransacao);
-    } else {
-        console.log("Elemento 'btn-adicionar' não encontrado!");
-    }
+    document
+        .getElementById("btn-adicionar")
+        .addEventListener("click", adicionarTransacao);
 }
 
 function inicializarTipoConta() {
@@ -295,7 +286,7 @@ async function adicionarTransacao() {
                 return;
             }
 
-            // 🔥 PARCELADO
+            // �� PARCELADO
             if (parcelas > 1) {
                 const [anoFatura, mesFaturaNumero] = mesFatura.split("-");
                 let ano = parseInt(anoFatura);
@@ -409,7 +400,7 @@ async function adicionarTransacao() {
             dados
         );
 
-        // 🔥 só roda para pagamento de fatura
+        // �� só roda para pagamento de fatura
         if (tipo === "pagamento_fatura") {
             await quitarFatura({
                 userId: user.uid,
@@ -431,18 +422,8 @@ async function adicionarTransacao() {
 }
 
 function atualizarCategorias() {
-    const tipoEl = document.getElementById("tipo-teste");
-    if (!tipoEl) {
-        console.log("Elemento 'tipo-teste' não encontrado!");
-        return;
-    }
-
-    const tipo = tipoEl.value;
+    const tipo = document.getElementById("tipo-teste").value;
     const selectCategoria = document.getElementById("categoria-teste");
-    if (!selectCategoria) {
-        console.log("Elemento 'categoria-teste' não encontrado!");
-        return;
-    }
 
     selectCategoria.innerHTML = "";
 
@@ -466,6 +447,7 @@ function atualizarCategorias() {
     categoriasLista.forEach(cat => {
         const option = document.createElement("option");
         option.value = cat.toLowerCase();
+
         option.textContent =
             tipo === "receita"
                 ? cat
@@ -555,7 +537,7 @@ function atualizarTela(listaTransacoes) {
                 </button>
 
                 <button class="btn-delete" onclick="confirmarExclusao('${t.id}')">
-                    🗑️
+                    ��️
                 </button>
             </div>
 
@@ -666,7 +648,7 @@ function calcularSaldo(listaTransacoes) {
                 totalDespesas += valor;
             }
 
-            // 🚫 crédito NUNCA entra aqui
+            // �� crédito NUNCA entra aqui
         }
 
         // ===== PAGAMENTO DE FATURA =====
@@ -693,7 +675,7 @@ async function removerTransacao(id) {
     const user = auth.currentUser;
     if (!user) return;
 
-    // 🔥 BUSCA DIRETO DO FIRESTORE (100% confiável)
+    // �� BUSCA DIRETO DO FIRESTORE (100% confiável)
     const docRef = doc(db, "users", user.uid, "transacoes", id);
     const docSnap = await getDoc(docRef);
 
@@ -703,7 +685,7 @@ async function removerTransacao(id) {
 
     console.log("Transação a remover:", transacao);
 
-    // 🔥 AGORA SIM: SEMPRE FUNCIONA
+    // �� AGORA SIM: SEMPRE FUNCIONA
     if (transacao.tipo === "pagamento_fatura") {
         console.log("Chamando reabrirFatura");
 
@@ -944,7 +926,7 @@ document.getElementById("confirmar-exclusao").addEventListener("click", async ()
 
         } else {
 
-            // 🔥 AGORA SIM PASSA PELA LÓGICA COMPLETA
+            // �� AGORA SIM PASSA PELA LÓGICA COMPLETA
             await removerTransacao(idParaExcluir);
 
         }
@@ -1215,33 +1197,20 @@ document.getElementById("btn-abrir-form-conta").addEventListener("click", () => 
     //document.getElementById("btn-abrir-form-conta").style.display = "none";
 });
 
-    document.addEventListener("DOMContentLoaded", function() {
-    const tipoContaEl = document.getElementById("tipo-conta");
-    if (tipoContaEl) {
-        tipoContaEl.addEventListener("change", function() {
-            const tipo = this.value;
+    document.getElementById("tipo-conta").addEventListener("change", function() {
 
-            if (tipo === "cartao") {
-                const datasCartao = document.getElementById("datas-cartao");
-                const dataSaldoConta = document.getElementById("data-saldo-conta");
-                if (datasCartao && dataSaldoConta) {
-                    datasCartao.style.display = "block";
-                    dataSaldoConta.style.display = "none";
-                }
-            } else {
-                const datasCartao = document.getElementById("datas-cartao");
-                const dataSaldoConta = document.getElementById("data-saldo-conta");
-                if (datasCartao && dataSaldoConta) {
-                    datasCartao.style.display = "none";
-                    dataSaldoConta.style.display = "block";
-                }
-            }
+    const tipo = this.value;
 
-            atualizarPlaceholderSaldo();
-        });
+    if (tipo === "cartao") {
+        document.getElementById("datas-cartao").style.display = "block";
+        document.getElementById("data-saldo-conta").style.display = "none";
     } else {
-        console.log("Elemento 'tipo-conta' não encontrado!");
+        document.getElementById("datas-cartao").style.display = "none";
+        document.getElementById("data-saldo-conta").style.display = "block";
     }
+
+    atualizarPlaceholderSaldo();
+
 });
 
 document.getElementById("btn-salvar-conta").addEventListener("click", async () => {
@@ -1742,7 +1711,7 @@ function escutarContasTempoReal() {
         "conta-bancaria-depositada",
         "conta-bancaria-debitada",
         "conta-pagamento-fatura",
-        "conta-investimento" // 👈 NOVO
+        "conta-investimento" // �� NOVO
         ],
         contas
     );
@@ -1876,17 +1845,17 @@ document
         if (
             t.tipo === "despesa" &&
             t.formaPagamento === "credito" &&
-            t.status !== "pago" && // 🔥 ESSA LINHA É A CHAVE
+            t.status !== "pago" && // �� ESSA LINHA É A CHAVE
             t.cartao &&
             t.data
         ) {
             // ✅ NÃO dividir novamente — o valor já é da parcela
             const valorParcela = t.valor;
 
-            // 🔥 usa a DATA da parcela (não mesFatura)
+            // �� usa a DATA da parcela (não mesFatura)
             const mesRaw = t.data.slice(0, 7); // "2025-05"
 
-            // 🎨 formata para "Mai/25"
+            // �� formata para "Mai/25"
             const mesFormatado = formatarMesAno(mesRaw);
 
             const chave = `${t.cartao}__${mesFormatado}`;
@@ -2020,7 +1989,7 @@ document.getElementById("toggle-saldo").addEventListener("click", () => {
     saldoVisivel = !saldoVisivel;
 
     const icone = document.getElementById("icone-olho");
-    icone.textContent = saldoVisivel ? "👁️" : "🙈";
+    icone.textContent = saldoVisivel ? "��️" : "��";
 
     renderSaldo();
 });
@@ -2274,8 +2243,7 @@ async function renderizarInvestimentos() {
             investimentos[nome] = {
                 tipo: t.tipoInvestimento || "-",
                 totalInvestido: 0,
-                totalAtual: 0,
-                transacoes: [] // 🔥 CORREÇÃO AQUI
+                totalAtual: 0
             };
         }
 
@@ -2284,9 +2252,6 @@ async function renderizarInvestimentos() {
 
         investimentos[nome].totalInvestido += valor;
         investimentos[nome].totalAtual += valorAtual;
-
-        // 🔥 GUARDA HISTÓRICO
-        investimentos[nome].transacoes.push(t);
     });
 
     container.innerHTML = "";
@@ -2303,52 +2268,21 @@ async function renderizarInvestimentos() {
         totalAtualGeral += inv.totalAtual;
 
         const div = document.createElement("div");
-        div.className = "saldo-item investimento-item";
+        div.className = "saldo-item";
 
         div.innerHTML = `
-            <div class="linha-investimento">
-                <div>
-                    <strong>${nome}</strong><br>
-                    <small>${inv.tipo}</small>
-                </div>
-
-                <div style="text-align:right">
-                    <div>R$ ${inv.totalAtual.toFixed(2)}</div>
-                    <small style="color:${lucro >= 0 ? '#4A7C59' : '#A94442'}">
-                        ${lucro >= 0 ? "+" : ""}R$ ${lucro.toFixed(2)}
-                    </small>
-                </div>
+            <div>
+                <strong>${nome}</strong><br>
+                <small>${inv.tipo}</small>
             </div>
 
-            <div class="extrato-investimento" style="display:none;"></div>
+            <div style="text-align:right">
+                <div>R$ ${inv.totalAtual.toFixed(2)}</div>
+                <small style="color:${lucro >= 0 ? '#4A7C59' : '#A94442'}">
+                    ${lucro >= 0 ? "+" : ""}R$ ${lucro.toFixed(2)}
+                </small>
+            </div>
         `;
-
-        const linha = div.querySelector(".linha-investimento");
-        const extrato = div.querySelector(".extrato-investimento");
-
-        linha.addEventListener("click", (e) => {
-            e.stopPropagation(); // 🔥 ESSENCIAL
-
-            const aberto = extrato.style.display === "block";
-
-            if (aberto) {
-                extrato.style.display = "none";
-                extrato.innerHTML = "";
-                return;
-            }
-
-            extrato.style.display = "block";
-
-            extrato.innerHTML = inv.transacoes
-                .sort((a, b) => new Date(b.data) - new Date(a.data))
-                .map(t => `
-                    <div class="linha-extrato">
-                        <span>${formatarData(t.data)}</span>
-                        <span>R$ ${Number(t.valor).toFixed(2)}</span>
-                    </div>
-                `)
-                .join("");
-        });
 
         container.appendChild(div);
     });
@@ -2382,14 +2316,14 @@ document
         const container = document.getElementById("investimentos-detalhe");
         const aberto = this.classList.contains("show");
 
-        // 🔴 FECHAR
+        // �� FECHAR
         if (aberto) {
             this.classList.remove("show");
             container.innerHTML = ""; // limpa conteúdo
             return;
         }
 
-        // 🟢 ABRIR
+        // �� ABRIR
         this.classList.add("show");
         await renderizarInvestimentos();
     });
