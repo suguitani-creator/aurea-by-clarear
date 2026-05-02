@@ -593,31 +593,26 @@ li.despesa {
 
 .filtro-comparativo {
     display: flex;
-    flex-direction: column;   /* 🔥 ESSENCIAL */
-    gap: 14px;
-
-    align-items: stretch;     /* 🔥 ESSENCIAL */
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .comparativo-container {
     display: block;
-    width: 100%;            /* 🔥 ocupa espaço disponível */
-    max-width: 100%;        /* 🔥 remove limitação */
-
+    width: 100%;
+    max-width: 200px; /* mantém seu tamanho */
     background: #F0E7DA;
-    padding: 12px 16px;
-    border-radius: 12px;
-
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
     font-size: 13px;
     color: #8B6F4E;
-
     transition: all 0.3s ease;
-
-    text-align: left;       /* 🔥 importante pro layout */
-    margin: 0;
-
-    height: auto;
-    overflow: visible;
+    width: 200px;
+    text-align: center;
+    margin: 0; /* importante */
 }
 
 .comparativo-container:hover {
@@ -998,7 +993,7 @@ button.modo-edicao:hover {
     border: 1px solid #ccc;
     box-sizing: border-box;
 
-    transition: all 0.2s ease; /* 🔥 animação suave */
+    transition: all 0.2s ease; /* �� animação suave */
 }
 
 /* ocupa linha toda */
@@ -1038,7 +1033,7 @@ button.modo-edicao:hover {
     border-radius: 8px;
     cursor: pointer;
 
-    transition: all 0.2s ease; /* 🔥 animação */
+    transition: all 0.2s ease; /* �� animação */
 }
 
 /* Hover (elevação leve) */
@@ -1094,13 +1089,10 @@ button.modo-edicao:hover {
 }
 
 .saldo-total {
-    margin-top: 12px;
-    padding-top: 10px;
-    border-top: 2px solid #ccc;
-
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    margin-top: 8px;
+    font-weight: bold;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding-top: 6px;
 }
 
 #faturas-detalhe {
@@ -1110,7 +1102,6 @@ button.modo-edicao:hover {
 
 #faturas-container.show #faturas-detalhe {
     display: block;
-    height: auto;
 }
 
 /* Estilo para transações pendentes */
@@ -1123,48 +1114,5 @@ button.modo-edicao:hover {
 .transacao-paga {
     background-color: #d4edda;  /* Cor verde clara */
     border-left: 4px solid #28a745;  /* Borda verde */
-}
-
-.linha-investimento {
-    display: flex;
-    justify-content: space-between;
-    cursor: pointer;
-    padding: 8px 0;
-}
-
-.linha-extrato {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    padding: 4px 0;
-    border-top: 1px solid #eee;
-}
-
-#investimentos-detalhe {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    overflow: visible;
-}
-
-.investimento-item {
-    display: block;
-    width: 100%;
-}
-
-.extrato-investimento {
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid #ddd;
-
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.filtro-comparativo > div {
-    width: 100%;
-    display: block;
 }
 
