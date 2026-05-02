@@ -218,13 +218,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
 async function adicionarTransacao() {
     limparErrosFormulario();
+
     const user = auth.currentUser;
     if (!user) return;
 
     const tipo = document.getElementById("tipo-teste").value;
 
     if (!tipo) {
-        showToast("Selecione receita ou despesa", "error");
+        showToast("Selecione o tipo de transação", "error");
         return;
     }
 
@@ -232,41 +233,35 @@ async function adicionarTransacao() {
 
     // ================= RECEITA =================
     if (tipo === "receita") {
-        const fonte = document.getElementById("fonte")?.value || "";
-        const descricao = document.getElementById("descricao-receita")?.value || "";
         const valor = parseFloat(document.getElementById("valor-receita")?.value);
         const data = document.getElementById("data-receita")?.value || "";
         const conta = document.getElementById("conta-bancaria-depositada")?.value || "";
-
-        if (isNaN(valor)) {
-            marcarErro(document.getElementById("valor-receita"));
-        }
-
-        if (!data) {
-            marcarErro(document.getElementById("data-receita"));
-        }
-
-        if (!conta) {
-            marcarErro(document.getElementById("conta-bancaria-depositada"));
-        }
 
         if (isNaN(valor) || !data || !conta) {
             showToast("Preencha os campos obrigatórios", "error");
             return;
         }
 
-        dados = { ...dados, fonte, descricao, valor, data, conta };
+        dados = {
+            ...dados,
+            fonte: document.getElementById("fonte")?.value || "",
+            descricao: document.getElementById("descricao-receita")?.value || "",
+            valor,
+            data,
+            conta
+        };
     }
 
     // ================= DESPESA =================
     if (tipo === "despesa") {
-        const essencial = document.getElementById("essencial")?.value || "";
-        const categoria = document.getElementById("categoria-teste")?.value || "";
-        const subcategoria = document.getElementById("subcategoria-teste")?.value || "";
-        const descricao = document.getElementById("descricao-despesa")?.value || "";
         const valor = parseFloat(document.getElementById("valor-despesa")?.value);
         const data = document.getElementById("data-despesa")?.value || "";
         const formaPagamento = document.getElementById("forma-pagamento-teste")?.value || "";
+
+        if (isNaN(valor) || !data || !formaPagamento) {
+            showToast("Preencha os campos obrigatórios", "error");
+            return;
+        }
 
         let conta = "";
         let cartao = "";
@@ -276,7 +271,6 @@ async function adicionarTransacao() {
         if (formaPagamento === "pix" || formaPagamento === "debito") {
             conta = document.getElementById("conta-bancaria-debitada")?.value || "";
             if (!conta) {
-                marcarErro(document.getElementById("conta-bancaria-debitada"));
                 showToast("Selecione a conta", "error");
                 return;
             }
@@ -287,91 +281,54 @@ async function adicionarTransacao() {
             parcelas = document.getElementById("parcelas")?.value.replace("x", "") || "";
             mesFatura = document.getElementById("mes-fatura")?.value || "";
 
-            if (!cartao) {
-                marcarErro(document.getElementById("nome-cartao"));
-            }
-
-            if (!parcelas) {
-                marcarErro(document.getElementById("parcelas"));
-            }
-
-            if (!mesFatura) {
-                marcarErro(document.getElementById("mes-fatura"));
-            }
-
             if (!cartao || !parcelas || !mesFatura) {
                 showToast("Preencha os dados do cartão", "error");
                 return;
             }
 
-            // Adiciona o status "pendente" para as transações com cartão de crédito
-            dados.status = "pendente"; // A transação de crédito começa como "pendente"
-        }
+            // 🔥 PARCELADO
+            if (parcelas > 1) {
+                const [anoFatura, mesFaturaNumero] = mesFatura.split("-");
+                let ano = parseInt(anoFatura);
+                let mes = parseInt(mesFaturaNumero) - 1;
+                const dia = new Date(data).getDate();
 
-        if (isNaN(valor)) {
-            marcarErro(document.getElementById("valor-despesa"));
-        }
+                for (let i = 0; i < parcelas; i++) {
+                    let mesParcela = mes + i;
+                    let anoParcela = ano;
 
-        if (!data) {
-            marcarErro(document.getElementById("data-despesa"));
-        }
+                    if (mesParcela > 11) {
+                        mesParcela -= 12;
+                        anoParcela += 1;
+                    }
 
-        if (!formaPagamento) {
-            marcarErro(document.getElementById("forma-pagamento-teste"));
-        }
+                    const dataParcela = `${anoParcela}-${String(mesParcela + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
 
-        if (isNaN(valor) || !data || !formaPagamento) {
-            showToast("Preencha os campos obrigatórios", "error");
-            return;
-        }
-
-        // Parcelamento
-        if (formaPagamento === "credito" && parcelas > 0) {
-            const [anoFatura, mesFaturaNumero] = mesFatura.split("-");
-
-            let ano = parseInt(anoFatura);
-            let mes = parseInt(mesFaturaNumero) - 1;
-
-            const diaCompra = new Date(data).getDate();
-
-            for (let i = 0; i < parcelas; i++) {
-                let mesParcela = mes + i;
-
-                if (mesParcela > 11) {
-                    mesParcela -= 12;
-                    ano += 1;
+                    await addDoc(
+                        collection(db, "users", user.uid, "transacoes"),
+                        {
+                            tipo,
+                            formaPagamento,
+                            cartao,
+                            valor: valor / parcelas,
+                            data: dataParcela,
+                            parcelas: i + 1,
+                            mesFatura: `${anoParcela}-${String(mesParcela + 1).padStart(2, "0")}`,
+                            status: "pendente"
+                        }
+                    );
                 }
 
-                let dataParcela = `${ano}-${String(mesParcela + 1).padStart(2, "0")}-${String(diaCompra).padStart(2, "0")}`;
-
-                let transacaoParcela = {
-                    ...dados,
-                    formaPagamento,
-                    cartao,
-                    mesFatura: `${ano}-${String(mesParcela + 1).padStart(2, "0")}`,
-                    categoria,
-                    subcategoria,
-                    valor: valor / parcelas,
-                    data: dataParcela,
-                    parcelas: i + 1,
-                    status: "pendente", // Adiciona o status "pendente" para cada parcela
-                };
-
-                await addDoc(collection(db, "users", user.uid, "transacoes"), transacaoParcela);
+                showToast("Despesas parceladas adicionadas!");
+                limparFormulario();
+                return;
             }
 
-            showToast("Despesas parceladas adicionadas!");
-
-            limparFormulario(); 
-
-            return;
+            dados.status = "pendente";
         }
 
         dados = {
             ...dados,
-            essencial,
-            categoria,
-            subcategoria,
             valor,
             data,
             formaPagamento,
@@ -382,100 +339,49 @@ async function adicionarTransacao() {
         };
     }
 
-    // ================= PAGAMENTO DE FATURA =================
+    // ================= PAGAMENTO FATURA =================
     if (tipo === "pagamento_fatura") {
-        const cartao = document.getElementById("cartao-fatura")?.value || "";
-        const mesFatura = document.getElementById("mes-fatura-pagamento")?.value || "";
         const valor = parseFloat(document.getElementById("valor-fatura")?.value);
         const data = document.getElementById("data-fatura")?.value || "";
         const conta = document.getElementById("conta-pagamento-fatura")?.value || "";
-
-        if (!cartao) {
-            marcarErro(document.getElementById("cartao-fatura"));
-        }
-
-        if (!mesFatura) {
-            marcarErro(document.getElementById("mes-fatura-pagamento"));
-        }
-
-        if (isNaN(valor)) {
-            marcarErro(document.getElementById("valor-fatura"));
-        }
-
-        if (!data) {
-            marcarErro(document.getElementById("data-fatura"));
-        }
-
-        if (!conta) {
-            marcarErro(document.getElementById("conta-pagamento-fatura"));
-        }
+        const cartao = document.getElementById("cartao-fatura")?.value || "";
+        const mesFatura = document.getElementById("mes-fatura-pagamento")?.value || "";
 
         if (!cartao || !mesFatura || isNaN(valor) || !data || !conta) {
             showToast("Preencha todos os campos da fatura", "error");
             return;
         }
 
-        dados = {
-            ...dados,
-            cartao,
-            mesFatura,
-            valor,
-            data,
-            conta,
-        };
+        dados = { ...dados, cartao, mesFatura, valor, data, conta };
     }
 
-   // ================= INVESTIMENTO =================
+    // ================= INVESTIMENTO =================
     if (tipo === "investimento") {
-
-        const nome = document.getElementById("nome-investimento")?.value || "";
-        const tipoInvestimento = document.getElementById("tipo-investimento")?.value || "";
         const valor = parseFloat(document.getElementById("valor-investimento")?.value);
         const data = document.getElementById("data-investimento")?.value || "";
         const conta = document.getElementById("conta-investimento")?.value || "";
 
-        // 🔥 NOVO (opcional por enquanto)
-        const rendimento = parseFloat(
-            document.getElementById("rendimento-investimento")?.value
-        ) || 0;
-
-        if (!nome || !tipoInvestimento || isNaN(valor) || !data || !conta) {
-            showToast("Preencha todos os campos do investimento", "error");
+        if (isNaN(valor) || !data || !conta) {
+            showToast("Preencha os campos do investimento", "error");
             return;
         }
 
-        // 🔥 cálculo inicial
-        const valorAtual = valor * (1 + rendimento);
+        const rendimentoRaw = parseFloat(document.getElementById("rendimento-investimento")?.value);
+        const rendimento = isNaN(rendimentoRaw) ? 0 : rendimentoRaw / 100;
 
         dados = {
             ...dados,
-            nomeInvestimento: nome,
-            tipoInvestimento,
+            nomeInvestimento: document.getElementById("nome-investimento")?.value || "",
+            tipoInvestimento: document.getElementById("tipo-investimento")?.value || "",
             valor,
             data,
             conta,
-
-        // 🆕 NOVOS CAMPOS
-        rendimento,      // ex: 0.12 = 12%
-        valorAtual       // valor já com rendimento aplicado
+            rendimento,
+            valorAtual: valor * (1 + rendimento)
         };
     }
-    // ================= LIMPEZA =================
-    Object.keys(dados).forEach(key => {
-        if (["cartao", "parcelas", "mesFatura"].includes(key)) {
-            if (dados[key] === undefined || dados[key] === null) {
-                dados[key] = "";
-            }
-        } else if (
-            dados[key] === undefined ||
-            dados[key] === null ||
-            dados[key] === ""
-        ) {
-            delete dados[key];
-        }
-    });
 
-    // ================= EDIÇÃO =================
+    // ================= FINAL PADRÃO =================
     if (idEmEdicao !== null) {
         await updateDoc(
             doc(db, "users", user.uid, "transacoes", idEmEdicao),
@@ -483,35 +389,16 @@ async function adicionarTransacao() {
         );
 
         idEmEdicao = null;
-
         showToast("Transação atualizada!");
-
-        document.getElementById("indicador-edicao").style.display = "none";
-
-        const btn = document.getElementById("btn-adicionar");
-        btn.textContent = "Adicionar";
-        btn.classList.remove("modo-edicao");
-
         limparFormulario();
-
         return;
     }
 
-    // ================= NOVA =================
-    await addDoc(
-        collection(db, "users", user.uid, "transacoes"),
-        dados
-    );
-
-    // 🔥 AQUI entra a mágica
-    await quitarFatura({
-        userId: user.uid,
-        cartao: dados.cartao,
-        mesFatura: dados.mesFatura
+    await finalizarTransacao({
+        user,
+        dados,
+        mensagem: "Transação adicionada!"
     });
-
-    showToast("Transação adicionada!");
-    limparFormulario();
 }
 
 function atualizarCategorias() {
@@ -2420,3 +2307,22 @@ document
         this.classList.add("show");
         await renderizarInvestimentos();
     });
+
+async function finalizarTransacao({ user, dados, mensagem }) {
+    await addDoc(
+        collection(db, "users", user.uid, "transacoes"),
+        dados
+    );
+
+    // Só tenta quitar se fizer sentido
+    if (dados.tipo === "pagamento_fatura") {
+        await quitarFatura({
+            userId: user.uid,
+            cartao: dados.cartao,
+            mesFatura: dados.mesFatura
+        });
+    }
+
+    showToast(mensagem || "Transação adicionada!");
+    limparFormulario();
+}
