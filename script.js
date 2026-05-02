@@ -2295,7 +2295,8 @@ async function renderizarInvestimentos() {
         const linha = div.querySelector(".linha-investimento");
         const extrato = div.querySelector(".extrato-investimento");
 
-        linha.addEventListener("click", () => {
+        linha.addEventListener("click", (e) => {
+            e.stopPropagation(); // 🔥 ESSENCIAL
 
             const aberto = extrato.style.display === "block";
 
