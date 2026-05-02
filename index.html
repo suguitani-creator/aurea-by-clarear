@@ -280,28 +280,34 @@
                     <!-- BLOCO INVESTIMENTO -->
                     <div id="bloco-investimento" style="display:none;">
 
+                        <!-- Linha 1 -->
                         <div class="form-grid-2">
-                            <input id="nome-investimento" class="input full" placeholder="Nome do investimento">
-                        </div>
-
-                        <div class="form-grid-2">
+                            <input id="nome-investimento" class="input" placeholder="Nome do investimento">
                             <select id="tipo-investimento" class="input">
                                 <option value="">Tipo</option>
-                                <option value="renda_fixa">Renda fixa</option>
-                                <option value="renda_variavel">Renda variável</option>
+                                <option value="renda_fixa">Renda Fixa</option>
+                                <option value="renda_variavel">Renda Variável</option>
                             </select>
                         </div>
 
+                        <!-- Linha 2 -->
                         <div class="form-grid-2">
-                            <input id="valor-investimento" type="number" class="input" placeholder="Valor">
+                            <input id="valor-investimento" type="number" class="input" placeholder="Valor investido">
                             <input id="data-investimento" type="date" class="input">
                         </div>
 
+                        <!-- Linha 3 -->
                         <div class="form-grid-2">
                             <select id="conta-investimento" class="input full">
                                 <option value="">Conta de origem</option>
                             </select>
                         </div>
+
+                        <!-- 🆕 Linha 4 — NOVO CAMPO -->
+                        <div class="form-grid-2">
+                            <input id="rendimento-investimento" type="number" class="input" placeholder="Rendimento (%)">
+                        </div>
+
                     </div>
 
                     <!-- BOTÕES -->

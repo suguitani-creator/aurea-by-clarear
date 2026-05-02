@@ -907,6 +907,7 @@ function limparFormulario() {
     document.getElementById("valor-investimento").value = "";
     document.getElementById("data-investimento").value = "";
     document.getElementById("conta-investimento").value = "";
+    document.getElementById("rendimento-investimento").value = "";
 
     // Resetando a visibilidade dos campos
     document.getElementById("bloco-receita").style.display = "none"; // Esconde o bloco de receita
@@ -1115,6 +1116,8 @@ window.editarTransacao = function(id) {
         document.getElementById("valor-investimento").value = transacao.valor || "";
         document.getElementById("data-investimento").value = transacao.data || "";
         document.getElementById("conta-investimento").value = transacao.conta || "";
+        document.getElementById("rendimento-investimento").value = 
+            transacao.rendimento ? transacao.rendimento * 100 : "";
     }
 
     // ================= UI (IGUAL AO ORIGINAL) =================
