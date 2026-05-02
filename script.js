@@ -425,7 +425,7 @@ async function adicionarTransacao() {
         };
     }
 
-    // ================= INVESTIMENTO =================
+   // ================= INVESTIMENTO =================
     if (tipo === "investimento") {
 
         const nome = document.getElementById("nome-investimento")?.value || "";
@@ -434,21 +434,32 @@ async function adicionarTransacao() {
         const data = document.getElementById("data-investimento")?.value || "";
         const conta = document.getElementById("conta-investimento")?.value || "";
 
+        // 🔥 NOVO (opcional por enquanto)
+        const rendimento = parseFloat(
+            document.getElementById("rendimento-investimento")?.value
+        ) || 0;
+
         if (!nome || !tipoInvestimento || isNaN(valor) || !data || !conta) {
             showToast("Preencha todos os campos do investimento", "error");
             return;
         }
 
+        // 🔥 cálculo inicial
+        const valorAtual = valor * (1 + rendimento);
+
         dados = {
-        ...dados,
-        nomeInvestimento: nome,
-        tipoInvestimento,
-        valor,
-        data,
-        conta
+            ...dados,
+            nomeInvestimento: nome,
+            tipoInvestimento,
+            valor,
+            data,
+            conta,
+
+        // 🆕 NOVOS CAMPOS
+        rendimento,      // ex: 0.12 = 12%
+        valorAtual       // valor já com rendimento aplicado
         };
     }
-
     // ================= LIMPEZA =================
     Object.keys(dados).forEach(key => {
         if (["cartao", "parcelas", "mesFatura"].includes(key)) {
@@ -2301,34 +2312,88 @@ async function calcularInvestimentos() {
 async function renderizarInvestimentos() {
     const container = document.getElementById("investimentos-detalhe");
 
-    const investimentos = await calcularInvestimentos();
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const snapshot = await getDocs(
+        collection(db, "users", user.uid, "transacoes")
+    );
+
+    const investimentos = {};
+
+    // ================= AGRUPAR =================
+    snapshot.forEach(doc => {
+        const t = doc.data();
+
+        if (t.tipo !== "investimento") return;
+
+        const nome = t.nomeInvestimento || "Sem nome";
+
+        if (!investimentos[nome]) {
+            investimentos[nome] = {
+                tipo: t.tipoInvestimento || "-",
+                totalInvestido: 0,
+                totalAtual: 0
+            };
+        }
+
+        const valor = Number(t.valor) || 0;
+        const valorAtual = Number(t.valorAtual ?? t.valor) || 0;
+
+        investimentos[nome].totalInvestido += valor;
+        investimentos[nome].totalAtual += valorAtual;
+    });
 
     container.innerHTML = "";
 
-    let total = 0;
+    let totalInvestidoGeral = 0;
+    let totalAtualGeral = 0;
 
-    Object.entries(investimentos).forEach(([nome, valor]) => {
-        total += valor;
+    // ================= RENDER =================
+    Object.entries(investimentos).forEach(([nome, inv]) => {
+
+        const lucro = inv.totalAtual - inv.totalInvestido;
+
+        totalInvestidoGeral += inv.totalInvestido;
+        totalAtualGeral += inv.totalAtual;
 
         const div = document.createElement("div");
         div.className = "saldo-item";
 
         div.innerHTML = `
-            <span>${nome}</span>
-            <span class="valor receita">
-                R$ ${valor.toFixed(2)}
-            </span>
+            <div>
+                <strong>${nome}</strong><br>
+                <small>${inv.tipo}</small>
+            </div>
+
+            <div style="text-align:right">
+                <div>R$ ${inv.totalAtual.toFixed(2)}</div>
+                <small style="color:${lucro >= 0 ? '#4A7C59' : '#A94442'}">
+                    ${lucro >= 0 ? "+" : ""}R$ ${lucro.toFixed(2)}
+                </small>
+            </div>
         `;
 
         container.appendChild(div);
     });
 
+    // ================= TOTAL GERAL =================
+    const lucroTotal = totalAtualGeral - totalInvestidoGeral;
+
     const totalDiv = document.createElement("div");
     totalDiv.className = "saldo-total";
 
     totalDiv.innerHTML = `
-        <span>Total Investido</span>
-        <span>R$ ${total.toFixed(2)}</span>
+        <div><strong>Total Investido</strong></div>
+        <div>R$ ${totalInvestidoGeral.toFixed(2)}</div>
+
+        <div><strong>Valor Atual</strong></div>
+        <div>R$ ${totalAtualGeral.toFixed(2)}</div>
+
+        <div><strong>Resultado</strong></div>
+        <div style="color:${lucroTotal >= 0 ? '#4A7C59' : '#A94442'}">
+            ${lucroTotal >= 0 ? "+" : ""}R$ ${lucroTotal.toFixed(2)}
+        </div>
     `;
 
     container.appendChild(totalDiv);
