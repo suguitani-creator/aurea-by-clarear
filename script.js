@@ -2305,8 +2305,9 @@ document
         if (t.tipo !== "investimento") return;
 
         const nome = t.nomeInvestimento || "Sem nome";
-        const valor = Number(t.valorAtual ?? t.valor) || 0;
-        const data = new Date(t.data); // Certifique-se de usar a data corretamente
+        const data = t.data;  // Aqui, vamos verificar se `data` está definida
+
+        if (!data) return;  // Se não houver data, ignorar este registro
 
         if (!investimentos[nome]) {
             investimentos[nome] = {
@@ -2315,7 +2316,13 @@ document
             };
         }
 
-        investimentos[nome].datas.push(data);
+        // Se a data for um timestamp, use toDate() para convertê-la para objeto Date
+        const valor = Number(t.valorAtual ?? t.valor) || 0;
+
+        // Verifique se `data` é um timestamp antes de chamá-lo
+        const parsedDate = data.toDate ? data.toDate() : new Date(data);  // Verifique se é necessário usar o `toDate()`
+
+        investimentos[nome].datas.push(parsedDate);
         investimentos[nome].valores.push(valor);
     });
 
