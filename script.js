@@ -286,46 +286,6 @@ async function adicionarTransacao() {
                 showToast("Preencha os dados do cartão", "error");
                 return;
             }
-
-            // �� PARCELADO
-            if (parcelas > 1) {
-                const [anoFatura, mesFaturaNumero] = mesFatura.split("-");
-                let ano = parseInt(anoFatura);
-                let mes = parseInt(mesFaturaNumero) - 1;
-                const dia = new Date(data).getDate();
-
-                for (let i = 0; i < parcelas; i++) {
-                    let mesParcela = mes + i;
-                    let anoParcela = ano;
-
-                    if (mesParcela > 11) {
-                        mesParcela -= 12;
-                        anoParcela += 1;
-                    }
-
-                    const dataParcela = `${anoParcela}-${String(mesParcela + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
-
-                    await addDoc(
-                        collection(db, "users", user.uid, "transacoes"),
-                        {
-                            tipo,
-                            formaPagamento,
-                            cartao,
-                            valor: valor / parcelas,
-                            data: dataParcela,
-                            parcelas: i + 1,
-                            mesFatura: `${anoParcela}-${String(mesParcela + 1).padStart(2, "0")}`,
-                            status: "pendente"
-                        }
-                    );
-                }
-
-                showToast("Despesas parceladas adicionadas!");
-                limparFormulario();
-                return;
-            }
-
-            dados.status = "pendente";
         }
 
         dados = {
@@ -338,22 +298,6 @@ async function adicionarTransacao() {
             parcelas,
             mesFatura
         };
-    }
-
-    // ================= PAGAMENTO FATURA =================
-    if (tipo === "pagamento_fatura") {
-        const valor = parseFloat(document.getElementById("valor-fatura")?.value);
-        const data = document.getElementById("data-fatura")?.value || "";
-        const conta = document.getElementById("conta-pagamento-fatura")?.value || "";
-        const cartao = document.getElementById("cartao-fatura")?.value || "";
-        const mesFatura = document.getElementById("mes-fatura-pagamento")?.value || "";
-
-        if (!cartao || !mesFatura || isNaN(valor) || !data || !conta) {
-            showToast("Preencha todos os campos da fatura", "error");
-            return;
-        }
-
-        dados = { ...dados, cartao, mesFatura, valor, data, conta };
     }
 
     // ================= INVESTIMENTO =================
@@ -384,42 +328,92 @@ async function adicionarTransacao() {
 
     // ================= FINAL PADRÃO =================
     try {
-
-    if (idEmEdicao !== null) {
-        await updateDoc(
-            doc(db, "users", user.uid, "transacoes", idEmEdicao),
-            dados
-        );
-
-        idEmEdicao = null;
-
-        showToast("Transação atualizada!");
-    } else {
-
-        await addDoc(
-            collection(db, "users", user.uid, "transacoes"),
-            dados
-        );
-
-        // �� só roda para pagamento de fatura
-        if (tipo === "pagamento_fatura") {
-            await quitarFatura({
-                userId: user.uid,
-                cartao: dados.cartao,
-                mesFatura: dados.mesFatura
-            });
+        if (idEmEdicao !== null) {
+            await updateDoc(
+                doc(db, "users", user.uid, "transacoes", idEmEdicao),
+                dados
+            );
+            idEmEdicao = null;
+            showToast("Transação atualizada!");
+        } else {
+            await addDoc(
+                collection(db, "users", user.uid, "transacoes"),
+                dados
+            );
+            showToast("Transação adicionada!");
         }
 
-        showToast("Transação adicionada!");
+        limparFormulario();
+    } catch (error) {
+        console.error("Erro ao salvar:", error);
+        showToast("Erro ao salvar transação", "error");
     }
-
-    // ✅ SEMPRE executa
-    limparFormulario();
-
-} catch (error) {
-    console.error("Erro ao salvar:", error);
-    showToast("Erro ao salvar transação", "error");
 }
+
+async function renderizarGraficoInvestimentos() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const snapshot = await getDocs(collection(db, "users", user.uid, "transacoes"));
+    const investimentos = {};
+
+    snapshot.forEach(doc => {
+        const t = doc.data();
+        if (t.tipo !== "investimento") return;
+
+        const nome = t.nomeInvestimento || "Sem nome";
+        const valor = Number(t.valorAtual ?? t.valor) || 0;
+        const data = new Date(t.data); // Certifique-se de usar a data corretamente
+
+        if (!investimentos[nome]) {
+            investimentos[nome] = {
+                datas: [],
+                valores: []
+            };
+        }
+
+        investimentos[nome].datas.push(data);
+        investimentos[nome].valores.push(valor);
+    });
+
+    // Para cada investimento, criar um gráfico
+    Object.entries(investimentos).forEach(([nome, dados]) => {
+        const ctx = document.getElementById("graficoInvestimentos").getContext("2d");
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dados.datas,  // Datas dos aportes
+                datasets: [{
+                    label: nome,
+                    data: dados.valores,  // Valores do investimento ao longo do tempo
+                    borderColor: '#4A7C59',  // Cor da linha (personalizável)
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'time',  // Usar tipo de eixo de tempo
+                        time: {
+                            unit: 'month',  // Definir intervalo de tempo (mensal, por exemplo)
+                            tooltipFormat: 'll'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Data do Aporte'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Valor do Investimento'
+                        }
+                    }
+                }
+            }
+        });
+    });
 }
 
 function atualizarCategorias() {
