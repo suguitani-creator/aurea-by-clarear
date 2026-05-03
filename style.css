@@ -1140,13 +1140,9 @@ button.modo-edicao:hover {
 }
 
 .saldo-total {
-    margin-top: 12px;
+    margin-top: 15px;
     padding-top: 10px;
-    border-top: 2px solid #ccc;
-
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    border-top: 2px solid #ddd;
 }
 
 #investimentos-detalhe {
