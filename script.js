@@ -350,71 +350,6 @@ async function adicionarTransacao() {
     }
 }
 
-async function renderizarGraficoInvestimentos() {
-    const user = auth.currentUser;
-    if (!user) return;
-
-    const snapshot = await getDocs(collection(db, "users", user.uid, "transacoes"));
-    const investimentos = {};
-
-    snapshot.forEach(doc => {
-        const t = doc.data();
-        if (t.tipo !== "investimento") return;
-
-        const nome = t.nomeInvestimento || "Sem nome";
-        const valor = Number(t.valorAtual ?? t.valor) || 0;
-        const data = new Date(t.data); // Certifique-se de usar a data corretamente
-
-        if (!investimentos[nome]) {
-            investimentos[nome] = {
-                datas: [],
-                valores: []
-            };
-        }
-
-        investimentos[nome].datas.push(data);
-        investimentos[nome].valores.push(valor);
-    });
-
-    // Para cada investimento, criar um gráfico
-    Object.entries(investimentos).forEach(([nome, dados]) => {
-        const ctx = document.getElementById("graficoInvestimentos").getContext("2d");
-        const chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: dados.datas,  // Datas dos aportes
-                datasets: [{
-                    label: nome,
-                    data: dados.valores,  // Valores do investimento ao longo do tempo
-                    borderColor: '#4A7C59',  // Cor da linha (personalizável)
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        type: 'time',  // Usar tipo de eixo de tempo
-                        time: {
-                            unit: 'month',  // Definir intervalo de tempo (mensal, por exemplo)
-                            tooltipFormat: 'll'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Data do Aporte'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Valor do Investimento'
-                        }
-                    }
-                }
-            }
-        });
-    });
-}
 
 function atualizarCategorias() {
     const tipo = document.getElementById("tipo-teste").value;
@@ -2370,15 +2305,15 @@ document
         if (t.tipo !== "investimento") return;
 
         const nome = t.nomeInvestimento || "Sem nome";
+        const valor = Number(t.valorAtual ?? t.valor) || 0;
+        const data = new Date(t.data); // Certifique-se de usar a data corretamente
+
         if (!investimentos[nome]) {
             investimentos[nome] = {
                 datas: [],
                 valores: []
             };
         }
-
-        const valor = Number(t.valorAtual ?? t.valor) || 0;
-        const data = t.data || "";  // Certifique-se que o campo "data" está correto
 
         investimentos[nome].datas.push(data);
         investimentos[nome].valores.push(valor);
