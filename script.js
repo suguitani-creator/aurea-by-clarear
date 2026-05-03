@@ -2294,52 +2294,67 @@ document
     });
 
     async function renderizarGraficoInvestimentos() {
-    // Dados simulados de investimento (sem usar o banco de dados por enquanto)
-    const investimentos = {
-        'Investimento A': {
-            datas: ['2022-01-01', '2022-02-01', '2022-03-01', '2022-04-01'],
-            valores: [1000, 1500, 2000, 2500]
-        },
-        'Investimento B': {
-            datas: ['2022-01-01', '2022-02-01', '2022-03-01', '2022-04-01'],
-            valores: [2000, 2200, 2400, 2800]
-        }
-    };
+    const user = auth.currentUser;
+    if (!user) return;
 
-    // Limpar o conteúdo anterior do gráfico
-    const ctx = document.getElementById("graficoInvestimentos").getContext("2d");
-    const chart = new Chart(ctx, {
-        type: 'line', // Tipo de gráfico (linha)
-        data: {
-            labels: investimentos['Investimento A'].datas, // Datas dos aportes
-            datasets: Object.entries(investimentos).map(([nome, dados]) => ({
-                label: nome, // Nome do investimento
-                data: dados.valores, // Valores ao longo do tempo
-                borderColor: '#' + Math.floor(Math.random()*16777215).toString(16), // Cor aleatória
-                fill: false
-            }))
-        },
-        options: {
-            responsive: true,
-            scales: {
-                x: {
-                    type: 'time', // Usar tipo de eixo de tempo
-                    time: {
-                        unit: 'month', // Definir intervalo de tempo
-                        tooltipFormat: 'll' // Formato do tooltip
+    const snapshot = await getDocs(collection(db, "users", user.uid, "transacoes"));
+    const investimentos = {};
+
+    snapshot.forEach(doc => {
+        const t = doc.data();
+        if (t.tipo !== "investimento") return;
+
+        const nome = t.nomeInvestimento || "Sem nome";
+        const valor = Number(t.valorAtual ?? t.valor) || 0;
+        const data = new Date(t.data); // Certifique-se de usar a data corretamente
+
+        if (!investimentos[nome]) {
+            investimentos[nome] = {
+                datas: [],
+                valores: []
+            };
+        }
+
+        investimentos[nome].datas.push(data);
+        investimentos[nome].valores.push(valor);
+    });
+
+    // Para cada investimento, criar um gráfico
+    Object.entries(investimentos).forEach(([nome, dados]) => {
+        const ctx = document.getElementById("graficoInvestimentos").getContext("2d");
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dados.datas,  // Datas dos aportes
+                datasets: [{
+                    label: nome,
+                    data: dados.valores,  // Valores do investimento ao longo do tempo
+                    borderColor: '#4A7C59',  // Cor da linha (personalizável)
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'time',  // Usar tipo de eixo de tempo
+                        time: {
+                            unit: 'month',  // Definir intervalo de tempo (mensal, por exemplo)
+                            tooltipFormat: 'll'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Data do Aporte'
+                        }
                     },
-                    title: {
-                        display: true,
-                        text: 'Data do Aporte'
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Valor do Investimento'
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Valor do Investimento'
+                        }
                     }
                 }
             }
-        }
+        });
     });
 }
