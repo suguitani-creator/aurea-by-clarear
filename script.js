@@ -204,6 +204,7 @@ window.addEventListener("DOMContentLoaded", () => {
             escutarContasTempoReal();
             escutarCartoesTempoReal();
             iniciarListenerSaldo();
+            renderizarGraficoInvestimentos();
 
         } else {
             authContainer.style.display = "block";
