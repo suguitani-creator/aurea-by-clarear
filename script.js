@@ -360,6 +360,7 @@ async function adicionarTransacao() {
         const valor = parseFloat(document.getElementById("valor-investimento")?.value);
         const data = document.getElementById("data-investimento")?.value || "";
         const conta = document.getElementById("conta-investimento")?.value || "";
+        const tipoMov = document.getElementById("tipo-mov-investimento")?.value;
 
         if (isNaN(valor) || !data || !conta) {
             showToast("Preencha os campos do investimento", "error");
@@ -369,15 +370,14 @@ async function adicionarTransacao() {
         const rendimentoRaw = parseFloat(document.getElementById("rendimento-investimento")?.value);
         const rendimento = isNaN(rendimentoRaw) ? 0 : rendimentoRaw / 100;
 
-        dados = {
-            ...dados,
-            nomeInvestimento: document.getElementById("nome-investimento")?.value || "",
-            tipoInvestimento: document.getElementById("tipo-investimento")?.value || "",
-            valor,
-            data,
-            conta,
-            rendimento,
-            valorAtual: valor * (1 + rendimento)
+       dados = {
+        ...dados,
+        nomeInvestimento: document.getElementById("nome-investimento")?.value || "",
+        tipoInvestimento: document.getElementById("tipo-investimento")?.value || "",
+        valor,
+        data,
+        conta,
+        tipoMovimento: tipoMov // 🔥 NOVO
         };
     }
 
@@ -2249,10 +2249,15 @@ async function renderizarInvestimentos() {
         }
 
         const valor = Number(t.valor) || 0;
-        const valorAtual = Number(t.valorAtual ?? t.valor) || 0;
 
-        investimentos[nome].totalInvestido += valor;
-        investimentos[nome].totalAtual += valorAtual;
+        if (t.tipoMovimento === "aporte") {
+            investimentos[nome].totalInvestido += valor;
+            investimentos[nome].totalAtual += valor;
+        }
+
+if (t.tipoMovimento === "rendimento") {
+    investimentos[nome].totalAtual += valor;
+}
 
         // �� GUARDA HISTÓRICO
         investimentos[nome].transacoes.push(t);
@@ -2382,27 +2387,33 @@ document
         lista.push({
             data: t.data,
             valor: Number(t.valor) || 0,
-            valorAtual: Number(t.valorAtual ?? t.valor) || 0
+            tipo: t.tipoMovimento || "aporte"
         });
     });
 
-    // 🔥 ordena por data crescente
     lista.sort((a, b) => new Date(a.data) - new Date(b.data));
 
-    // 🔥 acumula evolução
-    let acumuladoInvestido = 0;
-    let acumuladoAtual = 0;
+    let investido = 0;
+    let atual = 0;
 
     const evolucao = [];
 
     lista.forEach(item => {
-        acumuladoInvestido += item.valor;
-        acumuladoAtual += item.valorAtual;
+
+        if (item.tipo === "aporte") {
+            investido += item.valor;
+            atual += item.valor;
+        }
+
+        if (item.tipo === "rendimento") {
+            atual += item.valor;
+        }
 
         evolucao.push({
             data: item.data,
-            investido: acumuladoInvestido,
-            atual: acumuladoAtual
+            investido,
+            atual,
+            lucro: atual - investido
         });
     });
 
