@@ -376,7 +376,7 @@ async function adicionarTransacao() {
         tipoInvestimento: document.getElementById("tipo-investimento")?.value || "",
         valor,
         data,
-        conta,
+        conta: tipoMov === "aporte" ? conta : null,
         tipoMovimento: tipoMov // 🔥 NOVO
         };
     }
@@ -2470,17 +2470,29 @@ document.getElementById("tipo-mov-investimento")
 .addEventListener("change", function () {
 
     const tipo = this.value;
+
     const label = document.getElementById("label-investimento");
     const input = document.getElementById("valor-investimento");
+    const conta = document.getElementById("conta-investimento");
+
+    // 🔥 pega a linha inteira da conta
+    const linhaConta = conta.closest(".form-grid-2");
 
     if (tipo === "aporte") {
         label.innerText = "Valor do aporte";
         input.placeholder = "Quanto você investiu";
+
+        // mostra conta
+        linhaConta.style.display = "grid";
     }
 
     if (tipo === "rendimento") {
         label.innerText = "Valor do rendimento";
-        input.placeholder = "Lucro ou prejuízo (use negativo se for perda)";
+        input.placeholder = "Lucro ou prejuízo";
+
+        // 🔥 esconde conta completamente
+        conta.value = "";
+        linhaConta.style.display = "none";
     }
 });
 
