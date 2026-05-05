@@ -483,9 +483,14 @@ function atualizarTela(listaTransacoes) {
     lista.innerHTML = "";
 
     listaTransacoes.forEach((t) => {
+
+        // 🔥 FILTRO CRÍTICO (NÍVEL PRODUTO)
+        if (t.tipo === "investimento" && t.tipoMovimento === "rendimento") {
+            return;
+        }
+
         const item = document.createElement("li");
 
-        // Adiciona classe para tipo de transação (pode ser 'receita', 'despesa' ou 'pagamento_fatura')
         item.classList.add(t.tipo);
         item.classList.add("item-transacao");
 
@@ -507,22 +512,18 @@ function atualizarTela(listaTransacoes) {
             principal = `Pagamento de Fatura - ${t.cartao || "Cartão"}`;
             secundario = t.data ? formatarData(t.data) : "";
         }
-
         // ================= INVESTIMENTO =================
         else if (t.tipo === "investimento") {
             principal = t.nomeInvestimento || "Investimento";
             secundario = t.data ? formatarData(t.data) : "";
         }
 
-        // ============================================
-        // Definindo o status da transação (pendente ou paga) somente para "despesa" com "crédito"
-        let statusClass = "";  // classe para indicar o status
+        // ================= STATUS =================
+        let statusClass = "";
         if (t.tipo === "despesa" && t.formaPagamento === "credito") {
-            if (t.status === "pago") {
-                statusClass = "transacao-paga";  // classe para transação paga
-            } else {
-                statusClass = "transacao-pendente";  // classe para transação pendente
-            }
+            statusClass = t.status === "pago"
+                ? "transacao-paga"
+                : "transacao-pendente";
         }
 
         item.innerHTML = `
@@ -551,7 +552,6 @@ function atualizarTela(listaTransacoes) {
             </div>
         `;
 
-        // Clique só na parte esquerda (melhor UX)
         const areaClicavel = item.querySelector(".linha-clicavel");
 
         areaClicavel.addEventListener("click", () => {
