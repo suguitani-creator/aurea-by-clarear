@@ -2466,3 +2466,36 @@ async function renderizarGraficoInvestimentos() {
     });
 }
 
+document.getElementById("tipo-mov-investimento")
+.addEventListener("change", function () {
+
+    const tipo = this.value;
+    const label = document.getElementById("label-investimento");
+    const input = document.getElementById("valor-investimento");
+
+    if (tipo === "aporte") {
+        label.innerText = "Valor do aporte";
+        input.placeholder = "Quanto você investiu";
+    }
+
+    if (tipo === "rendimento") {
+        label.innerText = "Valor do rendimento";
+        input.placeholder = "Lucro ou prejuízo (use negativo se for perda)";
+    }
+});
+
+document.getElementById("valor-investimento")
+.addEventListener("input", function () {
+
+    const tipo = document.getElementById("tipo-mov-investimento").value;
+
+    if (tipo === "rendimento") {
+        this.style.color = this.value < 0 ? "#A94442" : "#4A7C59";
+    } else {
+        this.style.color = "#000";
+    }
+});
+
+// default ao abrir o form
+document.getElementById("tipo-mov-investimento").dispatchEvent(new Event("change"));
+
