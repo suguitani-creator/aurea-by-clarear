@@ -728,7 +728,7 @@ function atualizarGrafico(listaTransacoes) {
 
     const labels = Object.keys(categoriasAgrupadas);
     const valores = Object.values(categoriasAgrupadas);
-    const ctx = document.getElementById("graficoCategorias");
+    const ctx = document.getElementById("graficoInvestimentos");
 
     if (grafico) grafico.destroy();
 
@@ -2358,8 +2358,100 @@ document
             return;
         }
 
-        // �� ABRIR
+        // 🔓 ABRIR
         this.classList.add("show");
         await renderizarInvestimentos();
+        await renderizarGraficoInvestimentos(); // 🔥 AQUI
     });
+
+    async function gerarEvolucaoInvestimentos() {
+    const user = auth.currentUser;
+    if (!user) return [];
+
+    const snapshot = await getDocs(
+        collection(db, "users", user.uid, "transacoes")
+    );
+
+    const lista = [];
+
+    snapshot.forEach(doc => {
+        const t = doc.data();
+
+        if (t.tipo !== "investimento") return;
+
+        lista.push({
+            data: t.data,
+            valor: Number(t.valor) || 0,
+            valorAtual: Number(t.valorAtual ?? t.valor) || 0
+        });
+    });
+
+    // 🔥 ordena por data crescente
+    lista.sort((a, b) => new Date(a.data) - new Date(b.data));
+
+    // 🔥 acumula evolução
+    let acumuladoInvestido = 0;
+    let acumuladoAtual = 0;
+
+    const evolucao = [];
+
+    lista.forEach(item => {
+        acumuladoInvestido += item.valor;
+        acumuladoAtual += item.valorAtual;
+
+        evolucao.push({
+            data: item.data,
+            investido: acumuladoInvestido,
+            atual: acumuladoAtual
+        });
+    });
+
+    return evolucao;
+}
+
+let graficoInvestimentos = null;
+
+async function renderizarGraficoInvestimentos() {
+    const dados = await gerarEvolucaoInvestimentos();
+
+    if (!dados.length) return;
+
+    const labels = dados.map(d => formatarData(d.data));
+    const investido = dados.map(d => d.investido);
+    const atual = dados.map(d => d.atual);
+
+    const ctx = document.getElementById("graficoCategorias");
+
+    // 🔥 evita bug de gráfico duplicado
+    if (graficoInvestimentos) {
+        graficoInvestimentos.destroy();
+    }
+
+    graficoInvestimentos = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Total Investido",
+                    data: investido,
+                    tension: 0.3
+                },
+                {
+                    label: "Valor Atual",
+                    data: atual,
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            }
+        }
+    });
+}
 
