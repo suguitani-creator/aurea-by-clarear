@@ -728,7 +728,7 @@ function atualizarGrafico(listaTransacoes) {
 
     const labels = Object.keys(categoriasAgrupadas);
     const valores = Object.values(categoriasAgrupadas);
-    const ctx = document.getElementById("graficoInvestimentos");
+    const ctx = document.getElementById("graficoCategorias");
 
     if (grafico) grafico.destroy();
 
