@@ -96,7 +96,6 @@ window.addEventListener("DOMContentLoaded", () => {
     inicializarFormulario();
     inicializarTipoConta();
     inicializarFiltro();
-    inicializarToggleSaldo();
 
     window.addEventListener("resize", aplicarLayoutResponsivo);
 
@@ -1930,54 +1929,9 @@ document
         }
     });
 
-const iconeOlhoAberto = `
-<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
-viewBox="0 0 24 24" fill="none" stroke="currentColor"
-stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
-  <circle cx="12" cy="12" r="3"/>
-</svg>
-`;
-
-const iconeOlhoFechado = `
-<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
-viewBox="0 0 24 24" fill="none" stroke="currentColor"
-stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M17.94 17.94C16.12 19.24 14.13 20 12 20c-7 0-11-8-11-8 
-           a21.77 21.77 0 0 1 5.06-5.94"/>
-  <path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8 
-           a21.82 21.82 0 0 1-3.17 4.5"/>
-  <line x1="1" y1="1" x2="23" y2="23"/>
-  <circle cx="12" cy="12" r="3"/>
-</svg>
-`;
-
 let saldoVisivel = true;
 let saldoAtual = 0;
 let saldoAnterior = 0;
-
-function inicializarToggleSaldo() {
-    const btn = document.getElementById("toggle-saldo");
-    const saldo = document.getElementById("saldo-valor");
-    const icone = document.getElementById("icone-olho");
-
-    if (!btn || !saldo || !icone) return; // evita seus erros de null
-
-    // estado inicial
-    icone.innerHTML = iconeOlhoAberto;
-
-    btn.addEventListener("click", () => {
-        saldoVisivel = !saldoVisivel;
-
-        if (saldoVisivel) {
-            saldo.style.filter = "none";
-            icone.innerHTML = iconeOlhoAberto;
-        } else {
-            saldo.style.filter = "blur(6px)";
-            icone.innerHTML = iconeOlhoFechado;
-        }
-    });
-}
 
 // �� Atualiza saldo
 function atualizarSaldoTopoComDados(saldos) {
@@ -2035,7 +1989,7 @@ document.getElementById("toggle-saldo").addEventListener("click", () => {
     saldoVisivel = !saldoVisivel;
 
     const icone = document.getElementById("icone-olho");
-    icone.textContent = saldoVisivel ? "��️" : "��";
+    icone.textContent = saldoVisivel ? "👁️" : "🙈";
 
     renderSaldo();
 });
