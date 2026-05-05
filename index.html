@@ -290,25 +290,24 @@
                             </select>
                         </div>
 
-                        <!-- Linha 2 — TIPO + VALOR -->
+                        <!-- Linha 2 — TIPO -->
                         <div class="form-grid-2">
-                            <select id="tipo-mov-investimento" class="input">
+                            <select id="tipo-mov-investimento" class="input full">
                                 <option value="aporte">Aporte</option>
                                 <option value="rendimento">Rendimento</option>
                             </select>
-
-                            <input id="valor-investimento" type="number" class="input" placeholder="Valor">
                         </div>
 
-                        <!-- 💡 label dinâmica -->
-                        <div id="label-investimento" class="label-investimento">
-                            Valor do aporte
-                        </div>
-
-                        <!-- Linha 3 — DATA -->
+                        <!-- Linha 3 — LABEL + VALOR -->
                         <div class="form-grid-2">
+                            <div>
+                                <div id="label-investimento" class="label-investimento">
+                                    Valor do aporte
+                                </div>
+                                <input id="valor-investimento" type="number" class="input" placeholder="Valor">
+                            </div>
+
                             <input id="data-investimento" type="date" class="input">
-                            <div></div>
                         </div>
 
                         <!-- Linha 4 — CONTA -->
@@ -318,11 +317,10 @@
                             </select>
                         </div>
 
-                        <!-- 🔒 Campo antigo escondido (mantido por segurança) -->
+                        <!-- Campo antigo escondido -->
                         <div id="campo-rendimento-antigo" style="display:none;">
                             <input id="rendimento-investimento" type="number" class="input">
                         </div>
-
                     </div>
 
                     <!-- BOTÕES -->

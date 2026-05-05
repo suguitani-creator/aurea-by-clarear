@@ -1159,3 +1159,9 @@ button.modo-edicao:hover {
     height: auto !important;
     overflow: visible !important;
 }
+
+.label-investimento {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 4px;
+}
