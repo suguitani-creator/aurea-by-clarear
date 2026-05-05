@@ -2420,7 +2420,7 @@ async function renderizarGraficoInvestimentos() {
     const investido = dados.map(d => d.investido);
     const atual = dados.map(d => d.atual);
 
-    const ctx = document.getElementById("graficoCategorias");
+    const ctx = document.getElementById("graficoInvestimentos");
 
     // 🔥 evita bug de gráfico duplicado
     if (graficoInvestimentos) {
