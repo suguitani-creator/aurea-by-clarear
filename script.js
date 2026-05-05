@@ -362,8 +362,13 @@ async function adicionarTransacao() {
         const conta = document.getElementById("conta-investimento")?.value || "";
         const tipoMov = document.getElementById("tipo-mov-investimento")?.value;
 
-        if (isNaN(valor) || !data || !conta) {
-            showToast("Preencha os campos do investimento", "error");
+        if (isNaN(valor) || !data || (tipoMov === "aporte" && !conta)) {
+            showToast(
+            tipoMov === "aporte"
+            ? "Preencha valor, data e conta"
+            : "Preencha valor e data",
+            "error"
+            );
             return;
         }
 
