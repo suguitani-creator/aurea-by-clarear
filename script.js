@@ -2250,7 +2250,11 @@ async function renderizarInvestimentos() {
 
     // ================= AGRUPAR =================
     snapshot.forEach(doc => {
-        const t = doc.data();
+
+        const t = {
+            id: doc.id, // 🔥 importante pro futuro
+            ...doc.data()
+        };
 
         if (t.tipo !== "investimento") return;
 
@@ -2261,7 +2265,7 @@ async function renderizarInvestimentos() {
                 tipo: t.tipoInvestimento || "-",
                 totalInvestido: 0,
                 totalAtual: 0,
-                transacoes: [] // �� CORREÇÃO AQUI
+                transacoes: []
             };
         }
 
@@ -2272,11 +2276,10 @@ async function renderizarInvestimentos() {
             investimentos[nome].totalAtual += valor;
         }
 
-if (t.tipoMovimento === "rendimento") {
-    investimentos[nome].totalAtual += valor;
-}
+        if (t.tipoMovimento === "rendimento") {
+            investimentos[nome].totalAtual += valor;
+        }
 
-        // �� GUARDA HISTÓRICO
         investimentos[nome].transacoes.push(t);
     });
 
@@ -2298,16 +2301,30 @@ if (t.tipoMovimento === "rendimento") {
 
         div.innerHTML = `
             <div class="linha-investimento">
-                <div>
+
+                <div class="investimento-info">
                     <strong>${nome}</strong><br>
                     <small>${inv.tipo}</small>
                 </div>
 
-                <div style="text-align:right">
-                    <div>R$ ${inv.totalAtual.toFixed(2)}</div>
-                    <small style="color:${lucro >= 0 ? '#4A7C59' : '#A94442'}">
+                <div class="investimento-valores">
+                    <div class="valor-total">
+                        R$ ${inv.totalAtual.toFixed(2)}
+                    </div>
+                </div>
+            </div>
+
+            <div class="investimento-breakdown">
+                <div>
+                    <span>Investido</span>
+                    <strong>R$ ${inv.totalInvestido.toFixed(2)}</strong>
+                </div>
+
+                <div>
+                    <span>Rendimento</span>
+                    <strong style="color:${lucro >= 0 ? '#4A7C59' : '#A94442'}">
                         ${lucro >= 0 ? "+" : ""}R$ ${lucro.toFixed(2)}
-                    </small>
+                    </strong>
                 </div>
             </div>
 
@@ -2318,7 +2335,7 @@ if (t.tipoMovimento === "rendimento") {
         const extrato = div.querySelector(".extrato-investimento");
 
         linha.addEventListener("click", (e) => {
-        e.stopPropagation(); // �� ESSENCIAL
+            e.stopPropagation();
 
             const aberto = extrato.style.display === "block";
 
@@ -2335,7 +2352,10 @@ if (t.tipoMovimento === "rendimento") {
                 .map(t => `
                     <div class="linha-extrato">
                         <span>${formatarData(t.data)}</span>
-                        <span>R$ ${Number(t.valor).toFixed(2)}</span>
+                        <span style="color:${t.tipoMovimento === 'rendimento' ? '#5B8DEF' : '#000'}">
+                            ${t.tipoMovimento === 'rendimento' ? '📈' : '💰'}
+                            R$ ${Number(t.valor).toFixed(2)}
+                        </span>
                     </div>
                 `)
                 .join("");

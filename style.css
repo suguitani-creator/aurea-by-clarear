@@ -1121,6 +1121,10 @@ button.modo-edicao:hover {
 .investimento-item {
     display: block;
     width: 100%;
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 12px;
 }
 
 .extrato-investimento {
@@ -1185,4 +1189,34 @@ button.modo-edicao:hover {
 
 .investimento-rendimento {
     border-left: 4px solid #5B8DEF;
+}
+
+.linha-investimento {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.investimento-info small {
+    color: #777;
+    font-size: 12px;
+}
+
+.valor-total {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.investimento-breakdown {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    font-size: 13px;
+}
+
+.investimento-breakdown span {
+    color: #777;
+    display: block;
 }
