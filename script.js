@@ -2308,7 +2308,9 @@ async function renderizarInvestimentos() {
 
                 <div class="investimento-info">
                     <strong>${nome}</strong><br>
-                    <small>${inv.tipo}</small>
+                    <small style="color:${lucro >= 0 ? '#4A7C59' : '#A94442'}">
+                        ${inv.tipo} • ${percentual}%
+                    </small>
                 </div>
 
                 <div class="investimento-valores">
