@@ -2293,6 +2293,10 @@ async function renderizarInvestimentos() {
 
         const lucro = inv.totalAtual - inv.totalInvestido;
 
+        const percentual = inv.totalInvestido > 0
+        ? ((lucro / inv.totalInvestido) * 100).toFixed(2)
+        : 0;
+
         totalInvestidoGeral += inv.totalInvestido;
         totalAtualGeral += inv.totalAtual;
 
