@@ -484,11 +484,6 @@ function atualizarTela(listaTransacoes) {
 
     listaTransacoes.forEach((t) => {
 
-        // 🔥 FILTRO CRÍTICO (NÍVEL PRODUTO)
-        if (t.tipo === "investimento" && t.tipoMovimento === "rendimento") {
-            return;
-        }
-
         const item = document.createElement("li");
 
         item.classList.add(t.tipo);
@@ -496,26 +491,40 @@ function atualizarTela(listaTransacoes) {
 
         let principal = "";
         let secundario = "";
+        let valor = Number(t.valor) || 0;
 
         // ================= RECEITA =================
         if (t.tipo === "receita") {
             principal = t.fonte || "Receita";
             secundario = t.data ? formatarData(t.data) : "";
         }
+
         // ================= DESPESA =================
         else if (t.tipo === "despesa") {
             principal = t.categoria || "Despesa";
             secundario = t.data ? formatarData(t.data) : "";
         }
+
         // ================= PAGAMENTO DE FATURA =================
         else if (t.tipo === "pagamento_fatura") {
             principal = `Pagamento de Fatura - ${t.cartao || "Cartão"}`;
             secundario = t.data ? formatarData(t.data) : "";
+
+            item.classList.add("pagamento_fatura"); // 🔥 estilo visual
         }
+
         // ================= INVESTIMENTO =================
         else if (t.tipo === "investimento") {
-            principal = t.nomeInvestimento || "Investimento";
+
             secundario = t.data ? formatarData(t.data) : "";
+
+            if (t.tipoMovimento === "aporte") {
+                principal = `Aporte - ${t.nomeInvestimento || "Investimento"}`;
+                item.classList.add("investimento-aporte"); // 🔥 estilo
+            } else {
+                principal = `Rendimento - ${t.nomeInvestimento || "Investimento"}`;
+                item.classList.add("investimento-rendimento"); // 🔥 estilo
+            }
         }
 
         // ================= STATUS =================
@@ -525,6 +534,9 @@ function atualizarTela(listaTransacoes) {
                 ? "transacao-paga"
                 : "transacao-pendente";
         }
+
+        // 🔥 FORMATA VALOR (importante)
+        const valorFormatado = valor.toFixed(2);
 
         item.innerHTML = `
             <div class="item-info linha-clicavel ${statusClass}">
@@ -536,7 +548,7 @@ function atualizarTela(listaTransacoes) {
             </div>
 
             <div class="item-actions">
-                <span class="valor">R$ ${t.valor?.toFixed(2) || "0.00"}</span>
+                <span class="valor">R$ ${valorFormatado}</span>
 
                 <button class="btn-edit" onclick="editarTransacao('${t.id}')">
                     ✏️

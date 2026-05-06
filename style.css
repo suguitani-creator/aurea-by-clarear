@@ -1165,3 +1165,24 @@ button.modo-edicao:hover {
     color: #777;
     margin-bottom: 4px;
 }
+
+.investimento-rendimento {
+    border-left: 4px solid #5B8DEF;
+    background: #f5f8ff;
+}
+
+.investimento-rendimento .valor {
+    color: #5B8DEF;
+}
+
+.pagamento_fatura {
+    border-left: 4px solid #8E44AD;
+}
+
+.investimento-aporte {
+    border-left: 4px solid #E67E22;
+}
+
+.investimento-rendimento {
+    border-left: 4px solid #5B8DEF;
+}
